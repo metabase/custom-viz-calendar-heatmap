@@ -49,11 +49,19 @@ function getChartData(
 
 function getOption(data: [string, number][], latestYear: number) {
   const values = data.map((d) => d[1]);
+  const min = values.length ? Math.min(...values) : 0;
+  const max = values.length ? Math.max(...values) : 100;
+  console.log({ min, max });
   return {
+    title: {
+      top: 30,
+      left: "center",
+      text: String(latestYear),
+    },
     tooltip: {},
     visualMap: {
-      min: values.length ? Math.min(...values) : 0,
-      max: values.length ? Math.max(...values) : 100,
+      min,
+      max,
       type: "piecewise" as const,
       orient: "horizontal" as const,
       left: "center",

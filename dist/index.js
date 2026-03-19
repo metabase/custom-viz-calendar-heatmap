@@ -44196,12 +44196,20 @@ function T4(e, t) {
 	};
 }
 function E4(e, t) {
-	let n = e.map((e) => e[1]);
-	return {
+	let n = e.map((e) => e[1]), r = n.length ? Math.min(...n) : 0, i = n.length ? Math.max(...n) : 100;
+	return console.log({
+		min: r,
+		max: i
+	}), {
+		title: {
+			top: 30,
+			left: "center",
+			text: String(t)
+		},
 		tooltip: {},
 		visualMap: {
-			min: n.length ? Math.min(...n) : 0,
-			max: n.length ? Math.max(...n) : 100,
+			min: r,
+			max: i,
 			type: "piecewise",
 			orient: "horizontal",
 			left: "center",
