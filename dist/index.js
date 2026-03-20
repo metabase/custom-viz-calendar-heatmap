@@ -45913,14 +45913,22 @@ function i3(e) {
 var { jsx: a3, jsxs: o3, Fragment: s3 } = window.__METABASE_VIZ_API__.jsxRuntime;
 //#endregion
 //#region src/index.tsx
-function c3(e) {
+function c3(e, t) {
+	let { data: n } = u3(e, t), r = n.map(([e]) => p3(e)), i = /* @__PURE__ */ new Set();
+	for (let e of r) {
+		if (i.has(e)) return !0;
+		i.add(e);
+	}
+	return !1;
+}
+function l3(e) {
 	let t = /* @__PURE__ */ new Set();
 	return e.forEach((e) => {
 		let n = new Date(e);
 		isNaN(n.getTime()) || t.add(n.getFullYear());
 	}), Array.from(t).sort((e, t) => e - t);
 }
-function l3(e, t) {
+function u3(e, t) {
 	let [{ data: n }] = e, r = n.cols.findIndex((e) => e.name === t.dimension), i = n.cols.findIndex((e) => e.name === t.metric);
 	if (r === -1 || i === -1) {
 		let e = (/* @__PURE__ */ new Date()).getFullYear();
@@ -45930,39 +45938,39 @@ function l3(e, t) {
 			latestYear: e
 		};
 	}
-	let a = n.rows.map((e) => [String(e[r]), Number(e[i])]), o = c3(a.map(([e]) => e));
+	let a = n.rows.map((e) => [String(e[r]), Number(e[i])]), o = l3(a.map(([e]) => e));
 	return {
 		data: a,
 		years: o,
 		latestYear: o.length ? o[o.length - 1] : (/* @__PURE__ */ new Date()).getFullYear()
 	};
 }
-var u3 = 30;
-function d3(e) {
+var d3 = 30;
+function f3(e) {
 	let t = [], n = new Date(e, 0, 1), r = new Date(e, 11, 31);
-	for (let e = new Date(n); e <= r; e.setDate(e.getDate() + 1)) t.push(f3(e));
+	for (let e = new Date(n); e <= r; e.setDate(e.getDate() + 1)) t.push(p3(e));
 	return t;
 }
-function f3(e) {
+function p3(e) {
 	return new Date(e).toLocaleDateString("en-CA");
 }
-function p3(e) {
+function m3(e) {
 	return new Date(e).toLocaleDateString("en-US", {
 		month: "short",
 		day: "numeric",
 		year: "numeric"
 	});
 }
-function m3(e) {
+function h3(e) {
 	return e.toFixed(2);
 }
-function h3(e, t, n) {
+function g3(e, t, n) {
 	let r = i3(n), i = e.filter(([e]) => {
 		let n = new Date(e);
 		return !isNaN(n.getTime()) && n.getFullYear() === t;
-	}), a = i.map(([e, t]) => t), o = new Map(i.map(([e, t]) => [f3(e), t])), s = d3(t).map((e) => [e, o.get(e) ?? 0]), c = a.length ? Math.min(...a) : 0, l = a.length ? Math.max(...a) : 100;
+	}), a = i.map(([e, t]) => t), o = new Map(i.map(([e, t]) => [p3(e), t])), s = f3(t).map((e) => [e, o.get(e) ?? 0]), c = a.length ? Math.min(...a) : 0, l = a.length ? Math.max(...a) : 100;
 	return {
-		tooltip: { formatter: (e) => `${p3(e.value[0])}: ${m3(e.value[1])}` },
+		tooltip: { formatter: (e) => `${m3(e.value[0])}: ${h3(e.value[1])}` },
 		visualMap: {
 			min: c,
 			max: l,
@@ -46001,7 +46009,7 @@ function h3(e, t, n) {
 		},
 		calendar: {
 			top: 20,
-			left: u3,
+			left: d3,
 			cellSize: [18, 18],
 			range: t,
 			itemStyle: {
@@ -46031,7 +46039,7 @@ function h3(e, t, n) {
 		}
 	};
 }
-var g3 = () => ({
+var _3 = () => ({
 	id: "grid-heatmap",
 	getName: () => "Calendar Heatmap",
 	minSize: {
@@ -46045,8 +46053,14 @@ var g3 = () => ({
 	isSensible() {
 		return !0;
 	},
-	checkRenderable(e) {
+	checkRenderable(e, t) {
 		if (e.length === 0) throw Error("No series provided");
+		let n = t ?? {}, r = n.dimension ?? e[0]?.data?.cols?.[0]?.name, i = n.metric ?? e[0]?.data?.cols?.[1]?.name;
+		if (c3(e, {
+			...n,
+			dimension: r,
+			metric: i
+		})) throw Error("Data is unbinned: multiple entries with the same date. Please aggregate date column by day.");
 	},
 	settings: {
 		dimension: {
@@ -46094,16 +46108,16 @@ var g3 = () => ({
 			}
 		}
 	},
-	VisualizationComponent: _3,
-	StaticVisualizationComponent: v3
-}), _3 = (e) => {
-	let { height: t, width: n, settings: r, series: i } = e, a = h4(null), o = h4(null), [s, c] = p4(null), { data: l, years: u, latestYear: d } = l3(i, r);
+	VisualizationComponent: v3,
+	StaticVisualizationComponent: y3
+}), v3 = (e) => {
+	let { height: t, width: n, settings: r, series: i } = e, a = h4(null), o = h4(null), [s, c] = p4(null), { data: l, years: u, latestYear: d } = u3(i, r);
 	m4(() => {
 		c(d);
 	}, [d]);
 	let f = s ?? d, p = u.indexOf(f), m = p > 0, h = p < u.length - 1, g = r.color ?? "#85b8e8";
 	return m4(() => {
-		if (a.current) return o.current ||= qS(a.current), o.current.setOption(h3(l, f, g), !0), () => {
+		if (a.current) return o.current ||= qS(a.current), o.current.setOption(g3(l, f, g), !0), () => {
 			o.current?.dispose(), o.current = null;
 		};
 	}, [
@@ -46163,6 +46177,6 @@ var g3 = () => ({
 			}
 		})]
 	});
-}, v3 = (e) => /* @__PURE__ */ a3("div", { children: "TODO: Implement static visualization" });
+}, y3 = (e) => /* @__PURE__ */ a3("div", { children: "TODO: Implement static visualization" });
 //#endregion
-export { g3 as default };
+export { _3 as default };

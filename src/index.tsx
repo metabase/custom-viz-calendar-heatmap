@@ -14,6 +14,17 @@ type Settings = {
   color?: string;
 };
 
+function hasDuplicateDates(series: Series, settings: Settings): boolean {
+  const { data } = getChartData(series, settings);
+  const dates = data.map(([date]) => toISODateString(date));
+  const seen = new Set<string>();
+  for (const date of dates) {
+    if (seen.has(date)) return true;
+    seen.add(date);
+  }
+  return false;
+}
+
 function getYears(dates: string[]): number[] {
   const distinct = new Set<number>();
   dates.forEach((date) => {
@@ -185,9 +196,17 @@ const createVisualization: CreateCustomVisualization<Settings> = () => {
     isSensible() {
       return true;
     },
-    checkRenderable(series) {
+    checkRenderable(series, settings) {
       if (series.length === 0) {
         throw new Error("No series provided");
+      }
+      const s = settings ?? {};
+      const dimension = s.dimension ?? series[0]?.data?.cols?.[0]?.name;
+      const metric = s.metric ?? series[0]?.data?.cols?.[1]?.name;
+      if (hasDuplicateDates(series, { ...s, dimension, metric })) {
+        throw new Error(
+          "Data is unbinned: multiple entries with the same date. Please aggregate date column by day.",
+        );
       }
     },
     settings: {
