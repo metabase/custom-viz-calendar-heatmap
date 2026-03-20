@@ -39,7 +39,13 @@ function getYears(dates: string[]): number[] {
 function getChartData(
   series: Series,
   settings: Settings,
-): { data: [string, number][]; years: number[]; latestYear: number } {
+): {
+  data: [string, number][];
+  years: number[];
+  latestYear: number;
+  dimensionLabel: string;
+  metricLabel: string;
+} {
   const [{ data }] = series;
   const dimIndex = data.cols.findIndex(
     (col) => col.name === settings.dimension,
@@ -50,7 +56,13 @@ function getChartData(
 
   if (dimIndex === -1 || metricIndex === -1) {
     const currentYear = new Date().getFullYear();
-    return { data: [], years: [currentYear], latestYear: currentYear };
+    return {
+      data: [],
+      years: [currentYear],
+      latestYear: currentYear,
+      dimensionLabel: settings.dimension ?? "Date",
+      metricLabel: settings.metric ?? "Value",
+    };
   }
 
   const chartData: [string, number][] = data.rows.map((row) => [
@@ -63,7 +75,20 @@ function getChartData(
     ? years[years.length - 1]
     : new Date().getFullYear();
 
-  return { data: chartData, years, latestYear };
+  const dimensionLabel =
+    data.cols[dimIndex]?.display_name ?? data.cols[dimIndex]?.name ?? "Date";
+  const metricLabel =
+    data.cols[metricIndex]?.display_name ??
+    data.cols[metricIndex]?.name ??
+    "Value";
+
+  return {
+    data: chartData,
+    years,
+    latestYear,
+    dimensionLabel,
+    metricLabel,
+  };
 }
 
 const PADDING = 30;
@@ -101,6 +126,8 @@ function getOption(
   data: Array<[DateString, Value]>,
   displayedYear: number,
   color: string,
+  dimensionLabel: string,
+  metricLabel: string,
 ) {
   const colorScale = getColorScale(color);
   const displayedYearData = data.filter(([date]) => {
@@ -123,7 +150,7 @@ function getOption(
   return {
     tooltip: {
       formatter: (params: { value: [string, number] }) =>
-        `${formatDate(params.value[0])}: ${formatValue(params.value[1])}`,
+        `${dimensionLabel}: ${formatDate(params.value[0])}<br/>${metricLabel}: ${formatValue(params.value[1])}`,
     },
     visualMap: {
       min,
@@ -272,7 +299,10 @@ const VisualizationComponent = (props: CustomVisualizationProps<Settings>) => {
   const chartRef = useRef<echarts.ECharts | null>(null);
   const [displayedYear, setDisplayedYear] = useState<number | null>(null);
 
-  const { data, years, latestYear } = getChartData(series, settings);
+  const { data, years, latestYear, dimensionLabel, metricLabel } = getChartData(
+    series,
+    settings,
+  );
 
   useEffect(() => {
     setDisplayedYear(latestYear);
@@ -291,13 +321,16 @@ const VisualizationComponent = (props: CustomVisualizationProps<Settings>) => {
       chartRef.current = echarts.init(containerRef.current);
     }
 
-    chartRef.current.setOption(getOption(data, currentYear, color), true);
+    chartRef.current.setOption(
+      getOption(data, currentYear, color, dimensionLabel, metricLabel),
+      true,
+    );
 
     return () => {
       chartRef.current?.dispose();
       chartRef.current = null;
     };
-  }, [data, currentYear, color]);
+  }, [data, currentYear, color, dimensionLabel, metricLabel]);
 
   useEffect(() => {
     chartRef.current?.resize();

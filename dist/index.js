@@ -45935,14 +45935,18 @@ function u3(e, t) {
 		return {
 			data: [],
 			years: [e],
-			latestYear: e
+			latestYear: e,
+			dimensionLabel: t.dimension ?? "Date",
+			metricLabel: t.metric ?? "Value"
 		};
 	}
 	let a = n.rows.map((e) => [String(e[r]), Number(e[i])]), o = l3(a.map(([e]) => e));
 	return {
 		data: a,
 		years: o,
-		latestYear: o.length ? o[o.length - 1] : (/* @__PURE__ */ new Date()).getFullYear()
+		latestYear: o.length ? o[o.length - 1] : (/* @__PURE__ */ new Date()).getFullYear(),
+		dimensionLabel: n.cols[r]?.display_name ?? n.cols[r]?.name ?? "Date",
+		metricLabel: n.cols[i]?.display_name ?? n.cols[i]?.name ?? "Value"
 	};
 }
 var d3 = 30;
@@ -45964,44 +45968,44 @@ function m3(e) {
 function h3(e) {
 	return e.toFixed(2);
 }
-function g3(e, t, n) {
-	let r = i3(n), i = e.filter(([e]) => {
+function g3(e, t, n, r, i) {
+	let a = i3(n), o = e.filter(([e]) => {
 		let n = new Date(e);
 		return !isNaN(n.getTime()) && n.getFullYear() === t;
-	}), a = i.map(([e, t]) => t), o = new Map(i.map(([e, t]) => [p3(e), t])), s = f3(t).map((e) => [e, o.get(e) ?? 0]), c = a.length ? Math.min(...a) : 0, l = a.length ? Math.max(...a) : 100;
+	}), s = o.map(([e, t]) => t), c = new Map(o.map(([e, t]) => [p3(e), t])), l = f3(t).map((e) => [e, c.get(e) ?? 0]), u = s.length ? Math.min(...s) : 0, d = s.length ? Math.max(...s) : 100;
 	return {
-		tooltip: { formatter: (e) => `${m3(e.value[0])}: ${h3(e.value[1])}` },
+		tooltip: { formatter: (e) => `${r}: ${m3(e.value[0])}<br/>${i}: ${h3(e.value[1])}` },
 		visualMap: {
-			min: c,
-			max: l,
+			min: u,
+			max: d,
 			type: "piecewise",
 			orient: "horizontal",
 			left: "center",
-			inRange: { color: r },
+			inRange: { color: a },
 			pieces: [
 				{
 					min: 0,
 					max: 0,
-					color: r.get("empty")
+					color: a.get("empty")
 				},
 				{
 					gt: 0,
-					lte: l * .25,
-					color: r.get("low")
+					lte: d * .25,
+					color: a.get("low")
 				},
 				{
-					gt: l * .25,
-					lte: l * .5,
-					color: r.get("medium-low")
+					gt: d * .25,
+					lte: d * .5,
+					color: a.get("medium-low")
 				},
 				{
-					gt: l * .5,
-					lte: l * .75,
-					color: r.get("medium-high")
+					gt: d * .5,
+					lte: d * .75,
+					color: a.get("medium-high")
 				},
 				{
-					gt: l * .75,
-					color: r.get("high")
+					gt: d * .75,
+					color: a.get("high")
 				}
 			],
 			showLabel: !0,
@@ -46034,7 +46038,7 @@ function g3(e, t, n) {
 		series: {
 			type: "heatmap",
 			coordinateSystem: "calendar",
-			data: s,
+			data: l,
 			itemStyle: { borderRadius: 3 }
 		}
 	};
@@ -46111,19 +46115,21 @@ var _3 = () => ({
 	VisualizationComponent: v3,
 	StaticVisualizationComponent: y3
 }), v3 = (e) => {
-	let { height: t, width: n, settings: r, series: i } = e, a = h4(null), o = h4(null), [s, c] = p4(null), { data: l, years: u, latestYear: d } = u3(i, r);
+	let { height: t, width: n, settings: r, series: i } = e, a = h4(null), o = h4(null), [s, c] = p4(null), { data: l, years: u, latestYear: d, dimensionLabel: f, metricLabel: p } = u3(i, r);
 	m4(() => {
 		c(d);
 	}, [d]);
-	let f = s ?? d, p = u.indexOf(f), m = p > 0, h = p < u.length - 1, g = r.color ?? "#85b8e8";
+	let m = s ?? d, h = u.indexOf(m), g = h > 0, _ = h < u.length - 1, v = r.color ?? "#85b8e8";
 	return m4(() => {
-		if (a.current) return o.current ||= qS(a.current), o.current.setOption(g3(l, f, g), !0), () => {
+		if (a.current) return o.current ||= qS(a.current), o.current.setOption(g3(l, m, v, f, p), !0), () => {
 			o.current?.dispose(), o.current = null;
 		};
 	}, [
 		l,
+		m,
+		v,
 		f,
-		g
+		p
 	]), m4(() => {
 		o.current?.resize();
 	}, [n, t]), /* @__PURE__ */ o3("div", {
@@ -46139,12 +46145,12 @@ var _3 = () => ({
 			},
 			children: [
 				/* @__PURE__ */ a3("button", {
-					onClick: () => m && c(u[p - 1]),
-					disabled: !m,
+					onClick: () => g && c(u[h - 1]),
+					disabled: !g,
 					style: {
 						pointerEvents: "all",
-						cursor: m ? "pointer" : "default",
-						opacity: m ? 1 : .3,
+						cursor: g ? "pointer" : "default",
+						opacity: g ? 1 : .3,
 						fontSize: 16,
 						padding: "0 4px"
 					},
@@ -46152,17 +46158,17 @@ var _3 = () => ({
 				}),
 				/* @__PURE__ */ a3("span", {
 					style: { fontSize: 16 },
-					children: f
+					children: m
 				}),
 				/* @__PURE__ */ a3("button", {
-					onClick: () => h && c(u[p + 1]),
-					disabled: !h,
+					onClick: () => _ && c(u[h + 1]),
+					disabled: !_,
 					style: {
 						pointerEvents: "all",
 						background: "none",
 						border: "none",
-						cursor: h ? "pointer" : "default",
-						opacity: h ? 1 : .3,
+						cursor: _ ? "pointer" : "default",
+						opacity: _ ? 1 : .3,
 						fontSize: 16,
 						padding: "0 4px"
 					},
