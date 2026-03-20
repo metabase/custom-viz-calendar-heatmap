@@ -61,9 +61,13 @@ function getAllDatesForYear(year: number): string[] {
   const start = new Date(year, 0, 1);
   const end = new Date(year, 11, 31);
   for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
-    dates.push(d.toISOString().slice(0, 10));
+    dates.push(toISODateString(d));
   }
   return dates;
+}
+
+function toISODateString(date: string | Date): string {
+  return new Date(date).toLocaleDateString("en-CA");
 }
 
 function formatDate(date: string): string {
@@ -79,27 +83,32 @@ function formatValue(value: number): string {
   return value.toFixed(2);
 }
 
+type DateString = string;
+type Value = number;
+
 function getOption(
-  data: [string, number][],
+  data: Array<[DateString, Value]>,
   displayedYear: number,
   color: string,
 ) {
   const colorScale = getColorScale(color);
-  const yearData = data.filter(([date]) => {
+  const displayedYearData = data.filter(([date]) => {
     const d = new Date(date);
     return !isNaN(d.getTime()) && d.getFullYear() === displayedYear;
   });
-  const values = yearData.map((d) => d[1]);
+  const values = displayedYearData.map(([_, value]) => value);
 
   // Fill missing dates with 0 so empty cells are visible
   const dataMap = new Map(
-    yearData.map(([date, val]) => [date.slice(0, 10), val]),
+    displayedYearData.map(([date, val]) => [toISODateString(date), val]),
   );
+
   const filledData: [string, number][] = getAllDatesForYear(displayedYear).map(
     (date) => [date, dataMap.get(date) ?? 0],
   );
   const min = values.length ? Math.min(...values) : 0;
   const max = values.length ? Math.max(...values) : 100;
+
   return {
     tooltip: {
       formatter: (params: { value: [string, number] }) =>
@@ -255,8 +264,6 @@ const VisualizationComponent = (props: CustomVisualizationProps<Settings>) => {
   const canGoPrev = yearIndex > 0;
   const canGoNext = yearIndex < years.length - 1;
   const color = settings.color ?? DEFAULT_CALENDAR_COLOR;
-
-  console.log(color);
 
   useEffect(() => {
     if (!containerRef.current) return;

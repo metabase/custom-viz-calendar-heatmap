@@ -45940,26 +45940,29 @@ function l3(e, t) {
 var u3 = 30;
 function d3(e) {
 	let t = [], n = new Date(e, 0, 1), r = new Date(e, 11, 31);
-	for (let e = new Date(n); e <= r; e.setDate(e.getDate() + 1)) t.push(e.toISOString().slice(0, 10));
+	for (let e = new Date(n); e <= r; e.setDate(e.getDate() + 1)) t.push(f3(e));
 	return t;
 }
 function f3(e) {
+	return new Date(e).toLocaleDateString("en-CA");
+}
+function p3(e) {
 	return new Date(e).toLocaleDateString("en-US", {
 		month: "short",
 		day: "numeric",
 		year: "numeric"
 	});
 }
-function p3(e) {
+function m3(e) {
 	return e.toFixed(2);
 }
-function m3(e, t, n) {
+function h3(e, t, n) {
 	let r = i3(n), i = e.filter(([e]) => {
 		let n = new Date(e);
 		return !isNaN(n.getTime()) && n.getFullYear() === t;
-	}), a = i.map((e) => e[1]), o = new Map(i.map(([e, t]) => [e.slice(0, 10), t])), s = d3(t).map((e) => [e, o.get(e) ?? 0]), c = a.length ? Math.min(...a) : 0, l = a.length ? Math.max(...a) : 100;
+	}), a = i.map(([e, t]) => t), o = new Map(i.map(([e, t]) => [f3(e), t])), s = d3(t).map((e) => [e, o.get(e) ?? 0]), c = a.length ? Math.min(...a) : 0, l = a.length ? Math.max(...a) : 100;
 	return {
-		tooltip: { formatter: (e) => `${f3(e.value[0])}: ${p3(e.value[1])}` },
+		tooltip: { formatter: (e) => `${p3(e.value[0])}: ${m3(e.value[1])}` },
 		visualMap: {
 			min: c,
 			max: l,
@@ -46028,7 +46031,7 @@ function m3(e, t, n) {
 		}
 	};
 }
-var h3 = () => ({
+var g3 = () => ({
 	id: "grid-heatmap",
 	getName: () => "Calendar Heatmap",
 	minSize: {
@@ -46091,16 +46094,16 @@ var h3 = () => ({
 			}
 		}
 	},
-	VisualizationComponent: g3,
-	StaticVisualizationComponent: _3
-}), g3 = (e) => {
+	VisualizationComponent: _3,
+	StaticVisualizationComponent: v3
+}), _3 = (e) => {
 	let { height: t, width: n, settings: r, series: i } = e, a = h4(null), o = h4(null), [s, c] = p4(null), { data: l, years: u, latestYear: d } = l3(i, r);
 	m4(() => {
 		c(d);
 	}, [d]);
 	let f = s ?? d, p = u.indexOf(f), m = p > 0, h = p < u.length - 1, g = r.color ?? "#85b8e8";
-	return console.log(g), m4(() => {
-		if (a.current) return o.current ||= qS(a.current), o.current.setOption(m3(l, f, g), !0), () => {
+	return m4(() => {
+		if (a.current) return o.current ||= qS(a.current), o.current.setOption(h3(l, f, g), !0), () => {
 			o.current?.dispose(), o.current = null;
 		};
 	}, [
@@ -46160,6 +46163,6 @@ var h3 = () => ({
 			}
 		})]
 	});
-}, _3 = (e) => /* @__PURE__ */ a3("div", { children: "TODO: Implement static visualization" });
+}, v3 = (e) => /* @__PURE__ */ a3("div", { children: "TODO: Implement static visualization" });
 //#endregion
-export { h3 as default };
+export { g3 as default };
