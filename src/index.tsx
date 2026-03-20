@@ -53,6 +53,7 @@ function getChartData(
   return { data: chartData, years, latestYear };
 }
 
+const PADDING = 30;
 function getOption(data: [string, number][], displayedYear: number) {
   const yearData = data.filter(([date]) => {
     const d = new Date(date);
@@ -69,16 +70,15 @@ function getOption(data: [string, number][], displayedYear: number) {
       type: "piecewise" as const,
       orient: "horizontal" as const,
       left: "center",
-      top: 65,
     },
     calendar: {
-      top: 120,
-      left: 30,
-      right: 30,
+      top: 0,
+      left: PADDING,
+      right: PADDING,
       cellSize: ["auto", 13],
       range: displayedYear,
       itemStyle: {
-        borderWidth: 0.5,
+        borderWidth: 1,
       },
       yearLabel: { show: false },
     },
@@ -159,7 +159,6 @@ const VisualizationComponent = (props: CustomVisualizationProps<Settings>) => {
 
   const { data, years, latestYear } = getChartData(series, settings);
 
-  // Reset to latest year when data/settings change
   useEffect(() => {
     setDisplayedYear(latestYear);
   }, [latestYear]);
@@ -190,19 +189,15 @@ const VisualizationComponent = (props: CustomVisualizationProps<Settings>) => {
 
   return (
     <div style={{ width, height, position: "relative" }}>
-      <div ref={containerRef} style={{ width, height }} />
-
       <div
         style={{
-          position: "absolute",
-          top: 24,
-          left: 0,
           right: 0,
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
           gap: 8,
-          pointerEvents: "none",
+          marginBottom: 10,
+          marginTop: 10,
         }}
       >
         <button
@@ -235,6 +230,7 @@ const VisualizationComponent = (props: CustomVisualizationProps<Settings>) => {
           next
         </button>
       </div>
+      <div ref={containerRef} style={{ width, height }} />
     </div>
   );
 };
@@ -242,35 +238,7 @@ const VisualizationComponent = (props: CustomVisualizationProps<Settings>) => {
 const StaticVisualizationComponent = (
   props: CustomStaticVisualizationProps<Settings>,
 ) => {
-  const width = 540;
-  const height = 360;
-  const { settings, series } = props;
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [dataUrl, setDataUrl] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (!containerRef.current) return;
-
-    const { data, latestYear } = getChartData(series, settings);
-    const chart = echarts.init(containerRef.current, undefined, {
-      width,
-      height,
-    });
-    chart.setOption(getOption(data, latestYear));
-    setDataUrl(chart.getDataURL({ type: "png", pixelRatio: 2 }));
-    chart.dispose();
-  }, [series, settings]);
-
-  if (dataUrl) {
-    return <img src={dataUrl} width={width} height={height} />;
-  }
-
-  return (
-    <div
-      ref={containerRef}
-      style={{ width, height, visibility: "hidden", position: "absolute" }}
-    />
-  );
+  return <div>TODO: Implement static visualization</div>;
 };
 
 export default createVisualization;

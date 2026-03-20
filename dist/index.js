@@ -44200,7 +44200,8 @@ function T4(e, t) {
 		latestYear: o.length ? o[o.length - 1] : (/* @__PURE__ */ new Date()).getFullYear()
 	};
 }
-function E4(e, t) {
+var E4 = 30;
+function D4(e, t) {
 	let n = e.filter(([e]) => {
 		let n = new Date(e);
 		return !isNaN(n.getTime()) && n.getFullYear() === t;
@@ -44212,16 +44213,15 @@ function E4(e, t) {
 			max: r.length ? Math.max(...r) : 100,
 			type: "piecewise",
 			orient: "horizontal",
-			left: "center",
-			top: 65
+			left: "center"
 		},
 		calendar: {
-			top: 120,
-			left: 30,
-			right: 30,
+			top: 0,
+			left: E4,
+			right: E4,
 			cellSize: ["auto", 13],
 			range: t,
-			itemStyle: { borderWidth: .5 },
+			itemStyle: { borderWidth: 1 },
 			yearLabel: { show: !1 }
 		},
 		series: {
@@ -44231,7 +44231,7 @@ function E4(e, t) {
 		}
 	};
 }
-var D4 = () => ({
+var O4 = () => ({
 	id: "grid-heatmap",
 	getName: () => "Calendar Heatmap",
 	minSize: {
@@ -44286,16 +44286,16 @@ var D4 = () => ({
 			}
 		}
 	},
-	VisualizationComponent: O4,
-	StaticVisualizationComponent: k4
-}), O4 = (e) => {
+	VisualizationComponent: k4,
+	StaticVisualizationComponent: A4
+}), k4 = (e) => {
 	let { height: t, width: n, settings: r, series: i } = e, a = m4(null), o = m4(null), [s, c] = f4(null), { data: l, years: u, latestYear: d } = T4(i, r);
 	p4(() => {
 		c(d);
 	}, [d]);
 	let f = s ?? d, p = u.indexOf(f), m = p > 0, h = p < u.length - 1;
 	return p4(() => {
-		if (a.current) return o.current ||= KS(a.current), o.current.setOption(E4(l, f), !0), () => {
+		if (a.current) return o.current ||= KS(a.current), o.current.setOption(D4(l, f), !0), () => {
 			o.current?.dispose(), o.current = null;
 		};
 	}, [l, f]), p4(() => {
@@ -44306,23 +44306,15 @@ var D4 = () => ({
 			height: t,
 			position: "relative"
 		},
-		children: [/* @__PURE__ */ x4("div", {
-			ref: a,
+		children: [/* @__PURE__ */ S4("div", {
 			style: {
-				width: n,
-				height: t
-			}
-		}), /* @__PURE__ */ S4("div", {
-			style: {
-				position: "absolute",
-				top: 24,
-				left: 0,
 				right: 0,
 				display: "flex",
 				justifyContent: "center",
 				alignItems: "center",
 				gap: 8,
-				pointerEvents: "none"
+				marginBottom: 10,
+				marginTop: 10
 			},
 			children: [
 				/* @__PURE__ */ x4("button", {
@@ -44356,33 +44348,14 @@ var D4 = () => ({
 					children: "next"
 				})
 			]
+		}), /* @__PURE__ */ x4("div", {
+			ref: a,
+			style: {
+				width: n,
+				height: t
+			}
 		})]
 	});
-}, k4 = (e) => {
-	let { settings: t, series: n } = e, r = m4(null), [i, a] = f4(null);
-	return p4(() => {
-		if (!r.current) return;
-		let { data: e, latestYear: i } = T4(n, t), o = KS(r.current, void 0, {
-			width: 540,
-			height: 360
-		});
-		o.setOption(E4(e, i)), a(o.getDataURL({
-			type: "png",
-			pixelRatio: 2
-		})), o.dispose();
-	}, [n, t]), i ? /* @__PURE__ */ x4("img", {
-		src: i,
-		width: 540,
-		height: 360
-	}) : /* @__PURE__ */ x4("div", {
-		ref: r,
-		style: {
-			width: 540,
-			height: 360,
-			visibility: "hidden",
-			position: "absolute"
-		}
-	});
-};
+}, A4 = (e) => /* @__PURE__ */ x4("div", { children: "TODO: Implement static visualization" });
 //#endregion
-export { D4 as default };
+export { O4 as default };
