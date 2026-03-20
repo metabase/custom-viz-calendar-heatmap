@@ -6,10 +6,12 @@ import type {
 import type { Series } from "@metabase/custom-viz";
 import * as echarts from "echarts";
 import { useEffect, useRef, useState } from "react";
+import { getColorScale, TEXT_COLOR, DEFAULT_CALENDAR_COLOR } from "./colors";
 
 type Settings = {
   dimension?: string;
   metric?: string;
+  color?: string;
 };
 
 function getYears(dates: string[]): number[] {
@@ -64,16 +66,6 @@ function getAllDatesForYear(year: number): string[] {
   return dates;
 }
 
-const TEXT_COLOR = "#57606a";
-
-const HEAT_COLORS = new Map([
-  ["empty", "#ebedf0"],
-  ["low", "#c0d9f5"],
-  ["medium-low", "#85b8e8"],
-  ["medium-high", "#509ee2"],
-  ["high", "#2176b5"],
-]);
-
 function formatDate(date: string): string {
   const d = new Date(date);
   return d.toLocaleDateString("en-US", {
@@ -87,7 +79,12 @@ function formatValue(value: number): string {
   return value.toFixed(2);
 }
 
-function getOption(data: [string, number][], displayedYear: number) {
+function getOption(
+  data: [string, number][],
+  displayedYear: number,
+  color: string,
+) {
+  const colorScale = getColorScale(color);
   const yearData = data.filter(([date]) => {
     const d = new Date(date);
     return !isNaN(d.getTime()) && d.getFullYear() === displayedYear;
@@ -115,22 +112,22 @@ function getOption(data: [string, number][], displayedYear: number) {
       orient: "horizontal" as const,
       left: "center",
       inRange: {
-        color: [...HEAT_COLORS.values()],
+        color: colorScale,
       },
       pieces: [
-        { min: 0, max: 0, color: HEAT_COLORS.get("empty") },
-        { gt: 0, lte: max * 0.25, color: HEAT_COLORS.get("low") },
+        { min: 0, max: 0, color: colorScale.get("empty") },
+        { gt: 0, lte: max * 0.25, color: colorScale.get("low") },
         {
           gt: max * 0.25,
           lte: max * 0.5,
-          color: HEAT_COLORS.get("medium-low"),
+          color: colorScale.get("medium-low"),
         },
         {
           gt: max * 0.5,
           lte: max * 0.75,
-          color: HEAT_COLORS.get("medium-high"),
+          color: colorScale.get("medium-high"),
         },
-        { gt: max * 0.75, color: HEAT_COLORS.get("high") },
+        { gt: max * 0.75, color: colorScale.get("high") },
       ],
       showLabel: true,
       text: ["More", "Less"],
@@ -174,8 +171,8 @@ const createVisualization: CreateCustomVisualization<Settings> = () => {
   return {
     id: "grid-heatmap",
     getName: () => "Calendar Heatmap",
-    minSize: { width: 4, height: 3 },
-    defaultSize: { width: 8, height: 4 },
+    minSize: { width: 800, height: 400 },
+    defaultSize: { width: 800, height: 400 },
     isSensible() {
       return true;
     },
@@ -190,6 +187,7 @@ const createVisualization: CreateCustomVisualization<Settings> = () => {
         title: "Date Column",
         widget: "field",
         getDefault(object) {
+          // TODO: isa utils required for this.
           const s = object as Series;
           return s?.[0]?.data?.cols?.[0]?.name;
         },
@@ -210,6 +208,7 @@ const createVisualization: CreateCustomVisualization<Settings> = () => {
         title: "Metric Column",
         widget: "field",
         getDefault(object) {
+          // TODO: isa utils required for this.
           const s = object as Series;
           return s?.[0]?.data?.cols?.[1]?.name;
         },
@@ -223,6 +222,14 @@ const createVisualization: CreateCustomVisualization<Settings> = () => {
               value: col.name,
             })),
           };
+        },
+      },
+      color: {
+        id: "color",
+        title: "Color",
+        widget: "color",
+        getDefault() {
+          return DEFAULT_CALENDAR_COLOR;
         },
       },
     },
@@ -247,6 +254,9 @@ const VisualizationComponent = (props: CustomVisualizationProps<Settings>) => {
   const yearIndex = years.indexOf(currentYear);
   const canGoPrev = yearIndex > 0;
   const canGoNext = yearIndex < years.length - 1;
+  const color = settings.color ?? DEFAULT_CALENDAR_COLOR;
+
+  console.log(color);
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -255,13 +265,13 @@ const VisualizationComponent = (props: CustomVisualizationProps<Settings>) => {
       chartRef.current = echarts.init(containerRef.current);
     }
 
-    chartRef.current.setOption(getOption(data, currentYear), true);
+    chartRef.current.setOption(getOption(data, currentYear, color), true);
 
     return () => {
       chartRef.current?.dispose();
       chartRef.current = null;
     };
-  }, [data, currentYear]);
+  }, [data, currentYear, color]);
 
   useEffect(() => {
     chartRef.current?.resize();
