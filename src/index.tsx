@@ -54,12 +54,40 @@ function getChartData(
 }
 
 const PADDING = 30;
+function getAllDatesForYear(year: number): string[] {
+  const dates: string[] = [];
+  const start = new Date(year, 0, 1);
+  const end = new Date(year, 11, 31);
+  for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
+    dates.push(d.toISOString().slice(0, 10));
+  }
+  return dates;
+}
+
+const TEXT_COLOR = "#57606a";
+
+const HEAT_COLORS = new Map([
+  ["empty", "#ebedf0"],
+  ["low", "#c0d9f5"],
+  ["medium-low", "#85b8e8"],
+  ["medium-high", "#509ee2"],
+  ["high", "#2176b5"],
+]);
+
 function getOption(data: [string, number][], displayedYear: number) {
   const yearData = data.filter(([date]) => {
     const d = new Date(date);
     return !isNaN(d.getTime()) && d.getFullYear() === displayedYear;
   });
   const values = yearData.map((d) => d[1]);
+
+  // Fill missing dates with 0 so empty cells are visible
+  const dataMap = new Map(
+    yearData.map(([date, val]) => [date.slice(0, 10), val]),
+  );
+  const filledData: [string, number][] = getAllDatesForYear(displayedYear).map(
+    (date) => [date, dataMap.get(date) ?? 0],
+  );
   const min = values.length ? Math.min(...values) : 0;
   const max = values.length ? Math.max(...values) : 100;
   return {
@@ -70,22 +98,51 @@ function getOption(data: [string, number][], displayedYear: number) {
       type: "piecewise" as const,
       orient: "horizontal" as const,
       left: "center",
+      bottom: 0,
+      inRange: {
+        color: [...HEAT_COLORS.values()],
+      },
+      pieces: [
+        { min: 0, max: 0, color: HEAT_COLORS.get("empty") },
+        { gt: 0, lte: max * 0.25, color: HEAT_COLORS.get("low") },
+        { gt: max * 0.25, lte: max * 0.5, color: HEAT_COLORS.get("medium-low") },
+        { gt: max * 0.5, lte: max * 0.75, color: HEAT_COLORS.get("medium-high") },
+        { gt: max * 0.75, color: HEAT_COLORS.get("high") },
+      ],
+      showLabel: true,
+      text: ["More", "Less"],
     },
     calendar: {
-      top: 0,
+      top: 20,
       left: PADDING,
-      right: PADDING,
-      cellSize: ["auto", 13],
+      cellSize: [18, 18],
       range: displayedYear,
       itemStyle: {
-        borderWidth: 1,
+        borderWidth: 4,
+        borderColor: "#ffffff",
+        borderRadius: 2,
       },
+      splitLine: { show: false },
       yearLabel: { show: false },
+      dayLabel: {
+        show: true,
+        firstDay: 0,
+        color: TEXT_COLOR,
+        fontSize: 11,
+      },
+      monthLabel: {
+        nameMap: "en",
+        color: TEXT_COLOR,
+        fontSize: 11,
+      },
     },
     series: {
       type: "heatmap",
       coordinateSystem: "calendar",
-      data: yearData,
+      data: filledData,
+      itemStyle: {
+        borderRadius: 3,
+      },
     },
   };
 }
@@ -236,7 +293,7 @@ const VisualizationComponent = (props: CustomVisualizationProps<Settings>) => {
 };
 
 const StaticVisualizationComponent = (
-  props: CustomStaticVisualizationProps<Settings>,
+  _props: CustomStaticVisualizationProps<Settings>,
 ) => {
   return <div>TODO: Implement static visualization</div>;
 };

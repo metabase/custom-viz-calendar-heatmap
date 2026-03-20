@@ -44201,37 +44201,95 @@ function T4(e, t) {
 	};
 }
 var E4 = 30;
-function D4(e, t) {
+function D4(e) {
+	let t = [], n = new Date(e, 0, 1), r = new Date(e, 11, 31);
+	for (let e = new Date(n); e <= r; e.setDate(e.getDate() + 1)) t.push(e.toISOString().slice(0, 10));
+	return t;
+}
+var O4 = "#57606a", k4 = new Map([
+	["empty", "#ebedf0"],
+	["low", "#c0d9f5"],
+	["medium-low", "#85b8e8"],
+	["medium-high", "#509ee2"],
+	["high", "#2176b5"]
+]);
+function A4(e, t) {
 	let n = e.filter(([e]) => {
 		let n = new Date(e);
 		return !isNaN(n.getTime()) && n.getFullYear() === t;
-	}), r = n.map((e) => e[1]);
+	}), r = n.map((e) => e[1]), i = new Map(n.map(([e, t]) => [e.slice(0, 10), t])), a = D4(t).map((e) => [e, i.get(e) ?? 0]), o = r.length ? Math.min(...r) : 0, s = r.length ? Math.max(...r) : 100;
 	return {
 		tooltip: {},
 		visualMap: {
-			min: r.length ? Math.min(...r) : 0,
-			max: r.length ? Math.max(...r) : 100,
+			min: o,
+			max: s,
 			type: "piecewise",
 			orient: "horizontal",
-			left: "center"
+			left: "center",
+			bottom: 0,
+			inRange: { color: [...k4.values()] },
+			pieces: [
+				{
+					min: 0,
+					max: 0,
+					color: k4.get("empty")
+				},
+				{
+					gt: 0,
+					lte: s * .25,
+					color: k4.get("low")
+				},
+				{
+					gt: s * .25,
+					lte: s * .5,
+					color: k4.get("medium-low")
+				},
+				{
+					gt: s * .5,
+					lte: s * .75,
+					color: k4.get("medium-high")
+				},
+				{
+					gt: s * .75,
+					color: k4.get("high")
+				}
+			],
+			showLabel: !0,
+			text: ["More", "Less"]
 		},
 		calendar: {
-			top: 0,
+			top: 20,
 			left: E4,
-			right: E4,
-			cellSize: ["auto", 13],
+			cellSize: [18, 18],
 			range: t,
-			itemStyle: { borderWidth: 1 },
-			yearLabel: { show: !1 }
+			itemStyle: {
+				borderWidth: 4,
+				borderColor: "#ffffff",
+				borderRadius: 2
+			},
+			splitLine: { show: !1 },
+			yearLabel: { show: !1 },
+			dayLabel: {
+				show: !0,
+				firstDay: 0,
+				color: O4,
+				fontSize: 11
+			},
+			monthLabel: {
+				nameMap: "en",
+				color: O4,
+				fontSize: 11
+			}
 		},
 		series: {
 			type: "heatmap",
 			coordinateSystem: "calendar",
-			data: n
+			data: a,
+			itemStyle: { borderRadius: 3 }
 		}
 	};
 }
-var O4 = () => ({
+var j4 = () => ({
 	id: "grid-heatmap",
 	getName: () => "Calendar Heatmap",
 	minSize: {
@@ -44286,16 +44344,16 @@ var O4 = () => ({
 			}
 		}
 	},
-	VisualizationComponent: k4,
-	StaticVisualizationComponent: A4
-}), k4 = (e) => {
+	VisualizationComponent: M4,
+	StaticVisualizationComponent: N4
+}), M4 = (e) => {
 	let { height: t, width: n, settings: r, series: i } = e, a = m4(null), o = m4(null), [s, c] = f4(null), { data: l, years: u, latestYear: d } = T4(i, r);
 	p4(() => {
 		c(d);
 	}, [d]);
 	let f = s ?? d, p = u.indexOf(f), m = p > 0, h = p < u.length - 1;
 	return p4(() => {
-		if (a.current) return o.current ||= KS(a.current), o.current.setOption(D4(l, f), !0), () => {
+		if (a.current) return o.current ||= KS(a.current), o.current.setOption(A4(l, f), !0), () => {
 			o.current?.dispose(), o.current = null;
 		};
 	}, [l, f]), p4(() => {
@@ -44356,6 +44414,6 @@ var O4 = () => ({
 			}
 		})]
 	});
-}, A4 = (e) => /* @__PURE__ */ x4("div", { children: "TODO: Implement static visualization" });
+}, N4 = (e) => /* @__PURE__ */ x4("div", { children: "TODO: Implement static visualization" });
 //#endregion
-export { O4 as default };
+export { j4 as default };
