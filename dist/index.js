@@ -44173,7 +44173,55 @@ pC([rk]), pC([qO]), pC([
 	lW,
 	RG
 ]), pC(MK), pC(mq), pC(SF), pC(Nq), pC(vV), pC(Bq), pC(YJ), pC(pY), pC(IX), pC(mZ), pC(jK), pC(WZ), pC(qZ), pC(dQ), pC(PQ), pC(WQ), pC(t$), pC(D$), pC(r1), pC(H$), pC(n1), pC(K1), pC(B1), pC(G1), pC(Q1), pC(i0), pC(x0), pC(w0), pC(I2), pC(hD), pC(l4), pC(u4), pC(pN);
-var { useState: p4, useEffect: m4, useRef: h4, useCallback: g4, useMemo: _4, useReducer: v4, useContext: y4, createElement: b4, Fragment: x4 } = window.__METABASE_VIZ_API__.React, S4 = {
+var { useState: p4, useEffect: m4, useRef: h4, useCallback: g4, useMemo: _4, useReducer: v4, useContext: y4, createElement: b4, Fragment: x4 } = window.__METABASE_VIZ_API__.React, { jsx: S4, jsxs: C4, Fragment: w4 } = window.__METABASE_VIZ_API__.jsxRuntime, T4 = {
+	pointerEvents: "all",
+	borderRadius: 8,
+	fontWeight: 600,
+	fontSize: 12,
+	padding: "4px 10px",
+	transition: "background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease"
+}, E4 = {
+	background: "#ffffff",
+	border: "1px solid #e5e7eb",
+	color: "#374151",
+	cursor: "pointer"
+}, D4 = {
+	background: "#f9fafb",
+	border: "1px solid #d1d5db",
+	color: "#111827",
+	cursor: "pointer"
+}, O4 = {
+	background: "#f3f4f6",
+	border: "1px solid #9ca3af",
+	cursor: "pointer"
+}, k4 = {
+	background: "#ffffff",
+	border: "1px solid #e5e7eb",
+	color: "#9ca3af",
+	cursor: "default"
+};
+function A4({ children: e, onClick: t, disabled: n }) {
+	let [r, i] = p4(!1), [a, o] = p4(!1), s;
+	return s = n ? k4 : a ? O4 : r ? D4 : E4, /* @__PURE__ */ S4("button", {
+		type: "button",
+		onClick: t,
+		disabled: n,
+		style: {
+			...T4,
+			...s
+		},
+		onMouseEnter: () => i(!0),
+		onMouseLeave: () => {
+			i(!1), o(!1);
+		},
+		onMouseDown: () => !n && o(!0),
+		onMouseUp: () => o(!1),
+		children: e
+	});
+}
+//#endregion
+//#region node_modules/color-name/index.js
+var j4 = {
 	aliceblue: [
 		240,
 		248,
@@ -44915,31 +44963,31 @@ var { useState: p4, useEffect: m4, useRef: h4, useCallback: g4, useMemo: _4, use
 		50
 	]
 };
-for (let e in S4) Object.freeze(S4[e]);
-var C4 = Object.freeze(S4), w4 = Object.create(null);
-for (let e in C4) Object.hasOwn(C4, e) && (w4[C4[e]] = e);
-var T4 = {
+for (let e in j4) Object.freeze(j4[e]);
+var M4 = Object.freeze(j4), N4 = Object.create(null);
+for (let e in M4) Object.hasOwn(M4, e) && (N4[M4[e]] = e);
+var P4 = {
 	to: {},
 	get: {}
 };
-T4.get = function(e) {
+P4.get = function(e) {
 	let t = e.slice(0, 3).toLowerCase(), n, r;
 	switch (t) {
 		case "hsl":
-			n = T4.get.hsl(e), r = "hsl";
+			n = P4.get.hsl(e), r = "hsl";
 			break;
 		case "hwb":
-			n = T4.get.hwb(e), r = "hwb";
+			n = P4.get.hwb(e), r = "hwb";
 			break;
 		default:
-			n = T4.get.rgb(e), r = "rgb";
+			n = P4.get.rgb(e), r = "rgb";
 			break;
 	}
 	return n ? {
 		model: r,
 		value: n
 	} : null;
-}, T4.get.rgb = function(e) {
+}, P4.get.rgb = function(e) {
 	if (!e) return null;
 	let t = /^#([a-f\d]{3,4})$/i, n = /^#([a-f\d]{6})([a-f\d]{2})?$/i, r = /^rgba?\(\s*([+-]?(?:\d*\.)?\d+(?:e\d+)?)(?=[\s,])\s*(?:,\s*)?([+-]?(?:\d*\.)?\d+(?:e\d+)?)(?=[\s,])\s*(?:,\s*)?([+-]?(?:\d*\.)?\d+(?:e\d+)?)\s*(?:[\s,|/]\s*([+-]?(?:\d*\.)?\d+(?:e\d+)?)(%?)\s*)?\)$/i, i = /^rgba?\(\s*([+-]?[\d.]+)%\s*,?\s*([+-]?[\d.]+)%\s*,?\s*([+-]?[\d.]+)%\s*(?:[\s,|/]\s*([+-]?[\d.]+)(%?)\s*)?\)$/i, a = /^(\w+)$/, o = [
 		0,
@@ -44967,62 +45015,62 @@ T4.get = function(e) {
 		0,
 		0,
 		0
-	] : Object.hasOwn(C4, s[1]) ? (o = C4[s[1]].slice(), o[3] = 1, o) : null;
+	] : Object.hasOwn(M4, s[1]) ? (o = M4[s[1]].slice(), o[3] = 1, o) : null;
 	else return null;
-	for (c = 0; c < 3; c++) o[c] = E4(o[c], 0, 255);
-	return o[3] = E4(o[3], 0, 1), o;
-}, T4.get.hsl = function(e) {
+	for (c = 0; c < 3; c++) o[c] = F4(o[c], 0, 255);
+	return o[3] = F4(o[3], 0, 1), o;
+}, P4.get.hsl = function(e) {
 	if (!e) return null;
 	let t = e.match(/^hsla?\(\s*([+-]?(?:\d{0,3}\.)?\d+)(?:deg)?\s*,?\s*([+-]?[\d.]+)%\s*,?\s*([+-]?[\d.]+)%\s*(?:[,|/]\s*([+-]?(?=\.\d|\d)(?:0|[1-9]\d*)?(?:\.\d*)?(?:e[+-]?\d+)?)\s*)?\)$/i);
 	if (t) {
 		let e = Number.parseFloat(t[4]);
 		return [
 			(Number.parseFloat(t[1]) % 360 + 360) % 360,
-			E4(Number.parseFloat(t[2]), 0, 100),
-			E4(Number.parseFloat(t[3]), 0, 100),
-			E4(Number.isNaN(e) ? 1 : e, 0, 1)
+			F4(Number.parseFloat(t[2]), 0, 100),
+			F4(Number.parseFloat(t[3]), 0, 100),
+			F4(Number.isNaN(e) ? 1 : e, 0, 1)
 		];
 	}
 	return null;
-}, T4.get.hwb = function(e) {
+}, P4.get.hwb = function(e) {
 	if (!e) return null;
 	let t = e.match(/^hwb\(\s*([+-]?\d{0,3}(?:\.\d+)?)(?:deg)?\s*[\s,]\s*([+-]?[\d.]+)%\s*[\s,]\s*([+-]?[\d.]+)%\s*(?:[\s,]\s*([+-]?(?=\.\d|\d)(?:0|[1-9]\d*)?(?:\.\d*)?(?:e[+-]?\d+)?)\s*)?\)$/i);
 	if (t) {
 		let e = Number.parseFloat(t[4]);
 		return [
 			(Number.parseFloat(t[1]) % 360 + 360) % 360,
-			E4(Number.parseFloat(t[2]), 0, 100),
-			E4(Number.parseFloat(t[3]), 0, 100),
-			E4(Number.isNaN(e) ? 1 : e, 0, 1)
+			F4(Number.parseFloat(t[2]), 0, 100),
+			F4(Number.parseFloat(t[3]), 0, 100),
+			F4(Number.isNaN(e) ? 1 : e, 0, 1)
 		];
 	}
 	return null;
-}, T4.to.hex = function(...e) {
-	return "#" + D4(e[0]) + D4(e[1]) + D4(e[2]) + (e[3] < 1 ? D4(Math.round(e[3] * 255)) : "");
-}, T4.to.rgb = function(...e) {
+}, P4.to.hex = function(...e) {
+	return "#" + I4(e[0]) + I4(e[1]) + I4(e[2]) + (e[3] < 1 ? I4(Math.round(e[3] * 255)) : "");
+}, P4.to.rgb = function(...e) {
 	return e.length < 4 || e[3] === 1 ? "rgb(" + Math.round(e[0]) + ", " + Math.round(e[1]) + ", " + Math.round(e[2]) + ")" : "rgba(" + Math.round(e[0]) + ", " + Math.round(e[1]) + ", " + Math.round(e[2]) + ", " + e[3] + ")";
-}, T4.to.rgb.percent = function(...e) {
+}, P4.to.rgb.percent = function(...e) {
 	let t = Math.round(e[0] / 255 * 100), n = Math.round(e[1] / 255 * 100), r = Math.round(e[2] / 255 * 100);
 	return e.length < 4 || e[3] === 1 ? "rgb(" + t + "%, " + n + "%, " + r + "%)" : "rgba(" + t + "%, " + n + "%, " + r + "%, " + e[3] + ")";
-}, T4.to.hsl = function(...e) {
+}, P4.to.hsl = function(...e) {
 	return e.length < 4 || e[3] === 1 ? "hsl(" + e[0] + ", " + e[1] + "%, " + e[2] + "%)" : "hsla(" + e[0] + ", " + e[1] + "%, " + e[2] + "%, " + e[3] + ")";
-}, T4.to.hwb = function(...e) {
+}, P4.to.hwb = function(...e) {
 	let t = "";
 	return e.length >= 4 && e[3] !== 1 && (t = ", " + e[3]), "hwb(" + e[0] + ", " + e[1] + "%, " + e[2] + "%" + t + ")";
-}, T4.to.keyword = function(...e) {
-	return w4[e.slice(0, 3)];
+}, P4.to.keyword = function(...e) {
+	return N4[e.slice(0, 3)];
 };
-function E4(e, t, n) {
+function F4(e, t, n) {
 	return Math.min(Math.max(t, e), n);
 }
-function D4(e) {
+function I4(e) {
 	let t = Math.round(e).toString(16).toUpperCase();
 	return t.length < 2 ? "0" + t : t;
 }
 //#endregion
 //#region node_modules/color-convert/conversions.js
-var O4 = {};
-for (let e of Object.keys(C4)) O4[C4[e]] = e;
+var L4 = {};
+for (let e of Object.keys(M4)) L4[M4[e]] = e;
 var $ = {
 	rgb: {
 		channels: 3,
@@ -45108,12 +45156,12 @@ var $ = {
 		channels: 1,
 		labels: ["gray"]
 	}
-}, k4 = (6 / 29) ** 3;
-function A4(e) {
+}, R4 = (6 / 29) ** 3;
+function z4(e) {
 	let t = e > .0031308 ? 1.055 * e ** (1 / 2.4) - .055 : e * 12.92;
 	return Math.min(Math.max(0, t), 1);
 }
-function j4(e) {
+function B4(e) {
 	return e > .04045 ? ((e + .055) / 1.055) ** 2.4 : e / 12.92;
 }
 for (let e of Object.keys($)) {
@@ -45178,7 +45226,7 @@ $.rgb.hsl = function(e) {
 		r * 100
 	];
 }, $.rgb.oklab = function(e) {
-	let t = j4(e[0] / 255), n = j4(e[1] / 255), r = j4(e[2] / 255), i = Math.cbrt(.4122214708 * t + .5363325363 * n + .0514459929 * r), a = Math.cbrt(.2119034982 * t + .6806995451 * n + .1073969566 * r), o = Math.cbrt(.0883024619 * t + .2817188376 * n + .6299787005 * r), s = .2104542553 * i + .793617785 * a - .0040720468 * o, c = 1.9779984951 * i - 2.428592205 * a + .4505937099 * o, l = .0259040371 * i + .7827717662 * a - .808675766 * o;
+	let t = B4(e[0] / 255), n = B4(e[1] / 255), r = B4(e[2] / 255), i = Math.cbrt(.4122214708 * t + .5363325363 * n + .0514459929 * r), a = Math.cbrt(.2119034982 * t + .6806995451 * n + .1073969566 * r), o = Math.cbrt(.0883024619 * t + .2817188376 * n + .6299787005 * r), s = .2104542553 * i + .793617785 * a - .0040720468 * o, c = 1.9779984951 * i - 2.428592205 * a + .4505937099 * o, l = .0259040371 * i + .7827717662 * a - .808675766 * o;
 	return [
 		s * 100,
 		c * 100,
@@ -45193,22 +45241,22 @@ $.rgb.hsl = function(e) {
 		i * 100
 	];
 };
-function M4(e, t) {
+function V4(e, t) {
 	return (e[0] - t[0]) ** 2 + (e[1] - t[1]) ** 2 + (e[2] - t[2]) ** 2;
 }
 $.rgb.keyword = function(e) {
-	let t = O4[e];
+	let t = L4[e];
 	if (t) return t;
 	let n = Infinity, r;
-	for (let t of Object.keys(C4)) {
-		let i = C4[t], a = M4(e, i);
+	for (let t of Object.keys(M4)) {
+		let i = M4[t], a = V4(e, i);
 		a < n && (n = a, r = t);
 	}
 	return r;
 }, $.keyword.rgb = function(e) {
-	return [...C4[e]];
+	return [...M4[e]];
 }, $.rgb.xyz = function(e) {
-	let t = j4(e[0] / 255), n = j4(e[1] / 255), r = j4(e[2] / 255), i = t * .4124564 + n * .3575761 + r * .1804375, a = t * .2126729 + n * .7151522 + r * .072175, o = t * .0193339 + n * .119192 + r * .9503041;
+	let t = B4(e[0] / 255), n = B4(e[1] / 255), r = B4(e[2] / 255), i = t * .4124564 + n * .3575761 + r * .1804375, a = t * .2126729 + n * .7151522 + r * .072175, o = t * .0193339 + n * .119192 + r * .9503041;
 	return [
 		i * 100,
 		a * 100,
@@ -45216,7 +45264,7 @@ $.rgb.keyword = function(e) {
 	];
 }, $.rgb.lab = function(e) {
 	let t = $.rgb.xyz(e), n = t[0], r = t[1], i = t[2];
-	return n /= 95.047, r /= 100, i /= 108.883, n = n > k4 ? n ** (1 / 3) : 7.787 * n + 16 / 116, r = r > k4 ? r ** (1 / 3) : 7.787 * r + 16 / 116, i = i > k4 ? i ** (1 / 3) : 7.787 * i + 16 / 116, [
+	return n /= 95.047, r /= 100, i /= 108.883, n = n > R4 ? n ** (1 / 3) : 7.787 * n + 16 / 116, r = r > R4 ? r ** (1 / 3) : 7.787 * r + 16 / 116, i = i > R4 ? i ** (1 / 3) : 7.787 * i + 16 / 116, [
 		116 * r - 16,
 		500 * (n - r),
 		200 * (r - i)
@@ -45329,14 +45377,14 @@ $.rgb.keyword = function(e) {
 	];
 }, $.xyz.rgb = function(e) {
 	let t = e[0] / 100, n = e[1] / 100, r = e[2] / 100, i, a, o;
-	return i = t * 3.2404542 + n * -1.5371385 + r * -.4985314, a = t * -.969266 + n * 1.8760108 + r * .041556, o = t * .0556434 + n * -.2040259 + r * 1.0572252, i = A4(i), a = A4(a), o = A4(o), [
+	return i = t * 3.2404542 + n * -1.5371385 + r * -.4985314, a = t * -.969266 + n * 1.8760108 + r * .041556, o = t * .0556434 + n * -.2040259 + r * 1.0572252, i = z4(i), a = z4(a), o = z4(o), [
 		i * 255,
 		a * 255,
 		o * 255
 	];
 }, $.xyz.lab = function(e) {
 	let t = e[0], n = e[1], r = e[2];
-	return t /= 95.047, n /= 100, r /= 108.883, t = t > k4 ? t ** (1 / 3) : 7.787 * t + 16 / 116, n = n > k4 ? n ** (1 / 3) : 7.787 * n + 16 / 116, r = r > k4 ? r ** (1 / 3) : 7.787 * r + 16 / 116, [
+	return t /= 95.047, n /= 100, r /= 108.883, t = t > R4 ? t ** (1 / 3) : 7.787 * t + 16 / 116, n = n > R4 ? n ** (1 / 3) : 7.787 * n + 16 / 116, r = r > R4 ? r ** (1 / 3) : 7.787 * r + 16 / 116, [
 		116 * n - 16,
 		500 * (t - n),
 		200 * (n - r)
@@ -45358,7 +45406,7 @@ $.rgb.keyword = function(e) {
 		l * 100
 	];
 }, $.oklab.rgb = function(e) {
-	let t = e[0] / 100, n = e[1] / 100, r = e[2] / 100, i = (t + .3963377774 * n + .2158037573 * r) ** 3, a = (t - .1055613458 * n - .0638541728 * r) ** 3, o = (t - .0894841775 * n - 1.291485548 * r) ** 3, s = A4(4.0767416621 * i - 3.3077115913 * a + .2309699292 * o), c = A4(-1.2684380046 * i + 2.6097574011 * a - .3413193965 * o), l = A4(-.0041960863 * i - .7034186147 * a + 1.707614701 * o);
+	let t = e[0] / 100, n = e[1] / 100, r = e[2] / 100, i = (t + .3963377774 * n + .2158037573 * r) ** 3, a = (t - .1055613458 * n - .0638541728 * r) ** 3, o = (t - .0894841775 * n - 1.291485548 * r) ** 3, s = z4(4.0767416621 * i - 3.3077115913 * a + .2309699292 * o), c = z4(-1.2684380046 * i + 2.6097574011 * a - .3413193965 * o), l = z4(-.0041960863 * i - .7034186147 * a + 1.707614701 * o);
 	return [
 		s * 255,
 		c * 255,
@@ -45370,7 +45418,7 @@ $.rgb.keyword = function(e) {
 	let t = e[0], n = e[1], r = e[2], i, a, o;
 	a = (t + 16) / 116, i = n / 500 + a, o = a - r / 200;
 	let s = a ** 3, c = i ** 3, l = o ** 3;
-	return a = s > k4 ? s : (a - 16 / 116) / 7.787, i = c > k4 ? c : (i - 16 / 116) / 7.787, o = l > k4 ? l : (o - 16 / 116) / 7.787, i *= 95.047, a *= 100, o *= 108.883, [
+	return a = s > R4 ? s : (a - 16 / 116) / 7.787, i = c > R4 ? c : (i - 16 / 116) / 7.787, o = l > R4 ? l : (o - 16 / 116) / 7.787, i *= 95.047, a *= 100, o *= 108.883, [
 		i,
 		a,
 		o
@@ -45582,7 +45630,7 @@ $.rgb.keyword = function(e) {
 };
 //#endregion
 //#region node_modules/color-convert/route.js
-function N4() {
+function H4() {
 	let e = {}, t = Object.keys($);
 	for (let { length: n } = t, r = 0; r < n; r++) e[t[r]] = {
 		distance: -1,
@@ -45590,8 +45638,8 @@ function N4() {
 	};
 	return e;
 }
-function P4(e) {
-	let t = N4(), n = [e];
+function U4(e) {
+	let t = H4(), n = [e];
 	for (t[e].distance = 0; n.length > 0;) {
 		let e = n.pop(), r = Object.keys($[e]);
 		for (let { length: i } = r, a = 0; a < i; a++) {
@@ -45601,35 +45649,35 @@ function P4(e) {
 	}
 	return t;
 }
-function F4(e, t) {
+function W4(e, t) {
 	return function(n) {
 		return t(e(n));
 	};
 }
-function I4(e, t) {
+function G4(e, t) {
 	let n = [t[e].parent, e], r = $[t[e].parent][e], i = t[e].parent;
-	for (; t[i].parent;) n.unshift(t[i].parent), r = F4($[t[i].parent][i], r), i = t[i].parent;
+	for (; t[i].parent;) n.unshift(t[i].parent), r = W4($[t[i].parent][i], r), i = t[i].parent;
 	return r.conversion = n, r;
 }
-function L4(e) {
-	let t = P4(e), n = {}, r = Object.keys(t);
+function K4(e) {
+	let t = U4(e), n = {}, r = Object.keys(t);
 	for (let { length: e } = r, i = 0; i < e; i++) {
 		let e = r[i];
-		t[e].parent !== null && (n[e] = I4(e, t));
+		t[e].parent !== null && (n[e] = G4(e, t));
 	}
 	return n;
 }
 //#endregion
 //#region node_modules/color-convert/index.js
-var R4 = {}, z4 = Object.keys($);
-function B4(e) {
+var q4 = {}, J4 = Object.keys($);
+function Y4(e) {
 	let t = function(...t) {
 		let n = t[0];
 		return n == null ? n : (n.length > 1 && (t = n), e(t));
 	};
 	return "conversion" in e && (t.conversion = e.conversion), t;
 }
-function V4(e) {
+function X4(e) {
 	let t = function(...t) {
 		let n = t[0];
 		if (n == null) return n;
@@ -45640,38 +45688,38 @@ function V4(e) {
 	};
 	return "conversion" in e && (t.conversion = e.conversion), t;
 }
-for (let e of z4) {
-	R4[e] = {}, Object.defineProperty(R4[e], "channels", { value: $[e].channels }), Object.defineProperty(R4[e], "labels", { value: $[e].labels });
-	let t = L4(e), n = Object.keys(t);
+for (let e of J4) {
+	q4[e] = {}, Object.defineProperty(q4[e], "channels", { value: $[e].channels }), Object.defineProperty(q4[e], "labels", { value: $[e].labels });
+	let t = K4(e), n = Object.keys(t);
 	for (let r of n) {
 		let n = t[r];
-		R4[e][r] = V4(n), R4[e][r].raw = B4(n);
+		q4[e][r] = X4(n), q4[e][r].raw = Y4(n);
 	}
 }
 //#endregion
 //#region node_modules/color/index.js
-var H4 = [
+var Z4 = [
 	"keyword",
 	"gray",
 	"hex"
-], U4 = {};
-for (let e of Object.keys(R4)) U4[[...R4[e].labels].sort().join("")] = e;
-var W4 = {};
-function G4(e, t) {
-	if (!(this instanceof G4)) return new G4(e, t);
-	if (t && t in H4 && (t = null), t && !(t in R4)) throw Error("Unknown model: " + t);
+], Q4 = {};
+for (let e of Object.keys(q4)) Q4[[...q4[e].labels].sort().join("")] = e;
+var $4 = {};
+function e3(e, t) {
+	if (!(this instanceof e3)) return new e3(e, t);
+	if (t && t in Z4 && (t = null), t && !(t in q4)) throw Error("Unknown model: " + t);
 	let n, r;
 	if (e == null) this.model = "rgb", this.color = [
 		0,
 		0,
 		0
 	], this.valpha = 1;
-	else if (e instanceof G4) this.model = e.model, this.color = [...e.color], this.valpha = e.valpha;
+	else if (e instanceof e3) this.model = e.model, this.color = [...e.color], this.valpha = e.valpha;
 	else if (typeof e == "string") {
-		let t = T4.get(e);
+		let t = P4.get(e);
 		if (t === null) throw Error("Unable to parse color from string: " + e);
-		this.model = t.model, r = R4[this.model].channels, this.color = t.value.slice(0, r), this.valpha = typeof t.value[r] == "number" ? t.value[r] : 1;
-	} else if (e.length > 0) this.model = t || "rgb", r = R4[this.model].channels, this.color = Z4(Array.prototype.slice.call(e, 0, r), r), this.valpha = typeof e[r] == "number" ? e[r] : 1;
+		this.model = t.model, r = q4[this.model].channels, this.color = t.value.slice(0, r), this.valpha = typeof t.value[r] == "number" ? t.value[r] : 1;
+	} else if (e.length > 0) this.model = t || "rgb", r = q4[this.model].channels, this.color = o3(Array.prototype.slice.call(e, 0, r), r), this.valpha = typeof e[r] == "number" ? e[r] : 1;
 	else if (typeof e == "number") this.model = "rgb", this.color = [
 		e >> 16 & 255,
 		e >> 8 & 255,
@@ -45682,19 +45730,19 @@ function G4(e, t) {
 		let t = Object.keys(e);
 		"alpha" in e && (t.splice(t.indexOf("alpha"), 1), this.valpha = typeof e.alpha == "number" ? e.alpha : 0);
 		let r = t.sort().join("");
-		if (!(r in U4)) throw Error("Unable to parse color from object: " + JSON.stringify(e));
-		this.model = U4[r];
-		let { labels: i } = R4[this.model], a = [];
+		if (!(r in Q4)) throw Error("Unable to parse color from object: " + JSON.stringify(e));
+		this.model = Q4[r];
+		let { labels: i } = q4[this.model], a = [];
 		for (n = 0; n < i.length; n++) a.push(e[i[n]]);
-		this.color = Z4(a);
+		this.color = o3(a);
 	}
-	if (W4[this.model]) for (r = R4[this.model].channels, n = 0; n < r; n++) {
-		let e = W4[this.model][n];
+	if ($4[this.model]) for (r = q4[this.model].channels, n = 0; n < r; n++) {
+		let e = $4[this.model][n];
 		e && (this.color[n] = e(this.color[n]));
 	}
 	this.valpha = Math.max(0, Math.min(1, this.valpha)), Object.freeze && Object.freeze(this);
 }
-G4.prototype = {
+e3.prototype = {
 	toString() {
 		return this.string();
 	},
@@ -45702,20 +45750,20 @@ G4.prototype = {
 		return this[this.model]();
 	},
 	string(e) {
-		let t = this.model in T4.to ? this : this.rgb();
+		let t = this.model in P4.to ? this : this.rgb();
 		t = t.round(typeof e == "number" ? e : 1);
 		let n = t.valpha === 1 ? t.color : [...t.color, this.valpha];
-		return T4.to[t.model](...n);
+		return P4.to[t.model](...n);
 	},
 	percentString(e) {
 		let t = this.rgb().round(typeof e == "number" ? e : 1), n = t.valpha === 1 ? t.color : [...t.color, this.valpha];
-		return T4.to.rgb.percent(...n);
+		return P4.to.rgb.percent(...n);
 	},
 	array() {
 		return this.valpha === 1 ? [...this.color] : [...this.color, this.valpha];
 	},
 	object() {
-		let e = {}, { channels: t } = R4[this.model], { labels: n } = R4[this.model];
+		let e = {}, { channels: t } = q4[this.model], { labels: n } = q4[this.model];
 		for (let r = 0; r < t; r++) e[n[r]] = this.color[r];
 		return this.valpha !== 1 && (e.alpha = this.valpha), e;
 	},
@@ -45728,49 +45776,49 @@ G4.prototype = {
 		return e.r /= 255, e.g /= 255, e.b /= 255, this.valpha !== 1 && (e.alpha = this.valpha), e;
 	},
 	round(e) {
-		return e = Math.max(e || 0, 0), new G4([...this.color.map(q4(e)), this.valpha], this.model);
+		return e = Math.max(e || 0, 0), new e3([...this.color.map(n3(e)), this.valpha], this.model);
 	},
 	alpha(e) {
-		return e === void 0 ? this.valpha : new G4([...this.color, Math.max(0, Math.min(1, e))], this.model);
+		return e === void 0 ? this.valpha : new e3([...this.color, Math.max(0, Math.min(1, e))], this.model);
 	},
-	red: J4("rgb", 0, Y4(255)),
-	green: J4("rgb", 1, Y4(255)),
-	blue: J4("rgb", 2, Y4(255)),
-	hue: J4([
+	red: r3("rgb", 0, i3(255)),
+	green: r3("rgb", 1, i3(255)),
+	blue: r3("rgb", 2, i3(255)),
+	hue: r3([
 		"hsl",
 		"hsv",
 		"hsl",
 		"hwb",
 		"hcg"
 	], 0, (e) => (e % 360 + 360) % 360),
-	saturationl: J4("hsl", 1, Y4(100)),
-	lightness: J4("hsl", 2, Y4(100)),
-	saturationv: J4("hsv", 1, Y4(100)),
-	value: J4("hsv", 2, Y4(100)),
-	chroma: J4("hcg", 1, Y4(100)),
-	gray: J4("hcg", 2, Y4(100)),
-	white: J4("hwb", 1, Y4(100)),
-	wblack: J4("hwb", 2, Y4(100)),
-	cyan: J4("cmyk", 0, Y4(100)),
-	magenta: J4("cmyk", 1, Y4(100)),
-	yellow: J4("cmyk", 2, Y4(100)),
-	black: J4("cmyk", 3, Y4(100)),
-	x: J4("xyz", 0, Y4(95.047)),
-	y: J4("xyz", 1, Y4(100)),
-	z: J4("xyz", 2, Y4(108.833)),
-	l: J4("lab", 0, Y4(100)),
-	a: J4("lab", 1),
-	b: J4("lab", 2),
+	saturationl: r3("hsl", 1, i3(100)),
+	lightness: r3("hsl", 2, i3(100)),
+	saturationv: r3("hsv", 1, i3(100)),
+	value: r3("hsv", 2, i3(100)),
+	chroma: r3("hcg", 1, i3(100)),
+	gray: r3("hcg", 2, i3(100)),
+	white: r3("hwb", 1, i3(100)),
+	wblack: r3("hwb", 2, i3(100)),
+	cyan: r3("cmyk", 0, i3(100)),
+	magenta: r3("cmyk", 1, i3(100)),
+	yellow: r3("cmyk", 2, i3(100)),
+	black: r3("cmyk", 3, i3(100)),
+	x: r3("xyz", 0, i3(95.047)),
+	y: r3("xyz", 1, i3(100)),
+	z: r3("xyz", 2, i3(108.833)),
+	l: r3("lab", 0, i3(100)),
+	a: r3("lab", 1),
+	b: r3("lab", 2),
 	keyword(e) {
-		return e === void 0 ? R4[this.model].keyword(this.color) : new G4(e);
+		return e === void 0 ? q4[this.model].keyword(this.color) : new e3(e);
 	},
 	hex(e) {
-		return e === void 0 ? T4.to.hex(...this.rgb().round().color) : new G4(e);
+		return e === void 0 ? P4.to.hex(...this.rgb().round().color) : new e3(e);
 	},
 	hexa(e) {
-		if (e !== void 0) return new G4(e);
+		if (e !== void 0) return new e3(e);
 		let t = this.rgb().round().color, n = Math.round(this.valpha * 255).toString(16).toUpperCase();
-		return n.length === 1 && (n = "0" + n), T4.to.hex(...t) + n;
+		return n.length === 1 && (n = "0" + n), P4.to.hex(...t) + n;
 	},
 	rgbNumber() {
 		let e = this.rgb().color;
@@ -45830,7 +45878,7 @@ G4.prototype = {
 	},
 	grayscale() {
 		let e = this.rgb().color, t = e[0] * .3 + e[1] * .59 + e[2] * .11;
-		return G4.rgb(t, t, t);
+		return e3.rgb(t, t, t);
 	},
 	fade(e) {
 		return this.alpha(this.valpha - this.valpha * e);
@@ -45845,57 +45893,57 @@ G4.prototype = {
 	mix(e, t) {
 		if (!e || !e.rgb) throw Error("Argument to \"mix\" was not a Color instance, but rather an instance of " + typeof e);
 		let n = e.rgb(), r = this.rgb(), i = t === void 0 ? .5 : t, a = 2 * i - 1, o = n.alpha() - r.alpha(), s = ((a * o === -1 ? a : (a + o) / (1 + a * o)) + 1) / 2, c = 1 - s;
-		return G4.rgb(s * n.red() + c * r.red(), s * n.green() + c * r.green(), s * n.blue() + c * r.blue(), n.alpha() * i + r.alpha() * (1 - i));
+		return e3.rgb(s * n.red() + c * r.red(), s * n.green() + c * r.green(), s * n.blue() + c * r.blue(), n.alpha() * i + r.alpha() * (1 - i));
 	}
 };
-for (let e of Object.keys(R4)) {
-	if (H4.includes(e)) continue;
-	let { channels: t } = R4[e];
-	G4.prototype[e] = function(...t) {
-		return this.model === e ? new G4(this) : t.length > 0 ? new G4(t, e) : new G4([...X4(R4[this.model][e].raw(this.color)), this.valpha], e);
-	}, G4[e] = function(...n) {
+for (let e of Object.keys(q4)) {
+	if (Z4.includes(e)) continue;
+	let { channels: t } = q4[e];
+	e3.prototype[e] = function(...t) {
+		return this.model === e ? new e3(this) : t.length > 0 ? new e3(t, e) : new e3([...a3(q4[this.model][e].raw(this.color)), this.valpha], e);
+	}, e3[e] = function(...n) {
 		let r = n[0];
-		return typeof r == "number" && (r = Z4(n, t)), new G4(r, e);
+		return typeof r == "number" && (r = o3(n, t)), new e3(r, e);
 	};
 }
-function K4(e, t) {
+function t3(e, t) {
 	return Number(e.toFixed(t));
 }
-function q4(e) {
+function n3(e) {
 	return function(t) {
-		return K4(t, e);
+		return t3(t, e);
 	};
 }
-function J4(e, t, n) {
+function r3(e, t, n) {
 	e = Array.isArray(e) ? e : [e];
-	for (let r of e) (W4[r] ||= [])[t] = n;
+	for (let r of e) ($4[r] ||= [])[t] = n;
 	return e = e[0], function(r) {
 		let i;
 		return r === void 0 ? (i = this[e]().color[t], n && (i = n(i)), i) : (n && (r = n(r)), i = this[e](), i.color[t] = r, i);
 	};
 }
-function Y4(e) {
+function i3(e) {
 	return function(t) {
 		return Math.max(0, Math.min(e, t));
 	};
 }
-function X4(e) {
+function a3(e) {
 	return Array.isArray(e) ? e : [e];
 }
-function Z4(e, t) {
+function o3(e, t) {
 	for (let n = 0; n < t; n++) typeof e[n] != "number" && (e[n] = 0);
 	return e;
 }
 //#endregion
 //#region src/colors.ts
-var Q4 = "#57606a", $4 = "#85b8e8";
-function e3(e, t, n) {
-	let r = G4(e).rgb().array(), i = G4(t).rgb().array(), a = Math.round(r[0] + (i[0] - r[0]) * n), o = Math.round(r[1] + (i[1] - r[1]) * n), s = Math.round(r[2] + (i[2] - r[2]) * n);
-	return G4.rgb(a, o, s).string();
+var s3 = "#57606a", c3 = "#85b8e8";
+function l3(e, t, n) {
+	let r = e3(e).rgb().array(), i = e3(t).rgb().array(), a = Math.round(r[0] + (i[0] - r[0]) * n), o = Math.round(r[1] + (i[1] - r[1]) * n), s = Math.round(r[2] + (i[2] - r[2]) * n);
+	return e3.rgb(a, o, s).string();
 }
-var t3 = 92, n3 = .2, r3 = .1;
-function i3(e) {
-	let t = G4(e).lightness(t3).saturate(r3), n = G4(e).darken(n3).saturate(r3), r = t.string(), i = n.string(), a = (e) => e3(r, i, e), o = [
+var u3 = 92, d3 = .2, f3 = .1;
+function p3(e) {
+	let t = e3(e).lightness(u3).saturate(f3), n = e3(e).darken(d3).saturate(f3), r = t.string(), i = n.string(), a = (e) => l3(r, i, e), o = [
 		0,
 		.25,
 		.5,
@@ -45910,25 +45958,24 @@ function i3(e) {
 		["high", o[4]]
 	]);
 }
-var { jsx: a3, jsxs: o3, Fragment: s3 } = window.__METABASE_VIZ_API__.jsxRuntime;
 //#endregion
 //#region src/index.tsx
-function c3(e, t) {
-	let { data: n } = u3(e, t), r = n.map(([e]) => p3(e)), i = /* @__PURE__ */ new Set();
+function m3(e, t) {
+	let { data: n } = g3(e, t), r = n.map(([e]) => y3(e)), i = /* @__PURE__ */ new Set();
 	for (let e of r) {
 		if (i.has(e)) return !0;
 		i.add(e);
 	}
 	return !1;
 }
-function l3(e) {
+function h3(e) {
 	let t = /* @__PURE__ */ new Set();
 	return e.forEach((e) => {
 		let n = new Date(e);
 		isNaN(n.getTime()) || t.add(n.getFullYear());
 	}), Array.from(t).sort((e, t) => e - t);
 }
-function u3(e, t) {
+function g3(e, t) {
 	let [{ data: n }] = e, r = n.cols.findIndex((e) => e.name === t.dimension), i = n.cols.findIndex((e) => e.name === t.metric);
 	if (r === -1 || i === -1) {
 		let e = (/* @__PURE__ */ new Date()).getFullYear();
@@ -45940,7 +45987,7 @@ function u3(e, t) {
 			metricLabel: t.metric ?? "Value"
 		};
 	}
-	let a = n.rows.map((e) => [String(e[r]), Number(e[i])]), o = l3(a.map(([e]) => e));
+	let a = n.rows.map((e) => [String(e[r]), Number(e[i])]), o = h3(a.map(([e]) => e));
 	return {
 		data: a,
 		years: o,
@@ -45949,32 +45996,32 @@ function u3(e, t) {
 		metricLabel: n.cols[i]?.display_name ?? n.cols[i]?.name ?? "Value"
 	};
 }
-var d3 = 30;
-function f3(e) {
+var _3 = 30;
+function v3(e) {
 	let t = [], n = new Date(e, 0, 1), r = new Date(e, 11, 31);
-	for (let e = new Date(n); e <= r; e.setDate(e.getDate() + 1)) t.push(p3(e));
+	for (let e = new Date(n); e <= r; e.setDate(e.getDate() + 1)) t.push(y3(e));
 	return t;
 }
-function p3(e) {
+function y3(e) {
 	return new Date(e).toLocaleDateString("en-CA");
 }
-function m3(e) {
+function b3(e) {
 	return new Date(e).toLocaleDateString("en-US", {
 		month: "short",
 		day: "numeric",
 		year: "numeric"
 	});
 }
-function h3(e) {
+function x3(e) {
 	return e.toFixed(2);
 }
-function g3(e, t, n, r, i) {
-	let a = i3(n), o = e.filter(([e]) => {
+function S3(e, t, n, r, i) {
+	let a = p3(n), o = e.filter(([e]) => {
 		let n = new Date(e);
 		return !isNaN(n.getTime()) && n.getFullYear() === t;
-	}), s = o.map(([e, t]) => t), c = new Map(o.map(([e, t]) => [p3(e), t])), l = f3(t).map((e) => [e, c.get(e) ?? 0]), u = s.length ? Math.min(...s) : 0, d = s.length ? Math.max(...s) : 100;
+	}), s = o.map(([e, t]) => t), c = new Map(o.map(([e, t]) => [y3(e), t])), l = v3(t).map((e) => [e, c.get(e) ?? 0]), u = s.length ? Math.min(...s) : 0, d = s.length ? Math.max(...s) : 100;
 	return {
-		tooltip: { formatter: (e) => `${r}: ${m3(e.value[0])}<br/>${i}: ${h3(e.value[1])}` },
+		tooltip: { formatter: (e) => `${r}: ${b3(e.value[0])}<br/>${i}: ${x3(e.value[1])}` },
 		visualMap: {
 			min: u,
 			max: d,
@@ -46013,7 +46060,7 @@ function g3(e, t, n, r, i) {
 		},
 		calendar: {
 			top: 20,
-			left: d3,
+			left: _3,
 			cellSize: [18, 18],
 			range: t,
 			itemStyle: {
@@ -46026,12 +46073,12 @@ function g3(e, t, n, r, i) {
 			dayLabel: {
 				show: !0,
 				firstDay: 0,
-				color: Q4,
+				color: s3,
 				fontSize: 11
 			},
 			monthLabel: {
 				nameMap: "en",
-				color: Q4,
+				color: s3,
 				fontSize: 11
 			}
 		},
@@ -46043,7 +46090,7 @@ function g3(e, t, n, r, i) {
 		}
 	};
 }
-var _3 = () => ({
+var C3 = () => ({
 	id: "grid-heatmap",
 	getName: () => "Calendar Heatmap",
 	minSize: {
@@ -46060,7 +46107,7 @@ var _3 = () => ({
 	checkRenderable(e, t) {
 		if (e.length === 0) throw Error("No series provided");
 		let n = t ?? {}, r = n.dimension ?? e[0]?.data?.cols?.[0]?.name, i = n.metric ?? e[0]?.data?.cols?.[1]?.name;
-		if (c3(e, {
+		if (m3(e, {
 			...n,
 			dimension: r,
 			metric: i
@@ -46108,20 +46155,22 @@ var _3 = () => ({
 			title: "Color",
 			widget: "color",
 			getDefault() {
-				return $4;
+				return c3;
 			}
 		}
 	},
-	VisualizationComponent: v3,
-	StaticVisualizationComponent: y3
-}), v3 = (e) => {
-	let { height: t, width: n, settings: r, series: i } = e, a = h4(null), o = h4(null), [s, c] = p4(null), { data: l, years: u, latestYear: d, dimensionLabel: f, metricLabel: p } = u3(i, r);
+	VisualizationComponent: w3,
+	StaticVisualizationComponent: T3
+}), w3 = (e) => {
+	let { height: t, width: n, settings: r, series: i } = e, a = h4(null), o = h4(null), [s, c] = p4(null);
+	console.log({ props: e });
+	let { data: l, years: u, latestYear: d, dimensionLabel: f, metricLabel: p } = g3(i, r);
 	m4(() => {
 		c(d);
 	}, [d]);
 	let m = s ?? d, h = u.indexOf(m), g = h > 0, _ = h < u.length - 1, v = r.color ?? "#85b8e8";
 	return m4(() => {
-		if (a.current) return o.current ||= qS(a.current), o.current.setOption(g3(l, m, v, f, p), !0), () => {
+		if (a.current) return o.current ||= qS(a.current), o.current.setOption(S3(l, m, v, f, p), !0), () => {
 			o.current?.dispose(), o.current = null;
 		};
 	}, [
@@ -46132,9 +46181,9 @@ var _3 = () => ({
 		p
 	]), m4(() => {
 		o.current?.resize();
-	}, [n, t]), /* @__PURE__ */ o3("div", {
+	}, [n, t]), /* @__PURE__ */ C4("div", {
 		style: { position: "relative" },
-		children: [/* @__PURE__ */ o3("div", {
+		children: [/* @__PURE__ */ C4("div", {
 			style: {
 				display: "flex",
 				justifyContent: "center",
@@ -46144,38 +46193,25 @@ var _3 = () => ({
 				marginTop: 10
 			},
 			children: [
-				/* @__PURE__ */ a3("button", {
-					onClick: () => g && c(u[h - 1]),
+				/* @__PURE__ */ S4(A4, {
+					onClick: () => c(u[h - 1]),
 					disabled: !g,
-					style: {
-						pointerEvents: "all",
-						cursor: g ? "pointer" : "default",
-						opacity: g ? 1 : .3,
-						fontSize: 16,
-						padding: "0 4px"
-					},
-					children: "prev"
+					children: "Previous"
 				}),
-				/* @__PURE__ */ a3("span", {
-					style: { fontSize: 16 },
+				/* @__PURE__ */ S4("span", {
+					style: {
+						fontSize: 16,
+						fontWeight: 500
+					},
 					children: m
 				}),
-				/* @__PURE__ */ a3("button", {
-					onClick: () => _ && c(u[h + 1]),
+				/* @__PURE__ */ S4(A4, {
+					onClick: () => c(u[h + 1]),
 					disabled: !_,
-					style: {
-						pointerEvents: "all",
-						background: "none",
-						border: "none",
-						cursor: _ ? "pointer" : "default",
-						opacity: _ ? 1 : .3,
-						fontSize: 16,
-						padding: "0 4px"
-					},
-					children: "next"
+					children: "Next"
 				})
 			]
-		}), /* @__PURE__ */ a3("div", {
+		}), /* @__PURE__ */ S4("div", {
 			ref: a,
 			style: {
 				width: n,
@@ -46183,6 +46219,6 @@ var _3 = () => ({
 			}
 		})]
 	});
-}, y3 = (e) => /* @__PURE__ */ a3("div", { children: "TODO: Implement static visualization" });
+}, T3 = (e) => /* @__PURE__ */ S4("div", { children: "TODO: Implement static visualization" });
 //#endregion
-export { _3 as default };
+export { C3 as default };

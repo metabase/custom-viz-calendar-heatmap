@@ -6,6 +6,7 @@ import type {
 import type { Series } from "@metabase/custom-viz";
 import * as echarts from "echarts";
 import { useEffect, useRef, useState } from "react";
+import { Button } from "./Button";
 import { getColorScale, TEXT_COLOR, DEFAULT_CALENDAR_COLOR } from "./colors";
 
 type Settings = {
@@ -298,6 +299,7 @@ const VisualizationComponent = (props: CustomVisualizationProps<Settings>) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const chartRef = useRef<echarts.ECharts | null>(null);
   const [displayedYear, setDisplayedYear] = useState<number | null>(null);
+  console.log({ props });
 
   const { data, years, latestYear, dimensionLabel, metricLabel } = getChartData(
     series,
@@ -348,35 +350,19 @@ const VisualizationComponent = (props: CustomVisualizationProps<Settings>) => {
           marginTop: 10,
         }}
       >
-        <button
-          onClick={() => canGoPrev && setDisplayedYear(years[yearIndex - 1])}
+        <Button
+          onClick={() => setDisplayedYear(years[yearIndex - 1])}
           disabled={!canGoPrev}
-          style={{
-            pointerEvents: "all",
-            cursor: canGoPrev ? "pointer" : "default",
-            opacity: canGoPrev ? 1 : 0.3,
-            fontSize: 16,
-            padding: "0 4px",
-          }}
         >
-          prev
-        </button>
-        <span style={{ fontSize: 16 }}>{currentYear}</span>
-        <button
-          onClick={() => canGoNext && setDisplayedYear(years[yearIndex + 1])}
+          Previous
+        </Button>
+        <span style={{ fontSize: 16, fontWeight: 500 }}>{currentYear}</span>
+        <Button
+          onClick={() => setDisplayedYear(years[yearIndex + 1])}
           disabled={!canGoNext}
-          style={{
-            pointerEvents: "all",
-            background: "none",
-            border: "none",
-            cursor: canGoNext ? "pointer" : "default",
-            opacity: canGoNext ? 1 : 0.3,
-            fontSize: 16,
-            padding: "0 4px",
-          }}
         >
-          next
-        </button>
+          Next
+        </Button>
       </div>
       <div ref={containerRef} style={{ width, height }} />
     </div>
