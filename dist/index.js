@@ -44213,20 +44213,29 @@ var O4 = "#57606a", k4 = new Map([
 	["medium-high", "#509ee2"],
 	["high", "#2176b5"]
 ]);
-function A4(e, t) {
+function A4(e) {
+	return new Date(e).toLocaleDateString("en-US", {
+		month: "short",
+		day: "numeric",
+		year: "numeric"
+	});
+}
+function j4(e) {
+	return e.toFixed(2);
+}
+function M4(e, t) {
 	let n = e.filter(([e]) => {
 		let n = new Date(e);
 		return !isNaN(n.getTime()) && n.getFullYear() === t;
 	}), r = n.map((e) => e[1]), i = new Map(n.map(([e, t]) => [e.slice(0, 10), t])), a = D4(t).map((e) => [e, i.get(e) ?? 0]), o = r.length ? Math.min(...r) : 0, s = r.length ? Math.max(...r) : 100;
 	return {
-		tooltip: {},
+		tooltip: { formatter: (e) => `${A4(e.value[0])}: ${j4(e.value[1])}` },
 		visualMap: {
 			min: o,
 			max: s,
 			type: "piecewise",
 			orient: "horizontal",
 			left: "center",
-			bottom: 0,
 			inRange: { color: [...k4.values()] },
 			pieces: [
 				{
@@ -44289,7 +44298,7 @@ function A4(e, t) {
 		}
 	};
 }
-var j4 = () => ({
+var N4 = () => ({
 	id: "grid-heatmap",
 	getName: () => "Calendar Heatmap",
 	minSize: {
@@ -44344,29 +44353,24 @@ var j4 = () => ({
 			}
 		}
 	},
-	VisualizationComponent: M4,
-	StaticVisualizationComponent: N4
-}), M4 = (e) => {
+	VisualizationComponent: P4,
+	StaticVisualizationComponent: F4
+}), P4 = (e) => {
 	let { height: t, width: n, settings: r, series: i } = e, a = m4(null), o = m4(null), [s, c] = f4(null), { data: l, years: u, latestYear: d } = T4(i, r);
 	p4(() => {
 		c(d);
 	}, [d]);
 	let f = s ?? d, p = u.indexOf(f), m = p > 0, h = p < u.length - 1;
 	return p4(() => {
-		if (a.current) return o.current ||= KS(a.current), o.current.setOption(A4(l, f), !0), () => {
+		if (a.current) return o.current ||= KS(a.current), o.current.setOption(M4(l, f), !0), () => {
 			o.current?.dispose(), o.current = null;
 		};
 	}, [l, f]), p4(() => {
 		o.current?.resize();
 	}, [n, t]), /* @__PURE__ */ S4("div", {
-		style: {
-			width: n,
-			height: t,
-			position: "relative"
-		},
+		style: { position: "relative" },
 		children: [/* @__PURE__ */ S4("div", {
 			style: {
-				right: 0,
 				display: "flex",
 				justifyContent: "center",
 				alignItems: "center",
@@ -44414,6 +44418,6 @@ var j4 = () => ({
 			}
 		})]
 	});
-}, N4 = (e) => /* @__PURE__ */ x4("div", { children: "TODO: Implement static visualization" });
+}, F4 = (e) => /* @__PURE__ */ x4("div", { children: "TODO: Implement static visualization" });
 //#endregion
-export { j4 as default };
+export { N4 as default };

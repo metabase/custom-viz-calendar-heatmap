@@ -74,6 +74,19 @@ const HEAT_COLORS = new Map([
   ["high", "#2176b5"],
 ]);
 
+function formatDate(date: string): string {
+  const d = new Date(date);
+  return d.toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+}
+
+function formatValue(value: number): string {
+  return value.toFixed(2);
+}
+
 function getOption(data: [string, number][], displayedYear: number) {
   const yearData = data.filter(([date]) => {
     const d = new Date(date);
@@ -91,22 +104,32 @@ function getOption(data: [string, number][], displayedYear: number) {
   const min = values.length ? Math.min(...values) : 0;
   const max = values.length ? Math.max(...values) : 100;
   return {
-    tooltip: {},
+    tooltip: {
+      formatter: (params: { value: [string, number] }) =>
+        `${formatDate(params.value[0])}: ${formatValue(params.value[1])}`,
+    },
     visualMap: {
       min,
       max,
       type: "piecewise" as const,
       orient: "horizontal" as const,
       left: "center",
-      bottom: 0,
       inRange: {
         color: [...HEAT_COLORS.values()],
       },
       pieces: [
         { min: 0, max: 0, color: HEAT_COLORS.get("empty") },
         { gt: 0, lte: max * 0.25, color: HEAT_COLORS.get("low") },
-        { gt: max * 0.25, lte: max * 0.5, color: HEAT_COLORS.get("medium-low") },
-        { gt: max * 0.5, lte: max * 0.75, color: HEAT_COLORS.get("medium-high") },
+        {
+          gt: max * 0.25,
+          lte: max * 0.5,
+          color: HEAT_COLORS.get("medium-low"),
+        },
+        {
+          gt: max * 0.5,
+          lte: max * 0.75,
+          color: HEAT_COLORS.get("medium-high"),
+        },
         { gt: max * 0.75, color: HEAT_COLORS.get("high") },
       ],
       showLabel: true,
@@ -245,10 +268,9 @@ const VisualizationComponent = (props: CustomVisualizationProps<Settings>) => {
   }, [width, height]);
 
   return (
-    <div style={{ width, height, position: "relative" }}>
+    <div style={{ position: "relative" }}>
       <div
         style={{
-          right: 0,
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
