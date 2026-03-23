@@ -318,20 +318,18 @@ const VisualizationComponent = (props: CustomVisualizationProps<Settings>) => {
 
   useEffect(() => {
     if (!containerRef.current) return;
-
-    if (!chartRef.current) {
-      chartRef.current = echarts.init(containerRef.current);
-    }
-
-    chartRef.current.setOption(
-      getOption(data, currentYear, color, dimensionLabel, metricLabel),
-      true,
-    );
-
+    chartRef.current = echarts.init(containerRef.current);
     return () => {
       chartRef.current?.dispose();
       chartRef.current = null;
     };
+  }, []);
+
+  useEffect(() => {
+    chartRef.current?.setOption(
+      getOption(data, currentYear, color, dimensionLabel, metricLabel),
+      true,
+    );
   }, [data, currentYear, color, dimensionLabel, metricLabel]);
 
   useEffect(() => {

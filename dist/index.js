@@ -46170,9 +46170,11 @@ var C3 = () => ({
 	}, [d]);
 	let m = s ?? d, h = u.indexOf(m), g = h > 0, _ = h < u.length - 1, v = r.color ?? "#85b8e8";
 	return m4(() => {
-		if (a.current) return o.current ||= qS(a.current), o.current.setOption(S3(l, m, v, f, p), !0), () => {
+		if (a.current) return o.current = qS(a.current), () => {
 			o.current?.dispose(), o.current = null;
 		};
+	}, []), m4(() => {
+		o.current?.setOption(S3(l, m, v, f, p), !0);
 	}, [
 		l,
 		m,
