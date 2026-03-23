@@ -93,6 +93,29 @@ function getChartData(
 }
 
 const PADDING = 30;
+const CALENDAR_TOP = 20;
+const CALENDAR_DAY_LABEL_WIDTH = 20;
+const CALENDAR_MONTH_LABEL_HEIGHT = 18;
+const CALENDAR_ROWS = 7;
+const CALENDAR_WEEKS = 53;
+const CELL_SIZE_MIN = 12;
+const CELL_SIZE_MAX = 22;
+
+function getCellBorderRadius(cellSize: number): number {
+  return Math.max(1, Math.floor((cellSize - CELL_SIZE_MIN) / 3));
+}
+
+function getCellSize(width: number): number {
+  return Math.max(
+    CELL_SIZE_MIN,
+    Math.min(
+      CELL_SIZE_MAX,
+      Math.floor((width - PADDING - CALENDAR_DAY_LABEL_WIDTH) / CALENDAR_WEEKS),
+    ),
+  );
+}
+const VISUALMAP_LEFT = 18;
+const VISUALMAP_GAP = 8;
 
 function getAllDatesForYear(year: number): string[] {
   const dates: string[] = [];
@@ -130,6 +153,7 @@ function getOption(
   color: string,
   dimensionLabel: string,
   metricLabel: string,
+  cellSize: number,
 ) {
   const colorScale = getColorScale(color);
   const displayedYearData = data.filter(([date]) => {
@@ -159,8 +183,12 @@ function getOption(
       max,
       type: "piecewise" as const,
       orient: "horizontal" as const,
-      top: 140,
-      left: 18,
+      top:
+        CALENDAR_TOP +
+        CALENDAR_MONTH_LABEL_HEIGHT +
+        CALENDAR_ROWS * cellSize +
+        VISUALMAP_GAP,
+      left: "center",
       bottom: null,
       itemSymbol: "circle",
       inRange: {
@@ -188,15 +216,15 @@ function getOption(
       itemGap: 5,
     },
     calendar: {
-      top: 20,
+      top: CALENDAR_TOP,
       left: PADDING,
       bottom: null,
-      cellSize: [18, 18],
+      cellSize: [cellSize, cellSize],
       range: displayedYear,
       itemStyle: {
         borderWidth: 4,
         borderColor: "#ffffff",
-        borderRadius: 2,
+        borderRadius: getCellBorderRadius(cellSize),
       },
       splitLine: { show: false },
       yearLabel: { show: false },
@@ -217,7 +245,7 @@ function getOption(
       coordinateSystem: "calendar",
       data: filledData,
       itemStyle: {
-        borderRadius: 3,
+        borderRadius: getCellBorderRadius(cellSize),
       },
     },
   };
@@ -227,8 +255,8 @@ const createVisualization: CreateCustomVisualization<Settings> = () => {
   return {
     id: "grid-heatmap",
     getName: () => "Calendar Heatmap",
-    minSize: { width: 800, height: 400 },
-    defaultSize: { width: 800, height: 400 },
+    minSize: { width: 15, height: 6 },
+    defaultSize: { width: 20, height: 6 },
     isSensible() {
       return true;
     },
@@ -333,16 +361,27 @@ const VisualizationComponent = (props: CustomVisualizationProps<Settings>) => {
     };
   }, []);
 
+  const cellSize = getCellSize(width);
+
   useEffect(() => {
     chartRef.current?.setOption(
-      getOption(data, currentYear, color, dimensionLabel, metricLabel),
+      getOption(
+        data,
+        currentYear,
+        color,
+        dimensionLabel,
+        metricLabel,
+        cellSize,
+      ),
       true,
     );
-  }, [data, currentYear, color, dimensionLabel, metricLabel]);
+  }, [data, currentYear, color, dimensionLabel, metricLabel, cellSize]);
 
   useEffect(() => {
     chartRef.current?.resize();
   }, [width, height]);
+
+  console.log({ width, height });
 
   return (
     <div style={{ position: "relative" }}>
@@ -371,7 +410,10 @@ const VisualizationComponent = (props: CustomVisualizationProps<Settings>) => {
           Next
         </Button>
       </div>
-      <div ref={containerRef} style={{ width, height }} />
+      <div
+        ref={containerRef}
+        style={{ width, height, minWidth: 550, maxWidth: 1400 }}
+      />
     </div>
   );
 };

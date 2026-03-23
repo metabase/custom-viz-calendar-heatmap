@@ -45961,7 +45961,7 @@ function p3(e) {
 //#endregion
 //#region src/index.tsx
 function m3(e, t) {
-	let { data: n } = g3(e, t), r = n.map(([e]) => y3(e)), i = /* @__PURE__ */ new Set();
+	let { data: n } = g3(e, t), r = n.map(([e]) => k3(e)), i = /* @__PURE__ */ new Set();
 	for (let e of r) {
 		if (i.has(e)) return !0;
 		i.add(e);
@@ -45996,66 +45996,73 @@ function g3(e, t) {
 		metricLabel: n.cols[i]?.display_name ?? n.cols[i]?.name ?? "Value"
 	};
 }
-var _3 = 30;
-function v3(e) {
+var _3 = 30, v3 = 20, y3 = 20, b3 = 18, x3 = 7, S3 = 53, C3 = 12, w3 = 22;
+function T3(e) {
+	return Math.max(1, Math.floor((e - C3) / 3));
+}
+function E3(e) {
+	return Math.max(C3, Math.min(w3, Math.floor((e - _3 - y3) / S3)));
+}
+var D3 = 8;
+function O3(e) {
 	let t = [], n = new Date(e, 0, 1), r = new Date(e, 11, 31);
-	for (let e = new Date(n); e <= r; e.setDate(e.getDate() + 1)) t.push(y3(e));
+	for (let e = new Date(n); e <= r; e.setDate(e.getDate() + 1)) t.push(k3(e));
 	return t;
 }
-function y3(e) {
+function k3(e) {
 	return new Date(e).toLocaleDateString("en-CA");
 }
-function b3(e) {
+function A3(e) {
 	return new Date(e).toLocaleDateString("en-US", {
 		month: "short",
 		day: "numeric",
 		year: "numeric"
 	});
 }
-function x3(e) {
+function j3(e) {
 	return e.toFixed(2);
 }
-function S3(e, t, n, r, i) {
-	let a = p3(n), o = e.filter(([e]) => {
+function M3(e, t, n, r, i, a) {
+	let o = p3(n), s = e.filter(([e]) => {
 		let n = new Date(e);
 		return !isNaN(n.getTime()) && n.getFullYear() === t;
-	}), s = o.map(([e, t]) => t), c = new Map(o.map(([e, t]) => [y3(e), t])), l = v3(t).map((e) => [e, c.get(e) ?? 0]), u = s.length ? Math.min(...s) : 0, d = s.length ? Math.max(...s) : 100;
+	}), c = s.map(([e, t]) => t), l = new Map(s.map(([e, t]) => [k3(e), t])), u = O3(t).map((e) => [e, l.get(e) ?? 0]), d = c.length ? Math.min(...c) : 0, f = c.length ? Math.max(...c) : 100;
 	return {
-		tooltip: { formatter: (e) => `${r}: ${b3(e.value[0])}<br/>${i}: ${x3(e.value[1])}` },
+		tooltip: { formatter: (e) => `${r}: ${A3(e.value[0])}<br/>${i}: ${j3(e.value[1])}` },
 		visualMap: {
-			min: u,
-			max: d,
+			min: d,
+			max: f,
 			type: "piecewise",
 			orient: "horizontal",
-			top: 140,
-			left: 18,
+			top: v3 + b3 + x3 * a + D3,
+			left: "center",
 			bottom: null,
 			itemSymbol: "circle",
-			inRange: { color: a },
+			inRange: { color: o },
 			pieces: [
 				{
 					min: 0,
 					max: 0,
-					color: a.get("empty")
+					color: o.get("empty")
 				},
 				{
 					gt: 0,
-					lte: d * .25,
-					color: a.get("low")
+					lte: f * .25,
+					color: o.get("low")
 				},
 				{
-					gt: d * .25,
-					lte: d * .5,
-					color: a.get("medium-low")
+					gt: f * .25,
+					lte: f * .5,
+					color: o.get("medium-low")
 				},
 				{
-					gt: d * .5,
-					lte: d * .75,
-					color: a.get("medium-high")
+					gt: f * .5,
+					lte: f * .75,
+					color: o.get("medium-high")
 				},
 				{
-					gt: d * .75,
-					color: a.get("high")
+					gt: f * .75,
+					color: o.get("high")
 				}
 			],
 			showLabel: !1,
@@ -46065,15 +46072,15 @@ function S3(e, t, n, r, i) {
 			itemGap: 5
 		},
 		calendar: {
-			top: 20,
+			top: v3,
 			left: _3,
 			bottom: null,
-			cellSize: [18, 18],
+			cellSize: [a, a],
 			range: t,
 			itemStyle: {
 				borderWidth: 4,
 				borderColor: "#ffffff",
-				borderRadius: 2
+				borderRadius: T3(a)
 			},
 			splitLine: { show: !1 },
 			yearLabel: { show: !1 },
@@ -46092,21 +46099,21 @@ function S3(e, t, n, r, i) {
 		series: {
 			type: "heatmap",
 			coordinateSystem: "calendar",
-			data: l,
-			itemStyle: { borderRadius: 3 }
+			data: u,
+			itemStyle: { borderRadius: T3(a) }
 		}
 	};
 }
-var C3 = () => ({
+var N3 = () => ({
 	id: "grid-heatmap",
 	getName: () => "Calendar Heatmap",
 	minSize: {
-		width: 800,
-		height: 400
+		width: 15,
+		height: 6
 	},
 	defaultSize: {
-		width: 800,
-		height: 400
+		width: 20,
+		height: 6
 	},
 	isSensible() {
 		return !0;
@@ -46166,9 +46173,9 @@ var C3 = () => ({
 			}
 		}
 	},
-	VisualizationComponent: w3,
-	StaticVisualizationComponent: T3
-}), w3 = (e) => {
+	VisualizationComponent: P3,
+	StaticVisualizationComponent: F3
+}), P3 = (e) => {
 	let { height: t, width: n, settings: r, series: i } = e, a = h4(null), o = h4(null), [s, c] = p4(null);
 	console.log({ props: e });
 	let { data: l, years: u, latestYear: d, dimensionLabel: f, metricLabel: p } = g3(i, r);
@@ -46176,21 +46183,27 @@ var C3 = () => ({
 		c(d);
 	}, [d]);
 	let m = s ?? d, h = u.indexOf(m), g = h > 0, _ = h < u.length - 1, v = r.color ?? "#85b8e8";
-	return m4(() => {
+	m4(() => {
 		if (a.current) return o.current = qS(a.current), () => {
 			o.current?.dispose(), o.current = null;
 		};
-	}, []), m4(() => {
-		o.current?.setOption(S3(l, m, v, f, p), !0);
+	}, []);
+	let y = E3(n);
+	return m4(() => {
+		o.current?.setOption(M3(l, m, v, f, p, y), !0);
 	}, [
 		l,
 		m,
 		v,
 		f,
-		p
+		p,
+		y
 	]), m4(() => {
 		o.current?.resize();
-	}, [n, t]), /* @__PURE__ */ C4("div", {
+	}, [n, t]), console.log({
+		width: n,
+		height: t
+	}), /* @__PURE__ */ C4("div", {
 		style: { position: "relative" },
 		children: [/* @__PURE__ */ C4("div", {
 			style: {
@@ -46225,10 +46238,12 @@ var C3 = () => ({
 			ref: a,
 			style: {
 				width: n,
-				height: t
+				height: t,
+				minWidth: 550,
+				maxWidth: 1400
 			}
 		})]
 	});
-}, T3 = (e) => /* @__PURE__ */ S4("div", { children: "TODO: Implement static visualization" });
+}, F3 = (e) => /* @__PURE__ */ S4("div", { children: "TODO: Implement static visualization" });
 //#endregion
-export { C3 as default };
+export { N3 as default };
