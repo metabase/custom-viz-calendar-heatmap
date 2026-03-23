@@ -45961,7 +45961,7 @@ function p3(e) {
 //#endregion
 //#region src/index.tsx
 function m3(e, t) {
-	let { data: n } = g3(e, t), r = n.map(([e]) => k3(e)), i = /* @__PURE__ */ new Set();
+	let { data: n } = g3(e, t), r = n.map(([e]) => M3(e)), i = /* @__PURE__ */ new Set();
 	for (let e of r) {
 		if (i.has(e)) return !0;
 		i.add(e);
@@ -46003,32 +46003,38 @@ function T3(e) {
 function E3(e) {
 	return Math.max(C3, Math.min(w3, Math.floor((e - _3 - y3) / S3)));
 }
-var D3 = 8;
-function O3(e) {
-	let t = [], n = new Date(e, 0, 1), r = new Date(e, 11, 31);
-	for (let e = new Date(n); e <= r; e.setDate(e.getDate() + 1)) t.push(k3(e));
-	return t;
-}
+var D3 = 8, O3 = 30;
 function k3(e) {
-	return new Date(e).toLocaleDateString("en-CA");
+	return _3 + y3 + S3 * e;
 }
 function A3(e) {
+	return v3 + b3 + x3 * e + D3 + O3;
+}
+function j3(e) {
+	let t = [], n = new Date(e, 0, 1), r = new Date(e, 11, 31);
+	for (let e = new Date(n); e <= r; e.setDate(e.getDate() + 1)) t.push(M3(e));
+	return t;
+}
+function M3(e) {
+	return new Date(e).toLocaleDateString("en-CA");
+}
+function N3(e) {
 	return new Date(e).toLocaleDateString("en-US", {
 		month: "short",
 		day: "numeric",
 		year: "numeric"
 	});
 }
-function j3(e) {
+function P3(e) {
 	return e.toFixed(2);
 }
-function M3(e, t, n, r, i, a) {
+function F3(e, t, n, r, i, a) {
 	let o = p3(n), s = e.filter(([e]) => {
 		let n = new Date(e);
 		return !isNaN(n.getTime()) && n.getFullYear() === t;
-	}), c = s.map(([e, t]) => t), l = new Map(s.map(([e, t]) => [k3(e), t])), u = O3(t).map((e) => [e, l.get(e) ?? 0]), d = c.length ? Math.min(...c) : 0, f = c.length ? Math.max(...c) : 100;
+	}), c = s.map(([e, t]) => t), l = new Map(s.map(([e, t]) => [M3(e), t])), u = j3(t).map((e) => [e, l.get(e) ?? 0]), d = c.length ? Math.min(...c) : 0, f = c.length ? Math.max(...c) : 100;
 	return {
-		tooltip: { formatter: (e) => `${r}: ${A3(e.value[0])}<br/>${i}: ${j3(e.value[1])}` },
+		tooltip: { formatter: (e) => `${r}: ${N3(e.value[0])}<br/>${i}: ${P3(e.value[1])}` },
 		visualMap: {
 			min: d,
 			max: f,
@@ -46104,7 +46110,7 @@ function M3(e, t, n, r, i, a) {
 		}
 	};
 }
-var N3 = () => ({
+var I3 = () => ({
 	id: "grid-heatmap",
 	getName: () => "Calendar Heatmap",
 	minSize: {
@@ -46173,9 +46179,9 @@ var N3 = () => ({
 			}
 		}
 	},
-	VisualizationComponent: P3,
-	StaticVisualizationComponent: F3
-}), P3 = (e) => {
+	VisualizationComponent: L3,
+	StaticVisualizationComponent: R3
+}), L3 = (e) => {
 	let { height: t, width: n, settings: r, series: i } = e, a = h4(null), o = h4(null), [s, c] = p4(null);
 	console.log({ props: e });
 	let { data: l, years: u, latestYear: d, dimensionLabel: f, metricLabel: p } = g3(i, r);
@@ -46190,7 +46196,7 @@ var N3 = () => ({
 	}, []);
 	let y = E3(n);
 	return m4(() => {
-		o.current?.setOption(M3(l, m, v, f, p, y), !0);
+		o.current?.setOption(F3(l, m, v, f, p, y), !0);
 	}, [
 		l,
 		m,
@@ -46204,7 +46210,10 @@ var N3 = () => ({
 		width: n,
 		height: t
 	}), /* @__PURE__ */ C4("div", {
-		style: { position: "relative" },
+		style: {
+			position: "relative",
+			overflowX: "auto"
+		},
 		children: [/* @__PURE__ */ C4("div", {
 			style: {
 				display: "flex",
@@ -46237,13 +46246,11 @@ var N3 = () => ({
 		}), /* @__PURE__ */ S4("div", {
 			ref: a,
 			style: {
-				width: n,
-				height: t,
-				minWidth: 550,
-				maxWidth: 1400
+				width: k3(y),
+				height: A3(y)
 			}
 		})]
 	});
-}, F3 = (e) => /* @__PURE__ */ S4("div", { children: "TODO: Implement static visualization" });
+}, R3 = (e) => /* @__PURE__ */ S4("div", { children: "TODO: Implement static visualization" });
 //#endregion
-export { N3 as default };
+export { I3 as default };

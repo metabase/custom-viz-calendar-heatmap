@@ -116,6 +116,21 @@ function getCellSize(width: number): number {
 }
 const VISUALMAP_LEFT = 18;
 const VISUALMAP_GAP = 8;
+const VISUALMAP_HEIGHT = 30;
+
+function getChartWidth(cellSize: number): number {
+  return PADDING + CALENDAR_DAY_LABEL_WIDTH + CALENDAR_WEEKS * cellSize;
+}
+
+function getChartHeight(cellSize: number): number {
+  return (
+    CALENDAR_TOP +
+    CALENDAR_MONTH_LABEL_HEIGHT +
+    CALENDAR_ROWS * cellSize +
+    VISUALMAP_GAP +
+    VISUALMAP_HEIGHT
+  );
+}
 
 function getAllDatesForYear(year: number): string[] {
   const dates: string[] = [];
@@ -384,7 +399,7 @@ const VisualizationComponent = (props: CustomVisualizationProps<Settings>) => {
   console.log({ width, height });
 
   return (
-    <div style={{ position: "relative" }}>
+    <div style={{ position: "relative", overflowX: "auto" }}>
       <div
         style={{
           display: "flex",
@@ -412,7 +427,10 @@ const VisualizationComponent = (props: CustomVisualizationProps<Settings>) => {
       </div>
       <div
         ref={containerRef}
-        style={{ width, height, minWidth: 550, maxWidth: 1400 }}
+        style={{
+          width: getChartWidth(cellSize),
+          height: getChartHeight(cellSize),
+        }}
       />
     </div>
   );
