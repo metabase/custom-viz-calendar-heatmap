@@ -46136,6 +46136,7 @@ var I3 = () => ({
 	settings: {
 		dimension: {
 			id: "dimension",
+			section: "Data",
 			title: "Date Column",
 			widget: "field",
 			getDefault(e) {
@@ -46154,6 +46155,7 @@ var I3 = () => ({
 		},
 		metric: {
 			id: "metric",
+			section: "Data",
 			title: "Metric Column",
 			widget: "field",
 			getDefault(e) {
@@ -46172,6 +46174,7 @@ var I3 = () => ({
 		},
 		color: {
 			id: "color",
+			section: "Display",
 			title: "Color",
 			widget: "color",
 			getDefault() {

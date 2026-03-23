@@ -287,6 +287,7 @@ const createVisualization: CreateCustomVisualization<Settings> = () => {
     settings: {
       dimension: {
         id: "dimension",
+        section: "Data",
         title: "Date Column",
         widget: "field",
         getDefault(object) {
@@ -308,6 +309,7 @@ const createVisualization: CreateCustomVisualization<Settings> = () => {
       },
       metric: {
         id: "metric",
+        section: "Data",
         title: "Metric Column",
         widget: "field",
         getDefault(object) {
@@ -329,6 +331,7 @@ const createVisualization: CreateCustomVisualization<Settings> = () => {
       },
       color: {
         id: "color",
+        section: "Display",
         title: "Color",
         widget: "color",
         getDefault() {
