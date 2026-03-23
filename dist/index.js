@@ -46207,47 +46207,57 @@ var I3 = () => ({
 		o.current?.resize();
 	}, [n, t]);
 	let b = k3(y);
-	return /* @__PURE__ */ C4("div", {
+	return /* @__PURE__ */ S4("div", {
 		style: {
 			position: "relative",
-			overflowX: "auto"
+			display: "flex",
+			flexDirection: "column",
+			alignItems: "center",
+			height: "100%",
+			justifyContent: "center"
 		},
-		children: [/* @__PURE__ */ C4("div", {
+		children: /* @__PURE__ */ C4("div", {
 			style: {
-				display: "flex",
-				justifyContent: "center",
-				alignItems: "center",
-				gap: 8,
-				marginBottom: 10,
-				marginTop: 10,
-				width: b
+				overflowX: "auto",
+				width: "100%"
 			},
-			children: [
-				/* @__PURE__ */ S4(A4, {
-					onClick: () => c(u[h - 1]),
-					disabled: !g,
-					children: "Previous"
-				}),
-				/* @__PURE__ */ S4("span", {
-					style: {
-						fontSize: 16,
-						fontWeight: 500
-					},
-					children: m
-				}),
-				/* @__PURE__ */ S4(A4, {
-					onClick: () => c(u[h + 1]),
-					disabled: !_,
-					children: "Next"
-				})
-			]
-		}), /* @__PURE__ */ S4("div", {
-			ref: a,
-			style: {
-				width: b,
-				height: A3(y)
-			}
-		})]
+			children: [/* @__PURE__ */ C4("div", {
+				style: {
+					display: "flex",
+					justifyContent: "center",
+					alignItems: "center",
+					gap: 8,
+					marginBottom: 10,
+					marginTop: 10,
+					width: b
+				},
+				children: [
+					/* @__PURE__ */ S4(A4, {
+						onClick: () => c(u[h - 1]),
+						disabled: !g,
+						children: "Previous"
+					}),
+					/* @__PURE__ */ S4("span", {
+						style: {
+							fontSize: 16,
+							fontWeight: 500
+						},
+						children: m
+					}),
+					/* @__PURE__ */ S4(A4, {
+						onClick: () => c(u[h + 1]),
+						disabled: !_,
+						children: "Next"
+					})
+				]
+			}), /* @__PURE__ */ S4("div", {
+				ref: a,
+				style: {
+					width: b,
+					height: A3(y)
+				}
+			})]
+		})
 	});
 }, R3 = (e) => /* @__PURE__ */ S4("div", { children: "TODO: Implement static visualization" });
 //#endregion

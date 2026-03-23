@@ -397,39 +397,52 @@ const VisualizationComponent = (props: CustomVisualizationProps<Settings>) => {
   const chartWidth = getChartWidth(cellSize);
 
   return (
-    <div style={{ position: "relative", overflowX: "auto" }}>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          gap: 8,
-          marginBottom: 10,
-          marginTop: 10,
-          width: chartWidth,
-        }}
-      >
-        <Button
-          onClick={() => setDisplayedYear(years[yearIndex - 1])}
-          disabled={!canGoPrev}
+    <div
+      style={{
+        position: "relative",
+        // overflowX: "auto",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        height: "100%",
+        justifyContent: "center",
+      }}
+    >
+      <div style={{ overflowX: "auto", width: "100%" }}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            gap: 8,
+            marginBottom: 10,
+            marginTop: 10,
+            width: chartWidth,
+          }}
         >
-          Previous
-        </Button>
-        <span style={{ fontSize: 16, fontWeight: 500 }}>{currentYear}</span>
-        <Button
-          onClick={() => setDisplayedYear(years[yearIndex + 1])}
-          disabled={!canGoNext}
-        >
-          Next
-        </Button>
+          <Button
+            onClick={() => setDisplayedYear(years[yearIndex - 1])}
+            disabled={!canGoPrev}
+          >
+            Previous
+          </Button>
+          <span style={{ fontSize: 16, fontWeight: 500 }}>{currentYear}</span>
+          <Button
+            onClick={() => setDisplayedYear(years[yearIndex + 1])}
+            disabled={!canGoNext}
+          >
+            Next
+          </Button>
+        </div>
+
+        <div
+          ref={containerRef}
+          style={{
+            width: chartWidth,
+            height: getChartHeight(cellSize),
+          }}
+        />
       </div>
-      <div
-        ref={containerRef}
-        style={{
-          width: chartWidth,
-          height: getChartHeight(cellSize),
-        }}
-      />
     </div>
   );
 };
