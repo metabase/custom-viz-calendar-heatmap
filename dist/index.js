@@ -45996,7 +45996,7 @@ function g3(e, t) {
 		metricLabel: n.cols[i]?.display_name ?? n.cols[i]?.name ?? "Value"
 	};
 }
-var _3 = 30, v3 = 20, y3 = 20, b3 = 18, x3 = 7, S3 = 53, C3 = 12, w3 = 22;
+var _3 = 30, v3 = 20, y3 = 20, b3 = 18, x3 = 7, S3 = 53, C3 = 12, w3 = 30;
 function T3(e) {
 	return Math.max(1, Math.floor((e - C3) / 3));
 }
@@ -46040,7 +46040,7 @@ function F3(e, t, n, r, i, a) {
 			max: f,
 			type: "piecewise",
 			orient: "horizontal",
-			top: v3 + b3 + x3 * a + D3,
+			top: v3 + x3 * a + D3,
 			left: "center",
 			bottom: null,
 			itemSymbol: "circle",
@@ -46182,20 +46182,16 @@ var I3 = () => ({
 	VisualizationComponent: L3,
 	StaticVisualizationComponent: R3
 }), L3 = (e) => {
-	let { height: t, width: n, settings: r, series: i } = e, a = h4(null), o = h4(null), [s, c] = p4(null);
-	console.log({ props: e });
-	let { data: l, years: u, latestYear: d, dimensionLabel: f, metricLabel: p } = g3(i, r);
+	let { height: t, width: n, settings: r, series: i } = e, a = h4(null), o = h4(null), [s, c] = p4(null), { data: l, years: u, latestYear: d, dimensionLabel: f, metricLabel: p } = g3(i, r);
 	m4(() => {
 		c(d);
-	}, [d]);
-	let m = s ?? d, h = u.indexOf(m), g = h > 0, _ = h < u.length - 1, v = r.color ?? "#85b8e8";
-	m4(() => {
+	}, [d]), m4(() => {
 		if (a.current) return o.current = qS(a.current), () => {
 			o.current?.dispose(), o.current = null;
 		};
 	}, []);
-	let y = E3(n);
-	return m4(() => {
+	let m = s ?? d, h = u.indexOf(m), g = h > 0, _ = h < u.length - 1, v = r.color ?? "#85b8e8", y = E3(n);
+	m4(() => {
 		o.current?.setOption(F3(l, m, v, f, p, y), !0);
 	}, [
 		l,
@@ -46206,10 +46202,9 @@ var I3 = () => ({
 		y
 	]), m4(() => {
 		o.current?.resize();
-	}, [n, t]), console.log({
-		width: n,
-		height: t
-	}), /* @__PURE__ */ C4("div", {
+	}, [n, t]);
+	let b = k3(y);
+	return /* @__PURE__ */ C4("div", {
 		style: {
 			position: "relative",
 			overflowX: "auto"
@@ -46217,12 +46212,12 @@ var I3 = () => ({
 		children: [/* @__PURE__ */ C4("div", {
 			style: {
 				display: "flex",
-				justifyContent: "start",
+				justifyContent: "center",
 				alignItems: "center",
 				gap: 8,
 				marginBottom: 10,
 				marginTop: 10,
-				paddingLeft: _3
+				width: b
 			},
 			children: [
 				/* @__PURE__ */ S4(A4, {
@@ -46246,7 +46241,7 @@ var I3 = () => ({
 		}), /* @__PURE__ */ S4("div", {
 			ref: a,
 			style: {
-				width: k3(y),
+				width: b,
 				height: A3(y)
 			}
 		})]

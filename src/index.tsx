@@ -99,7 +99,7 @@ const CALENDAR_MONTH_LABEL_HEIGHT = 18;
 const CALENDAR_ROWS = 7;
 const CALENDAR_WEEKS = 53;
 const CELL_SIZE_MIN = 12;
-const CELL_SIZE_MAX = 22;
+const CELL_SIZE_MAX = 30;
 
 function getCellBorderRadius(cellSize: number): number {
   return Math.max(1, Math.floor((cellSize - CELL_SIZE_MIN) / 3));
@@ -198,11 +198,7 @@ function getOption(
       max,
       type: "piecewise" as const,
       orient: "horizontal" as const,
-      top:
-        CALENDAR_TOP +
-        CALENDAR_MONTH_LABEL_HEIGHT +
-        CALENDAR_ROWS * cellSize +
-        VISUALMAP_GAP,
+      top: CALENDAR_TOP + CALENDAR_ROWS * cellSize + VISUALMAP_GAP,
       left: "center",
       bottom: null,
       itemSymbol: "circle",
@@ -350,7 +346,6 @@ const VisualizationComponent = (props: CustomVisualizationProps<Settings>) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const chartRef = useRef<echarts.ECharts | null>(null);
   const [displayedYear, setDisplayedYear] = useState<number | null>(null);
-  console.log({ props });
 
   const { data, years, latestYear, dimensionLabel, metricLabel } = getChartData(
     series,
@@ -361,12 +356,6 @@ const VisualizationComponent = (props: CustomVisualizationProps<Settings>) => {
     setDisplayedYear(latestYear);
   }, [latestYear]);
 
-  const currentYear = displayedYear ?? latestYear;
-  const yearIndex = years.indexOf(currentYear);
-  const canGoPrev = yearIndex > 0;
-  const canGoNext = yearIndex < years.length - 1;
-  const color = settings.color ?? DEFAULT_CALENDAR_COLOR;
-
   useEffect(() => {
     if (!containerRef.current) return;
     chartRef.current = echarts.init(containerRef.current);
@@ -375,6 +364,12 @@ const VisualizationComponent = (props: CustomVisualizationProps<Settings>) => {
       chartRef.current = null;
     };
   }, []);
+
+  const currentYear = displayedYear ?? latestYear;
+  const yearIndex = years.indexOf(currentYear);
+  const canGoPrev = yearIndex > 0;
+  const canGoNext = yearIndex < years.length - 1;
+  const color = settings.color ?? DEFAULT_CALENDAR_COLOR;
 
   const cellSize = getCellSize(width);
 
@@ -396,19 +391,19 @@ const VisualizationComponent = (props: CustomVisualizationProps<Settings>) => {
     chartRef.current?.resize();
   }, [width, height]);
 
-  console.log({ width, height });
+  const chartWidth = getChartWidth(cellSize);
 
   return (
     <div style={{ position: "relative", overflowX: "auto" }}>
       <div
         style={{
           display: "flex",
-          justifyContent: "start",
+          justifyContent: "center",
           alignItems: "center",
           gap: 8,
           marginBottom: 10,
           marginTop: 10,
-          paddingLeft: PADDING,
+          width: chartWidth,
         }}
       >
         <Button
@@ -428,7 +423,7 @@ const VisualizationComponent = (props: CustomVisualizationProps<Settings>) => {
       <div
         ref={containerRef}
         style={{
-          width: getChartWidth(cellSize),
+          width: chartWidth,
           height: getChartHeight(cellSize),
         }}
       />
