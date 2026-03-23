@@ -93,6 +93,7 @@ function getChartData(
 }
 
 const PADDING = 30;
+
 function getAllDatesForYear(year: number): string[] {
   const dates: string[] = [];
   const start = new Date(year, 0, 1);
@@ -158,7 +159,10 @@ function getOption(
       max,
       type: "piecewise" as const,
       orient: "horizontal" as const,
-      left: "center",
+      top: 140,
+      left: 18,
+      bottom: null,
+      itemSymbol: "circle",
       inRange: {
         color: colorScale,
       },
@@ -177,12 +181,16 @@ function getOption(
         },
         { gt: max * 0.75, color: colorScale.get("high") },
       ],
-      showLabel: true,
+      showLabel: false,
       text: ["More", "Less"],
+      itemWidth: 10,
+      itemHeight: 10,
+      itemGap: 5,
     },
     calendar: {
       top: 20,
       left: PADDING,
+      bottom: null,
       cellSize: [18, 18],
       range: displayedYear,
       itemStyle: {
@@ -341,11 +349,12 @@ const VisualizationComponent = (props: CustomVisualizationProps<Settings>) => {
       <div
         style={{
           display: "flex",
-          justifyContent: "center",
+          justifyContent: "start",
           alignItems: "center",
           gap: 8,
           marginBottom: 10,
           marginTop: 10,
+          paddingLeft: PADDING,
         }}
       >
         <Button

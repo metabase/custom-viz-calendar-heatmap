@@ -46027,7 +46027,10 @@ function S3(e, t, n, r, i) {
 			max: d,
 			type: "piecewise",
 			orient: "horizontal",
-			left: "center",
+			top: 140,
+			left: 18,
+			bottom: null,
+			itemSymbol: "circle",
 			inRange: { color: a },
 			pieces: [
 				{
@@ -46055,12 +46058,16 @@ function S3(e, t, n, r, i) {
 					color: a.get("high")
 				}
 			],
-			showLabel: !0,
-			text: ["More", "Less"]
+			showLabel: !1,
+			text: ["More", "Less"],
+			itemWidth: 10,
+			itemHeight: 10,
+			itemGap: 5
 		},
 		calendar: {
 			top: 20,
 			left: _3,
+			bottom: null,
 			cellSize: [18, 18],
 			range: t,
 			itemStyle: {
@@ -46188,11 +46195,12 @@ var C3 = () => ({
 		children: [/* @__PURE__ */ C4("div", {
 			style: {
 				display: "flex",
-				justifyContent: "center",
+				justifyContent: "start",
 				alignItems: "center",
 				gap: 8,
 				marginBottom: 10,
-				marginTop: 10
+				marginTop: 10,
+				paddingLeft: _3
 			},
 			children: [
 				/* @__PURE__ */ S4(A4, {
