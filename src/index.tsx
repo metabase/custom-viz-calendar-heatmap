@@ -470,9 +470,37 @@ const VisualizationComponent = (props: CustomVisualizationProps<Settings>) => {
 };
 
 const StaticVisualizationComponent = (
-  _props: CustomStaticVisualizationProps<Settings>,
+  props: CustomStaticVisualizationProps<Settings>,
 ) => {
-  return <div>TODO: Implement static visualization</div>;
+  const { series, settings } = props;
+  const { data, latestYear, dimensionLabel, metricLabel } = getChartData(
+    series,
+    settings,
+  );
+  const color = settings.color ?? DEFAULT_CALENDAR_COLOR;
+
+  const cellSize = 14; // fixed for static export (~792px wide)
+  const chartWidth = getChartWidth(cellSize);
+  const chartHeight = getChartHeight(cellSize);
+
+  const chart = echarts.init(null, null, {
+    renderer: "svg",
+    width: chartWidth,
+    height: chartHeight,
+    ssr: true,
+  });
+  chart.setOption(
+    getOption(data, latestYear, color, dimensionLabel, metricLabel, cellSize),
+  );
+  const svgString = chart.renderToSVGString();
+  chart.dispose();
+
+  return (
+    <div
+      style={{ display: "flex", justifyContent: "center" }}
+      dangerouslySetInnerHTML={{ __html: svgString }}
+    />
+  );
 };
 
 export default createVisualization;
