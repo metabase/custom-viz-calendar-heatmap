@@ -162,6 +162,8 @@ function formatValue(value: number): string {
 type DateString = string;
 type Value = number;
 
+const EMPTY_CELL_COLOR = "#ebedf0";
+
 function getOption(
   data: Array<[DateString, Value]>,
   displayedYear: number,
@@ -177,21 +179,29 @@ function getOption(
   });
   const values = displayedYearData.map(([_, value]) => value);
 
-  // Fill missing dates with 0 so empty cells are visible
   const dataMap = new Map(
     displayedYearData.map(([date, val]) => [toISODateString(date), val]),
   );
 
-  const filledData: [string, number][] = getAllDatesForYear(displayedYear).map(
-    (date) => [date, dataMap.get(date) ?? 0],
-  );
+  const allDates = getAllDatesForYear(displayedYear);
+  const actualData: [string, number][] = allDates
+    .filter((date) => dataMap.has(date))
+    .map((date) => [date, dataMap.get(date)!]);
+  const emptyData: [string, number][] = allDates
+    .filter((date) => !dataMap.has(date))
+    .map((date) => [date, 0]);
+
   const min = values.length ? Math.min(...values) : 0;
   const max = values.length ? Math.max(...values) : 100;
 
+  const borderRadius = getCellBorderRadius(cellSize);
+
   return {
     tooltip: {
-      formatter: (params: { value: [string, number] }) =>
-        `${dimensionLabel}: ${formatDate(params.value[0])}<br/>${metricLabel}: ${formatValue(params.value[1])}`,
+      formatter: (params: { value: [string, number]; seriesIndex: number }) =>
+        params.seriesIndex === 0
+          ? `${dimensionLabel}: ${formatDate(params.value[0])}<br/>No data`
+          : `${dimensionLabel}: ${formatDate(params.value[0])}<br/>${metricLabel}: ${formatValue(params.value[1])}`,
     },
     visualMap: {
       min,
@@ -202,6 +212,7 @@ function getOption(
       left: "center",
       bottom: null,
       itemSymbol: "circle",
+      seriesIndex: 1,
       inRange: {
         color: colorScale,
       },
@@ -235,7 +246,7 @@ function getOption(
       itemStyle: {
         borderWidth: 4,
         borderColor: "#ffffff",
-        borderRadius: getCellBorderRadius(cellSize),
+        borderRadius,
       },
       splitLine: { show: false },
       yearLabel: { show: false },
@@ -251,14 +262,25 @@ function getOption(
         fontSize: 11,
       },
     },
-    series: {
-      type: "heatmap",
-      coordinateSystem: "calendar",
-      data: filledData,
-      itemStyle: {
-        borderRadius: getCellBorderRadius(cellSize),
+    series: [
+      {
+        type: "heatmap",
+        coordinateSystem: "calendar",
+        data: emptyData,
+        itemStyle: {
+          color: EMPTY_CELL_COLOR,
+          borderRadius,
+        },
       },
-    },
+      {
+        type: "heatmap",
+        coordinateSystem: "calendar",
+        data: actualData,
+        itemStyle: {
+          borderRadius,
+        },
+      },
+    ],
   };
 }
 
