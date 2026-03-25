@@ -8,11 +8,14 @@ import * as echarts from "echarts";
 import { useEffect, useRef, useState } from "react";
 import { Button } from "./Button";
 import { getColorScale, TEXT_COLOR, DEFAULT_CALENDAR_COLOR } from "./colors";
+import { CellShapeWidget } from "./CellShapeWidget";
+import type { CellShape } from "./types";
 
 type Settings = {
   dimension?: string;
   metric?: string;
   color?: string;
+  cellShape?: CellShape;
 };
 
 function hasDuplicateDates(series: Series, settings: Settings): boolean {
@@ -105,6 +108,15 @@ function getCellBorderRadius(cellSize: number): number {
   return Math.max(1, Math.floor((cellSize - CELL_SIZE_MIN) / 3));
 }
 
+function getBorderRadius(
+  shape: CellShape | undefined,
+  cellSize: number,
+): number {
+  if (shape === "square") return 0;
+  if (shape === "circle") return Math.floor(cellSize / 2);
+  return getCellBorderRadius(cellSize);
+}
+
 function getCellSize(width: number): number {
   return Math.max(
     CELL_SIZE_MIN,
@@ -171,6 +183,7 @@ function getOption(
   dimensionLabel: string,
   metricLabel: string,
   cellSize: number,
+  cellShape: CellShape | undefined,
 ) {
   const colorScale = getColorScale(color);
   const displayedYearData = data.filter(([date]) => {
@@ -194,7 +207,7 @@ function getOption(
   const min = values.length ? Math.min(...values) : 0;
   const max = values.length ? Math.max(...values) : 100;
 
-  const borderRadius = getCellBorderRadius(cellSize);
+  const borderRadius = getBorderRadius(cellShape, cellSize);
 
   return {
     tooltip: {
@@ -360,6 +373,15 @@ const createVisualization: CreateCustomVisualization<Settings> = () => {
           return DEFAULT_CALENDAR_COLOR;
         },
       },
+      cellShape: {
+        id: "cellShape",
+        section: "Display",
+        title: "Cell Shape",
+        widget: CellShapeWidget,
+        getDefault() {
+          return "rounded";
+        },
+      },
     },
     VisualizationComponent,
     StaticVisualizationComponent,
@@ -395,6 +417,7 @@ const VisualizationComponent = (props: CustomVisualizationProps<Settings>) => {
   const canGoPrev = yearIndex > 0;
   const canGoNext = yearIndex < years.length - 1;
   const color = settings.color ?? DEFAULT_CALENDAR_COLOR;
+  const cellShape = settings.cellShape;
 
   const cellSize = getCellSize(width);
 
@@ -407,10 +430,19 @@ const VisualizationComponent = (props: CustomVisualizationProps<Settings>) => {
         dimensionLabel,
         metricLabel,
         cellSize,
+        cellShape,
       ),
       true,
     );
-  }, [data, currentYear, color, dimensionLabel, metricLabel, cellSize]);
+  }, [
+    data,
+    currentYear,
+    color,
+    dimensionLabel,
+    metricLabel,
+    cellSize,
+    cellShape,
+  ]);
 
   useEffect(() => {
     chartRef.current?.resize();
@@ -475,6 +507,7 @@ const StaticVisualizationComponent = (
   const { series, settings } = props;
   const { data, latestYear } = getChartData(series, settings);
   const color = settings.color ?? DEFAULT_CALENDAR_COLOR;
+  const cellShape = settings.cellShape;
 
   const cellSize = 14;
   const step = cellSize + 2;
@@ -511,14 +544,12 @@ const StaticVisualizationComponent = (
 
   const svgWidth = paddingLeft + totalWeeks * step;
   const svgHeight = paddingTop + 7 * step + paddingBottom;
-  const borderRadius = getCellBorderRadius(cellSize);
+  const borderRadius = getBorderRadius(cellShape, cellSize);
 
   const cells = allDates.map((dateStr) => {
     const [y, m, d] = dateStr.split("-").map(Number);
     const date = new Date(y, m - 1, d);
-    const dayOfYear = Math.round(
-      (date.getTime() - jan1.getTime()) / 86400000,
-    );
+    const dayOfYear = Math.round((date.getTime() - jan1.getTime()) / 86400000);
     const week = Math.floor((dayOfYear + jan1DayOfWeek) / 7);
     const dayOfWeek = date.getDay();
     return (
@@ -536,8 +567,18 @@ const StaticVisualizationComponent = (
   });
 
   const MONTH_NAMES = [
-    "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
   ];
   const monthLabels = MONTH_NAMES.map((name, m) => {
     const firstOfMonth = new Date(latestYear, m, 1);
