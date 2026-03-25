@@ -1,4 +1,5 @@
 import type {
+  ClickObject,
   CreateCustomVisualization,
   CustomStaticVisualizationProps,
   CustomVisualizationProps,
@@ -416,9 +417,10 @@ const createVisualization: CreateCustomVisualization<Settings> = () => {
 };
 
 const VisualizationComponent = (props: CustomVisualizationProps<Settings>) => {
-  const { height, width, settings, series } = props;
+  const { height, width, settings, series, onClick } = props;
   const containerRef = useRef<HTMLDivElement>(null);
   const chartRef = useRef<echarts.ECharts | null>(null);
+  const onClickRef = useRef(onClick);
   const [displayedYear, setDisplayedYear] = useState<number | null>(null);
 
   const { data, years, latestYear, dimensionLabel, metricLabel } = getChartData(
@@ -431,10 +433,50 @@ const VisualizationComponent = (props: CustomVisualizationProps<Settings>) => {
   }, [latestYear]);
 
   useEffect(() => {
+    onClickRef.current = onClick;
+  }, [onClick]);
+
+  useEffect(() => {
     if (!containerRef.current) return;
-    chartRef.current = echarts.init(containerRef.current);
+    const chart = echarts.init(containerRef.current);
+    chartRef.current = chart;
+
+    chart.on("click", (params: echarts.ECElementEvent) => {
+      // Empty cells (series index 0) have no data to drill into
+      if (params.seriesIndex === 0) {
+        onClickRef.current(null);
+        return;
+      }
+
+      const [dateStr, metricValue] = params.data as [string, number];
+      const cols = series[0].data.cols;
+      const rows = series[0].data.rows;
+      const dimIndex = cols.findIndex((c) => c.name === settings.dimension);
+      const metricIndex = cols.findIndex((c) => c.name === settings.metric);
+      const dimCol = cols[dimIndex];
+      const metricCol = cols[metricIndex];
+
+      // Find the original row matching this date
+      const isoDate = toISODateString(dateStr);
+      const matchedRow = rows.find(
+        (row) => toISODateString(String(row[dimIndex])) === isoDate,
+      );
+
+      const clickObject: ClickObject<Settings> = {
+        value: metricValue,
+        column: metricCol,
+        dimensions: dimCol ? [{ value: dateStr, column: dimCol }] : [],
+        event: params.event?.event as MouseEvent | undefined,
+        origin: matchedRow
+          ? { row: matchedRow as (string | number | null)[], cols }
+          : undefined,
+      };
+
+      onClickRef.current(clickObject);
+    });
+
     return () => {
-      chartRef.current?.dispose();
+      chart.dispose();
       chartRef.current = null;
     };
   }, []);
@@ -521,6 +563,7 @@ const VisualizationComponent = (props: CustomVisualizationProps<Settings>) => {
           style={{
             width: chartWidth,
             height: getChartHeight(cellSize),
+            cursor: "pointer",
           }}
         />
       </div>
