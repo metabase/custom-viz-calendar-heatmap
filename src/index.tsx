@@ -9,6 +9,7 @@ import { useEffect, useRef, useState } from "react";
 import { Button } from "./Button";
 import { getColorScale, TEXT_COLOR, DEFAULT_CALENDAR_COLOR } from "./colors";
 import { CellShapeWidget } from "./CellShapeWidget";
+import { DateRangeWidget } from "./DateRangeWidget";
 import type { CellShape } from "./types";
 
 type Settings = {
@@ -16,6 +17,7 @@ type Settings = {
   metric?: string;
   color?: string;
   cellShape?: CellShape;
+  dateRange?: { start?: string; end?: string };
 };
 
 function hasDuplicateDates(series: Series, settings: Settings): boolean {
@@ -69,10 +71,17 @@ function getChartData(
     };
   }
 
-  const chartData: [string, number][] = data.rows.map((row) => [
+  const rawData: [string, number][] = data.rows.map((row) => [
     String(row[dimIndex]),
     Number(row[metricIndex]),
   ]);
+
+  const { start, end } = settings.dateRange ?? {};
+  const chartData = rawData.filter(([date]) => {
+    if (start && date < start) return false;
+    if (end && date > end) return false;
+    return true;
+  });
 
   const years = getYears(chartData.map(([date]) => date));
   const latestYear = years.length
@@ -361,6 +370,24 @@ const createVisualization: CreateCustomVisualization<Settings> = () => {
               name: col.display_name,
               value: col.name,
             })),
+          };
+        },
+      },
+      dateRange: {
+        id: "dateRange",
+        section: "Data",
+        title: "Date Range",
+        widget: DateRangeWidget,
+        getDefault() {
+          return undefined;
+        },
+        getProps(object, vizSettings) {
+          const s = object as Series;
+          const { data } = getChartData(s, { ...vizSettings, dateRange: undefined });
+          const dates = data.map(([d]) => d).sort();
+          return {
+            minDate: dates[0],
+            maxDate: dates[dates.length - 1],
           };
         },
       },
