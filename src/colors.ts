@@ -2,6 +2,7 @@ import Color from "color";
 
 export const TEXT_COLOR = "#57606a";
 export const DEFAULT_CALENDAR_COLOR = "#85b8e8";
+export const EMPTY_CELL_COLOR = "#ebedf0";
 
 type ColorMap = Map<
   "empty" | "low" | "medium-low" | "medium-high" | "high",
