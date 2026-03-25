@@ -1,5 +1,5 @@
 import { Series } from "@metabase/custom-viz";
-import type { Settings } from "./types";
+import type { Settings } from "../types";
 
 export function getChartData(
   series: Series,

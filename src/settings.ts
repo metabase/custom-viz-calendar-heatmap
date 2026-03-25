@@ -1,9 +1,14 @@
 import type { DateString, Value, CellShape } from "./types";
-import { getColorScale, TEXT_COLOR } from "./colors";
-import { getBorderRadius } from "./looks";
-import { toISODateString, getAllDatesForYear } from "./data";
-import { CALENDAR_TOP, CALENDAR_ROWS, VISUALMAP_GAP, PADDING } from "./looks";
-import { EMPTY_CELL_COLOR } from "./colors";
+import { getColorScale, TEXT_COLOR } from "./utils/colors";
+import { getBorderRadius } from "./utils/looks";
+import { toISODateString, getAllDatesForYear } from "./utils/data";
+import {
+  CALENDAR_TOP,
+  CALENDAR_ROWS,
+  VISUALMAP_GAP,
+  PADDING,
+} from "./utils/looks";
+import { EMPTY_CELL_COLOR } from "./utils/colors";
 
 export function getOption(
   data: Array<[DateString, Value]>,

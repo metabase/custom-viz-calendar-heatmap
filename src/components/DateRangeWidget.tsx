@@ -1,4 +1,3 @@
-import { useState } from "react";
 import type { BaseWidgetProps } from "@metabase/custom-viz";
 
 type DateRange = { start?: string; end?: string };

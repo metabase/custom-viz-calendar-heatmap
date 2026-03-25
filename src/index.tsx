@@ -1,25 +1,12 @@
-import type {
-  ClickObject,
-  CreateCustomVisualization,
-  CustomVisualizationProps,
-} from "@metabase/custom-viz";
-import type { Series } from "@metabase/custom-viz";
-import * as echarts from "echarts";
-import { useEffect, useRef, useState } from "react";
-import { Button } from "./Button";
-import { getColorScale, TEXT_COLOR, DEFAULT_CALENDAR_COLOR } from "./colors";
-import { CellShapeWidget } from "./CellShapeWidget";
-import { DateRangeWidget } from "./DateRangeWidget";
-import type { CellShape, DateString, Value, Settings } from "./types";
+import type { CreateCustomVisualization } from "@metabase/custom-viz";
+import { DEFAULT_CALENDAR_COLOR } from "./utils/colors";
+import { CellShapeWidget } from "./components/CellShapeWidget";
+import { DateRangeWidget } from "./components/DateRangeWidget";
+import type { Settings } from "./types";
 import { StaticVisualizationComponent } from "./StaticVisualization";
 import { VisualizationComponent } from "./Visualization";
 
-import {
-  getChartData,
-  hasDuplicateDates,
-  toISODateString,
-  getAllDatesForYear,
-} from "./data";
+import { getChartData, hasDuplicateDates } from "./utils/data";
 
 const createVisualization: CreateCustomVisualization<Settings> = () => {
   return {

@@ -1,6 +1,6 @@
 import type { BaseWidgetProps } from "@metabase/custom-viz";
 
-import type { CellShape } from "./types";
+import type { CellShape } from "../types";
 
 type Settings = { cellShape?: CellShape };
 

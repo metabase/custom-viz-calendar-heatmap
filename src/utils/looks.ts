@@ -1,4 +1,4 @@
-import type { CellShape } from "./types";
+import type { CellShape } from "../types";
 
 export const PADDING = 30;
 export const CALENDAR_TOP = 20;

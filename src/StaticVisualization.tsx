@@ -1,12 +1,12 @@
 import { CustomStaticVisualizationProps } from "@metabase/custom-viz";
-import { DEFAULT_CALENDAR_COLOR } from "./colors";
+import { DEFAULT_CALENDAR_COLOR } from "./utils/colors";
 import type { Settings } from "./types";
-import { getChartData } from "./data";
-import { getColorScale } from "./colors";
-import { toISODateString, getAllDatesForYear } from "./data";
-import { getBorderRadius } from "./looks";
-import { EMPTY_CELL_COLOR } from "./colors";
-import { TEXT_COLOR } from "./colors";
+import { getChartData } from "./utils/data";
+import { getColorScale } from "./utils/colors";
+import { toISODateString, getAllDatesForYear } from "./utils/data";
+import { getBorderRadius } from "./utils/looks";
+import { EMPTY_CELL_COLOR } from "./utils/colors";
+import { TEXT_COLOR } from "./utils/colors";
 
 export const StaticVisualizationComponent = (
   props: CustomStaticVisualizationProps<Settings>,

@@ -1,14 +1,14 @@
 import * as echarts from "echarts";
 import { useEffect, useRef, useState } from "react";
-import { Button } from "./Button";
+import { Button } from "./components/Button";
 import type {
   ClickObject,
   CustomVisualizationProps,
 } from "@metabase/custom-viz";
 import type { Settings } from "./types";
-import { getChartData, toISODateString } from "./data";
-import { getCellSize, getChartWidth, getChartHeight } from "./looks";
-import { DEFAULT_CALENDAR_COLOR } from "./colors";
+import { getChartData, toISODateString } from "./utils/data";
+import { getCellSize, getChartWidth, getChartHeight } from "./utils/looks";
+import { DEFAULT_CALENDAR_COLOR } from "./utils/colors";
 import { getOption } from "./settings";
 
 export function VisualizationComponent(
