@@ -384,7 +384,10 @@ const createVisualization: CreateCustomVisualization<Settings> = () => {
         },
         getProps(object, vizSettings) {
           const s = object as Series;
-          const { data } = getChartData(s, { ...vizSettings, dateRange: undefined });
+          const { data } = getChartData(s, {
+            ...vizSettings,
+            dateRange: undefined,
+          });
           const dates = data.map(([d]) => d).sort();
           return {
             minDate: dates[0],
@@ -421,6 +424,8 @@ const VisualizationComponent = (props: CustomVisualizationProps<Settings>) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const chartRef = useRef<echarts.ECharts | null>(null);
   const onClickRef = useRef(onClick);
+  const seriesRef = useRef(series);
+  const settingsRef = useRef(settings);
   const [displayedYear, setDisplayedYear] = useState<number | null>(null);
 
   const { data, years, latestYear, dimensionLabel, metricLabel } = getChartData(
@@ -435,6 +440,12 @@ const VisualizationComponent = (props: CustomVisualizationProps<Settings>) => {
   useEffect(() => {
     onClickRef.current = onClick;
   }, [onClick]);
+  useEffect(() => {
+    seriesRef.current = series;
+  }, [series]);
+  useEffect(() => {
+    settingsRef.current = settings;
+  }, [settings]);
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -442,6 +453,8 @@ const VisualizationComponent = (props: CustomVisualizationProps<Settings>) => {
     chartRef.current = chart;
 
     chart.on("click", (params: echarts.ECElementEvent) => {
+      if (typeof onClickRef.current !== "function") return;
+
       // Empty cells (series index 0) have no data to drill into
       if (params.seriesIndex === 0) {
         onClickRef.current(null);
@@ -449,10 +462,14 @@ const VisualizationComponent = (props: CustomVisualizationProps<Settings>) => {
       }
 
       const [dateStr, metricValue] = params.data as [string, number];
-      const cols = series[0].data.cols;
-      const rows = series[0].data.rows;
-      const dimIndex = cols.findIndex((c) => c.name === settings.dimension);
-      const metricIndex = cols.findIndex((c) => c.name === settings.metric);
+      const cols = seriesRef.current[0].data.cols;
+      const rows = seriesRef.current[0].data.rows;
+      const dimIndex = cols.findIndex(
+        (c) => c.name === settingsRef.current.dimension,
+      );
+      const metricIndex = cols.findIndex(
+        (c) => c.name === settingsRef.current.metric,
+      );
       const dimCol = cols[dimIndex];
       const metricCol = cols[metricIndex];
 
