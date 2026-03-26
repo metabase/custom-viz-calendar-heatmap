@@ -1,0 +1,8 @@
+{
+  "name": "Calendar Heatmap",
+  "icon": "calendar.svg",
+  "assets": ["calendar.svg"],
+  "metabase": {
+    "version": ">=59"
+  }
+}

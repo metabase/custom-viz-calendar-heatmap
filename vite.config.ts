@@ -95,13 +95,21 @@ function metabaseNotifyReload() {
 const isWatch = process.argv.includes("--watch");
 
 export default defineConfig({
-  plugins: [metabaseVizExternals(), ...(isWatch ? [metabaseNotifyReload()] : [])],
+  plugins: [
+    metabaseVizExternals(),
+    ...(isWatch ? [metabaseNotifyReload()] : []),
+  ],
+  define: {
+    "process.env.NODE_ENV": process.env.NODE_ENV
+      ? JSON.stringify(process.env.NODE_ENV)
+      : JSON.stringify("production"),
+  },
   build: {
     outDir: "dist",
     lib: {
       entry: resolve(__dirname, "src/index.tsx"),
-      formats: ["es", "iife"],
-      fileName: (format) => (format === "iife" ? "index.iife.js" : "index.js"),
+      formats: ["iife"],
+      fileName: () => "index.js",
       name: "__customVizPlugin__",
     },
   },

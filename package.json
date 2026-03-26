@@ -1,5 +1,5 @@
 {
-  "name": "grid-heatmap",
+  "name": "@metabase/custom-viz-grid-heatmap",
   "version": "0.0.1",
   "private": true,
   "type": "module",
@@ -9,10 +9,14 @@
     "type-check": "tsc --noEmit"
   },
   "devDependencies": {
-    "@metabase/custom-viz": "^0.0.1",
+    "@metabase/custom-viz": "0.0.1-alpha.1",
     "@types/react": "^19.2.14",
     "react": "^19.1.0",
     "typescript": "^5.9.3",
     "vite": "^8.0.0"
+  },
+  "dependencies": {
+    "color": "^5.0.3",
+    "echarts": "^6.0.0"
   }
 }
