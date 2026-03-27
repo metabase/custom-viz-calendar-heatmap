@@ -44,12 +44,7 @@ export function getOption(
   const borderRadius = getBorderRadius(cellShape, cellSize);
 
   return {
-    tooltip: {
-      formatter: (params: { value: [string, number]; seriesIndex: number }) =>
-        params.seriesIndex === 0
-          ? `${dimensionLabel}: ${formatDate(params.value[0])}<br/>No data`
-          : `${dimensionLabel}: ${formatDate(params.value[0])}<br/>${metricLabel}: ${formatValue(params.value[1])}`,
-    },
+    tooltip: { show: false },
     visualMap: {
       min,
       max,
