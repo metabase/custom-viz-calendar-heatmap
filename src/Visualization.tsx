@@ -1,12 +1,12 @@
-import * as echarts from 'echarts';
-import { useEffect, useRef, useState } from 'react';
-import { Button } from './components/Button';
-import type { ClickObject, CustomVisualizationProps } from '@metabase/custom-viz';
-import type { Settings } from './types';
-import { getChartData, toISODateString } from './utils/data';
-import { getCellSize, getChartHeight, getChartWidth } from './utils/looks';
-import { DEFAULT_CALENDAR_COLOR } from './utils/colors';
-import { getOption } from './settings';
+import * as echarts from "echarts";
+import { useEffect, useRef, useState } from "react";
+import { Button } from "./components/Button";
+import type { ClickObject, CustomVisualizationProps } from "@metabase/custom-viz";
+import type { Settings } from "./types";
+import { getChartData, toISODateString } from "./utils/data";
+import { getCellSize, getChartHeight, getChartWidth } from "./utils/looks";
+import { DEFAULT_CALENDAR_COLOR } from "./utils/colors";
+import { getOption } from "./settings";
 
 export function VisualizationComponent(
     props: CustomVisualizationProps<Settings>,
@@ -52,8 +52,8 @@ export function VisualizationComponent(
 
         setupTooltip(chart);
 
-        chart.on('click', (params: echarts.ECElementEvent) => {
-            if (typeof onVisualizationClickRef.current !== 'function') return;
+        chart.on("click", (params: echarts.ECElementEvent) => {
+            if (typeof onVisualizationClickRef.current !== "function") return;
 
             // Empty cells (series index 0) have no data to drill into
             if (params.seriesIndex === 0) {
@@ -99,8 +99,8 @@ export function VisualizationComponent(
     }, []);
 
     const setupTooltip = (chart: echarts.ECharts) => {
-        chart.on('mouseover', (params: echarts.ECElementEvent) => {
-            if (typeof onHoverChangeRef.current !== 'function') return;
+        chart.on("mouseover", (params: echarts.ECElementEvent) => {
+            if (typeof onHoverChangeRef.current !== "function") return;
             if (params.seriesIndex === 0) return;
             const [dateString, metricValue] = params.data as [string, number];
             const columns = seriesRef.current[0].data.cols;
@@ -113,7 +113,7 @@ export function VisualizationComponent(
             const dimensionColumn = columns[dimensionIndex];
             const metricColumn = columns[metricIndex];
 
-            const cellPixel = chart.convertToPixel('calendar', [dateString]);
+            const cellPixel = chart.convertToPixel("calendar", [dateString]);
             const chartRect = chart.getDom().getBoundingClientRect();
 
             onHoverChangeRef.current({
@@ -131,7 +131,7 @@ export function VisualizationComponent(
             });
         });
 
-        chart.on('mouseout', () => onHoverChangeRef.current?.(null));
+        chart.on("mouseout", () => onHoverChangeRef.current?.(null));
     };
 
     const currentYear = displayedYear ?? latestYear;
@@ -175,20 +175,20 @@ export function VisualizationComponent(
     return (
         <div
             style={{
-                position: 'relative',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                height: '100%',
-                justifyContent: 'center',
+                position: "relative",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                height: "100%",
+                justifyContent: "center",
             }}
         >
-            <div style={{ overflowX: 'auto', width: '100%' }}>
+            <div style={{ overflowX: "auto", width: "100%" }}>
                 <div
                     style={{
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
                         gap: 8,
                         marginBottom: 10,
                         marginTop: 10,
@@ -215,7 +215,7 @@ export function VisualizationComponent(
                     style={{
                         width: chartWidth,
                         height: getChartHeight(cellSize),
-                        cursor: 'pointer',
+                        cursor: "pointer",
                     }}
                 />
             </div>
