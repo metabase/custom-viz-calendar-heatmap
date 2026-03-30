@@ -1,23 +1,21 @@
 import * as echarts from "echarts";
 import { useEffect, useRef, useState } from "react";
 import { Button } from "./components/Button";
-import type {
-  ClickObject,
-  CustomVisualizationProps,
-} from "@metabase/custom-viz";
+import type { ClickObject, CustomVisualizationProps } from "@metabase/custom-viz";
 import type { Settings } from "./types";
 import { getChartData, toISODateString } from "./utils/data";
-import { getCellSize, getChartWidth, getChartHeight } from "./utils/looks";
+import { getCellSize, getChartHeight, getChartWidth } from "./utils/looks";
 import { DEFAULT_CALENDAR_COLOR } from "./utils/colors";
 import { getOption } from "./settings";
 
 export function VisualizationComponent(
   props: CustomVisualizationProps<Settings>,
 ) {
-  const { height, width, settings, series, onVisualizationClick } = props;
+  const { height, width, settings, series, onVisualizationClick, onHoverChange } = props;
   const containerRef = useRef<HTMLDivElement>(null);
   const chartRef = useRef<echarts.ECharts | null>(null);
   const onVisualizationClickRef = useRef(onVisualizationClick);
+  const onHoverChangeRef = useRef(onHoverChange);
   const seriesRef = useRef(series);
   const settingsRef = useRef(settings);
   const [displayedYear, setDisplayedYear] = useState<number | null>(null);
@@ -34,9 +32,15 @@ export function VisualizationComponent(
   useEffect(() => {
     onVisualizationClickRef.current = onVisualizationClick;
   }, [onVisualizationClick]);
+
+  useEffect(() => {
+    onHoverChangeRef.current = onHoverChange;
+  }, [onHoverChange]);
+
   useEffect(() => {
     seriesRef.current = series;
   }, [series]);
+
   useEffect(() => {
     settingsRef.current = settings;
   }, [settings]);
@@ -45,6 +49,8 @@ export function VisualizationComponent(
     if (!containerRef.current) return;
     const chart = echarts.init(containerRef.current);
     chartRef.current = chart;
+
+    setupTooltip(chart);
 
     chart.on("click", (params: echarts.ECElementEvent) => {
       if (typeof onVisualizationClickRef.current !== "function") return;
@@ -91,6 +97,42 @@ export function VisualizationComponent(
       chartRef.current = null;
     };
   }, []);
+
+  const setupTooltip = (chart: echarts.ECharts) => {
+    chart.on("mouseover", (params: echarts.ECElementEvent) => {
+      if (typeof onHoverChangeRef.current !== "function") return;
+      if (params.seriesIndex === 0) return;
+      const [dateString, metricValue] = params.data as [string, number];
+      const columns = seriesRef.current[0].data.cols;
+      const dimensionIndex = columns.findIndex(
+        ({ name }) => name === settingsRef.current.dimension,
+      );
+      const metricIndex = columns.findIndex(
+        ({ name }) => name === settingsRef.current.metric,
+      );
+      const dimensionColumn = columns[dimensionIndex];
+      const metricColumn = columns[metricIndex];
+
+      const cellPixel = chart.convertToPixel("calendar", [dateString]);
+      const chartRect = chart.getDom().getBoundingClientRect();
+
+      onHoverChangeRef.current({
+        value: metricValue,
+        column: metricColumn,
+        dimensions: dimensionColumn ? [{ value: dateString, column: dimensionColumn }] : [],
+        data: [
+          { key: dimensionColumn.display_name, col: dimensionColumn, value: dateString },
+          { key: metricColumn.display_name, col: metricColumn, value: metricValue },
+        ],
+        event: new MouseEvent("mouseover", {
+          clientX: chartRect.left + cellPixel[0],
+          clientY: chartRect.top + cellPixel[1],
+        }),
+      });
+    });
+
+    chart.on("mouseout", () => onHoverChangeRef.current?.(null));
+  };
 
   const currentYear = displayedYear ?? latestYear;
   const yearIndex = years.indexOf(currentYear);
