@@ -7,6 +7,7 @@ import { StaticVisualizationComponent } from "./StaticVisualization";
 import { VisualizationComponent } from "./Visualization";
 
 import { getChartData, hasDuplicateDates } from "./utils/data";
+import { findDefaultDimensionName, findDefaultMetricName, isDimensionCol, isMetricCol } from "./utils/isa";
 
 const createVisualization: CreateCustomVisualization<Settings> = () => {
   return {
@@ -14,18 +15,25 @@ const createVisualization: CreateCustomVisualization<Settings> = () => {
     getName: () => "Calendar Heatmap",
     minSize: { width: 15, height: 6 },
     defaultSize: { width: 20, height: 6 },
-    isSensible() {
-      return true;
-    },
+    isSensible: (data) => data.cols.find(isDimensionCol) && data.cols.find(isMetricCol),
     checkRenderable(series, settings) {
-      // TODO: improve check renderable logic using utils
       if (series.length === 0) {
         throw new Error("No series provided");
       }
+      const cols = series[0]?.data?.cols ?? [];
       const s = settings ?? {};
-      const dimension = s.dimension ?? series[0]?.data?.cols?.[0]?.name;
-      const metric = s.metric ?? series[0]?.data?.cols?.[1]?.name;
-      if (hasDuplicateDates(series, { ...s, dimension, metric })) {
+      const dimensionName = s.dimension ?? findDefaultDimensionName(series);
+      const metricName = s.metric ?? findDefaultMetricName(series);
+      const dimensionCol = cols.find((col) => col.name === dimensionName && isDimensionCol(col));
+      const metricCol = cols.find((col) => col.name === metricName && isMetricCol(col));
+
+      if (!dimensionCol) {
+        throw new Error("Please select a date column for the dimension.");
+      }
+      if (!metricCol) {
+        throw new Error("Please select a numeric column for the metric.");
+      }
+      if (hasDuplicateDates(series, { ...s, dimension: dimensionName, metric: metricName })) {
         throw new Error(
           "Data is unbinned: multiple entries with the same date. Please aggregate date column by day.",
         );
@@ -37,18 +45,13 @@ const createVisualization: CreateCustomVisualization<Settings> = () => {
         section: "Data",
         title: "Date Column",
         widget: "field",
-        getDefault(series) {
-          // TODO: isa utils required for this.
-          return series?.[0]?.data?.cols?.[0]?.name;
-        },
+        getDefault: findDefaultDimensionName,
         getProps(series) {
           const cols = series?.[0]?.data?.cols ?? [];
+          const dimensionCol = cols.filter(isDimensionCol);
           return {
-            columns: cols,
-            options: cols.map((col) => ({
-              name: col.display_name,
-              value: col.name,
-            })),
+            columns: dimensionCol,
+            options: dimensionCol.map(({ display_name, name }) => ({ name: display_name, value: name })),
           };
         },
       },
@@ -57,18 +60,13 @@ const createVisualization: CreateCustomVisualization<Settings> = () => {
         section: "Data",
         title: "Metric Column",
         widget: "field",
-        getDefault(series) {
-          // TODO: isa utils required for this.
-          return series?.[0]?.data?.cols?.[1]?.name;
-        },
+        getDefault: findDefaultMetricName,
         getProps(series) {
           const cols = series?.[0]?.data?.cols ?? [];
+          const metricCol = cols.filter(isMetricCol);
           return {
-            columns: cols,
-            options: cols.map((col) => ({
-              name: col.display_name,
-              value: col.name,
-            })),
+            columns: metricCol,
+            options: metricCol.map(({ display_name, name }) => ({ name: display_name, value: name })),
           };
         },
       },
