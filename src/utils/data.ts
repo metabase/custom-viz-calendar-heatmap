@@ -1,7 +1,7 @@
-import { Series } from "@metabase/custom-viz";
-import type { Settings } from "../types";
+import { Column, formatValue, Series } from "@metabase/custom-viz";
+import { MonthLabelFormatterParams, Settings } from "../types";
 
-export function getChartData(
+export const getChartData = (
   series: Series,
   settings: Settings,
 ): {
@@ -10,7 +10,9 @@ export function getChartData(
   latestYear: number;
   dimensionLabel: string;
   metricLabel: string;
-} {
+  dimensionCol?: Column;
+  metricCol?: Column;
+} => {
   const [{ data }] = series;
   const dimIndex = data.cols.findIndex(
     (col) => col.name === settings.dimension,
@@ -60,8 +62,10 @@ export function getChartData(
     latestYear,
     dimensionLabel,
     metricLabel,
+    dimensionCol: data.cols[dimIndex],
+    metricCol: data.cols[metricIndex],
   };
-}
+};
 
 function getYears(dates: string[]): number[] {
   const distinct = new Set<number>();
@@ -98,3 +102,26 @@ export function getAllDatesForYear(year: number): string[] {
   }
   return dates;
 }
+
+export const formatColumnAsMonth = (params: MonthLabelFormatterParams, dimensionCol: Column) => {
+  const date = `${params.yyyy}-${params.MM}-01`;
+  return formatValue(date, { column: { ...dimensionCol, unit: "month-of-year" }, date_abbreviate: true });
+};
+
+const formatColumnAsDay = (date: Date, dimensionCol: Column) => formatValue(
+  date,
+  { column: { ...dimensionCol, unit: "day-of-week" }, date_abbreviate: true },
+);
+
+export const getWeekDaysLabels = (dimensionCol: Column) => {
+  const now = new Date();
+  // echarts nameMap requires index 0 = Sunday
+  const sunday = new Date(now);
+  sunday.setDate(now.getDate() - now.getDay());
+
+  return Array.from({ length: 7 }, (_, i) => {
+    const day = new Date(sunday);
+    day.setDate(sunday.getDate() + i);
+    return formatColumnAsDay(day, dimensionCol);
+  });
+};

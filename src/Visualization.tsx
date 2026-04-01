@@ -20,7 +20,7 @@ export function VisualizationComponent(
   const settingsRef = useRef(settings);
   const [displayedYear, setDisplayedYear] = useState<number | null>(null);
 
-  const { data, years, latestYear, dimensionLabel, metricLabel } = getChartData(
+  const { data, years, latestYear, dimensionLabel, metricLabel, dimensionCol, metricCol } = getChartData(
     series,
     settings,
   );
@@ -153,6 +153,8 @@ export function VisualizationComponent(
         metricLabel,
         cellSize,
         cellShape,
+        dimensionCol,
+        metricCol,
       ),
       true,
     );
@@ -164,6 +166,8 @@ export function VisualizationComponent(
     metricLabel,
     cellSize,
     cellShape,
+    dimensionCol,
+    metricCol,
   ]);
 
   useEffect(() => {
