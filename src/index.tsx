@@ -64,8 +64,8 @@ const createVisualization: CreateCustomVisualization<Settings> = () => {
           const cols = series?.[0]?.data?.cols ?? [];
           const metricCols = cols.filter(isMetricCol);
           return {
-            columns: metricCol,
-            options: metricCol.map(({ display_name, name }) => ({ name: display_name, value: name })),
+            columns: metricCols,
+            options: metricCols.map(({ display_name, name }) => ({ name: display_name, value: name })),
           };
         },
       },
