@@ -62,7 +62,7 @@ const createVisualization: CreateCustomVisualization<Settings> = () => {
         getDefault: findDefaultMetricName,
         getProps(series) {
           const cols = series?.[0]?.data?.cols ?? [];
-          const metricCol = cols.filter(isMetricCol);
+          const metricCols = cols.filter(isMetricCol);
           return {
             columns: metricCol,
             options: metricCol.map(({ display_name, name }) => ({ name: display_name, value: name })),
