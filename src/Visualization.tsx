@@ -11,11 +11,11 @@ import { getOption } from "./settings";
 export function VisualizationComponent(
   props: CustomVisualizationProps<Settings>,
 ) {
-  const { height, width, settings, series, onVisualizationClick, onHoverChange } = props;
+  const { height, width, settings, series, onClick, onHover } = props;
   const containerRef = useRef<HTMLDivElement>(null);
   const chartRef = useRef<echarts.ECharts | null>(null);
-  const onVisualizationClickRef = useRef(onVisualizationClick);
-  const onHoverChangeRef = useRef(onHoverChange);
+  const onClickRef = useRef(onClick);
+  const onHoverRef = useRef(onHover);
   const seriesRef = useRef(series);
   const settingsRef = useRef(settings);
   const [displayedYear, setDisplayedYear] = useState<number | null>(null);
@@ -30,12 +30,12 @@ export function VisualizationComponent(
   }, [latestYear]);
 
   useEffect(() => {
-    onVisualizationClickRef.current = onVisualizationClick;
-  }, [onVisualizationClick]);
+    onClickRef.current = onClick;
+  }, [onClick]);
 
   useEffect(() => {
-    onHoverChangeRef.current = onHoverChange;
-  }, [onHoverChange]);
+    onHoverRef.current = onHover;
+  }, [onHover]);
 
   useEffect(() => {
     seriesRef.current = series;
@@ -53,11 +53,11 @@ export function VisualizationComponent(
     setupTooltip(chart);
 
     chart.on("click", (params: echarts.ECElementEvent) => {
-      if (typeof onVisualizationClickRef.current !== "function") return;
+      if (typeof onClickRef.current !== "function") return;
 
       // Empty cells (series index 0) have no data to drill into
       if (params.seriesIndex === 0) {
-        onVisualizationClickRef.current(null);
+        onClickRef.current(null);
         return;
       }
 
@@ -89,7 +89,7 @@ export function VisualizationComponent(
           : undefined,
       };
 
-      onVisualizationClickRef.current(clickObject);
+      onClickRef.current(clickObject);
     });
 
     return () => {
@@ -100,7 +100,7 @@ export function VisualizationComponent(
 
   const setupTooltip = (chart: echarts.ECharts) => {
     chart.on("mouseover", (params: echarts.ECElementEvent) => {
-      if (typeof onHoverChangeRef.current !== "function") return;
+      if (typeof onHoverRef.current !== "function") return;
       if (params.seriesIndex === 0) return;
       const [dateString, metricValue] = params.data as [string, number];
       const columns = seriesRef.current[0].data.cols;
@@ -116,7 +116,7 @@ export function VisualizationComponent(
       const cellPixel = chart.convertToPixel("calendar", [dateString]);
       const chartRect = chart.getDom().getBoundingClientRect();
 
-      onHoverChangeRef.current({
+      onHoverRef.current({
         value: metricValue,
         column: metricColumn,
         dimensions: dimensionColumn ? [{ value: dateString, column: dimensionColumn }] : [],
@@ -131,7 +131,7 @@ export function VisualizationComponent(
       });
     });
 
-    chart.on("mouseout", () => onHoverChangeRef.current?.(null));
+    chart.on("mouseout", () => onHoverRef.current?.(null));
   };
 
   const currentYear = displayedYear ?? latestYear;
