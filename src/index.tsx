@@ -22,8 +22,8 @@ const createVisualization: CreateCustomVisualization<Settings> = () => {
       }
       const cols = series[0]?.data?.cols ?? [];
       const s = settings ?? {};
-      const dimensionName = s.dimension ?? findDefaultDimensionName(series);
-      const metricName = s.metric ?? findDefaultMetricName(series);
+      const dimensionName = s.dimension ?? findDefaultDimensionName(cols);
+      const metricName = s.metric ?? findDefaultMetricName(cols);
       const dimensionCol = cols.find((col) => col.name === dimensionName && isDimensionCol(col));
       const metricCol = cols.find((col) => col.name === metricName && isMetricCol(col));
 
