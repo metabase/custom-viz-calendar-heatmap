@@ -1,7 +1,9 @@
-import type { DateString, Value, CellShape } from "./types";
+import type { Column } from "@metabase/custom-viz";
+import { formatValue } from "@metabase/custom-viz";
+import { DateString, Value, CellShape, MonthLabelFormatterParams } from "./types";
 import { getColorScale, TEXT_COLOR } from "./utils/colors";
-import { getBorderRadius } from "./utils/looks";
-import { toISODateString, getAllDatesForYear } from "./utils/data";
+import { CALENDAR_DAY_LABEL_WIDTH, getBorderRadius } from "./utils/looks";
+import { toISODateString, getAllDatesForYear, getWeekDaysLabels, formatColumnAsMonth } from "./utils/data";
 import {
   CALENDAR_TOP,
   CALENDAR_ROWS,
@@ -10,7 +12,7 @@ import {
 } from "./utils/looks";
 import { EMPTY_CELL_COLOR } from "./utils/colors";
 
-export function getOption(
+export const getOption = (
   data: Array<[DateString, Value]>,
   displayedYear: number,
   color: string,
@@ -18,7 +20,9 @@ export function getOption(
   metricLabel: string,
   cellSize: number,
   cellShape: CellShape | undefined,
-) {
+  dimensionCol?: Column,
+  metricCol?: Column,
+) => {
   const colorScale = getColorScale(color);
   const displayedYearData = data.filter(([date]) => {
     const d = new Date(date);
@@ -74,6 +78,7 @@ export function getOption(
         { gt: max * 0.75, color: colorScale.get("high") },
       ],
       showLabel: false,
+      formatter: (value: number) => formatValue(value, { column: metricCol }),
       text: ["More", "Less"],
       itemWidth: 10,
       itemHeight: 10,
@@ -81,7 +86,7 @@ export function getOption(
     },
     calendar: {
       top: CALENDAR_TOP,
-      left: PADDING,
+      left: PADDING + CALENDAR_DAY_LABEL_WIDTH,
       bottom: null,
       cellSize: [cellSize, cellSize],
       range: displayedYear,
@@ -97,11 +102,14 @@ export function getOption(
         firstDay: 0,
         color: TEXT_COLOR,
         fontSize: 11,
+        nameMap: dimensionCol ? getWeekDaysLabels(dimensionCol) : undefined,
       },
       monthLabel: {
-        nameMap: "en",
         color: TEXT_COLOR,
         fontSize: 11,
+        formatter: dimensionCol
+          ? (params: MonthLabelFormatterParams) => formatColumnAsMonth(params, dimensionCol)
+          : undefined,
       },
     },
     series: [
@@ -126,15 +134,3 @@ export function getOption(
   };
 }
 
-function formatDate(date: string): string {
-  const d = new Date(date);
-  return d.toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-  });
-}
-
-function formatValue(value: number): string {
-  return value.toFixed(2);
-}
