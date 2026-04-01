@@ -15,7 +15,6 @@ const createVisualization: CreateCustomVisualization<Settings> = () => {
     getName: () => "Calendar Heatmap",
     minSize: { width: 15, height: 6 },
     defaultSize: { width: 20, height: 6 },
-    isSensible: (data) => data.cols.find(isDimensionCol) && data.cols.find(isMetricCol),
     checkRenderable(series, settings) {
       if (series.length === 0) {
         throw new Error("No series provided");
