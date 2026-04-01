@@ -114,11 +114,11 @@ const formatColumnAsDay = (date: Date, dimensionCol: Column) => formatValue(
 );
 
 export const getWeekDaysLabels = (dimensionCol: Column) => {
-  const now = new Date();
-  // echarts nameMap requires index 0 = Sunday
-  const sunday = new Date(now);
-  sunday.setDate(now.getDate() - now.getDay());
-
+  /**
+   * Fixed Sunday; actual date doesn't matter, only the day-of-week.
+   * echarts nameMap requires index 0 = Sunday
+   */
+  const sunday = new Date(2024, 0, 7);
   return Array.from({ length: 7 }, (_, i) => {
     const day = new Date(sunday);
     day.setDate(sunday.getDate() + i);
