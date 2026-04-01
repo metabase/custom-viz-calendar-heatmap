@@ -187,7 +187,11 @@ export function VisualizationComponent(
         justifyContent: "center",
       }}
     >
-      <div style={{ overflowX: "auto", width: "100%" }}>
+      <div style={{
+        overflowX: "auto", width: "100%", display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+      }}>
         <div
           style={{
             display: "flex",
@@ -219,7 +223,6 @@ export function VisualizationComponent(
           style={{
             width: chartWidth,
             height: getChartHeight(cellSize),
-            cursor: "pointer",
           }}
         />
       </div>
