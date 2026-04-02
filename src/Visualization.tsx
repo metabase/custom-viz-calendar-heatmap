@@ -141,7 +141,7 @@ export function VisualizationComponent(
   const color = settings.color ?? DEFAULT_CALENDAR_COLOR;
   const cellShape = settings.cellShape;
 
-  const cellSize = getCellSize(width);
+  const cellSize = width ? getCellSize(width) : 0;
 
   useEffect(() => {
     chartRef.current?.setOption(

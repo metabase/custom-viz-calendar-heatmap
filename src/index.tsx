@@ -1,5 +1,4 @@
 import type { CreateCustomVisualization } from "@metabase/custom-viz";
-import { defineSetting } from "@metabase/custom-viz";
 import { DEFAULT_CALENDAR_COLOR } from "./utils/colors";
 import { CellShapeWidget } from "./components/CellShapeWidget";
 import type { Settings } from "./types";
@@ -9,9 +8,9 @@ import { VisualizationComponent } from "./Visualization";
 import { hasDuplicateDates } from "./utils/data";
 import { findDefaultDimensionName, findDefaultMetricName, isDimensionCol, isMetricCol } from "./utils/isa";
 
-const createVisualization: CreateCustomVisualization<Settings> = () => {
+const createVisualization: CreateCustomVisualization<Settings> = ({ defineSetting }) => {
   return {
-    id: "grid-heatmap",
+    id: "calendar-heatmap",
     getName: () => "Calendar Heatmap",
     minSize: { width: 15, height: 6 },
     defaultSize: { width: 20, height: 6 },
