@@ -32,17 +32,10 @@ export const getChartData = (
     };
   }
 
-  const rawData: [string, number][] = data.rows.map((row) => [
+  const chartData: [string, number][] = data.rows.map((row) => [
     String(row[dimIndex]),
     Number(row[metricIndex]),
   ]);
-
-  const { start, end } = settings.dateRange ?? {};
-  const chartData = rawData.filter(([date]) => {
-    if (start && date < start) return false;
-    if (end && date > end) return false;
-    return true;
-  });
 
   const years = getYears(chartData.map(([date]) => date));
   const latestYear = years.length

@@ -1,12 +1,12 @@
 import type { CreateCustomVisualization } from "@metabase/custom-viz";
+import { defineSetting } from "@metabase/custom-viz";
 import { DEFAULT_CALENDAR_COLOR } from "./utils/colors";
 import { CellShapeWidget } from "./components/CellShapeWidget";
-import { DateRangeWidget } from "./components/DateRangeWidget";
 import type { Settings } from "./types";
 import { StaticVisualizationComponent } from "./StaticVisualization";
 import { VisualizationComponent } from "./Visualization";
 
-import { getChartData, hasDuplicateDates } from "./utils/data";
+import { hasDuplicateDates } from "./utils/data";
 import { findDefaultDimensionName, findDefaultMetricName, isDimensionCol, isMetricCol } from "./utils/isa";
 
 const createVisualization: CreateCustomVisualization<Settings> = () => {
@@ -39,28 +39,28 @@ const createVisualization: CreateCustomVisualization<Settings> = () => {
       }
     },
     settings: {
-      dimension: {
+      dimension: defineSetting({
         id: "dimension",
         section: "Data",
         title: "Date Column",
         widget: "field",
-        getDefault: findDefaultDimensionName,
-        getProps(series) {
+        getDefault: (series) => findDefaultDimensionName(series?.[0]?.data?.cols ?? []),
+        getProps: (series) => {
           const cols = series?.[0]?.data?.cols ?? [];
-          const dimensionCol = cols.filter(isDimensionCol);
+          const dimensionCols = cols.filter(isDimensionCol);
           return {
-            columns: dimensionCol,
-            options: dimensionCol.map(({ display_name, name }) => ({ name: display_name, value: name })),
+            columns: dimensionCols,
+            options: dimensionCols.map(({ display_name, name }) => ({ name: display_name, value: name })),
           };
         },
-      },
-      metric: {
+      }),
+      metric: defineSetting({
         id: "metric",
         section: "Data",
         title: "Metric Column",
         widget: "field",
-        getDefault: findDefaultMetricName,
-        getProps(series) {
+        getDefault: (series) => findDefaultMetricName(series?.[0]?.data?.cols ?? []),
+        getProps: (series) => {
           const cols = series?.[0]?.data?.cols ?? [];
           const metricCols = cols.filter(isMetricCol);
           return {
@@ -68,45 +68,23 @@ const createVisualization: CreateCustomVisualization<Settings> = () => {
             options: metricCols.map(({ display_name, name }) => ({ name: display_name, value: name })),
           };
         },
-      },
-      dateRange: {
-        id: "dateRange",
-        section: "Data",
-        title: "Date Range",
-        widget: DateRangeWidget,
-        getDefault() {
-          return undefined;
-        },
-        getProps(series, vizSettings) {
-          const { data } = getChartData(series, {
-            ...vizSettings,
-            dateRange: undefined,
-          });
-          const dates = data.map(([d]) => d).sort();
-          return {
-            minDate: dates[0],
-            maxDate: dates[dates.length - 1],
-          };
-        },
-      },
-      color: {
+      }),
+      color: defineSetting({
         id: "color",
         section: "Display",
         title: "Color",
         widget: "color",
-        getDefault() {
-          return DEFAULT_CALENDAR_COLOR;
-        },
-      },
-      cellShape: {
+        getDefault: () => DEFAULT_CALENDAR_COLOR,
+        getProps: () => ({}),
+      }),
+      cellShape: defineSetting({
         id: "cellShape",
         section: "Display",
         title: "Cell Shape",
         widget: CellShapeWidget,
-        getDefault() {
-          return "rounded";
-        },
-      },
+        getDefault: () => "rounded",
+        getProps: () => ({}),
+      }),
     },
     VisualizationComponent,
     StaticVisualizationComponent,

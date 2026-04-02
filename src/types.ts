@@ -5,7 +5,6 @@ export type Settings = {
   metric?: string;
   color?: string;
   cellShape?: CellShape;
-  dateRange?: { start?: string; end?: string };
 };
 
 export type DateString = string;

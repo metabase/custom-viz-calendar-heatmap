@@ -99,12 +99,14 @@ export const getOption = (
       yearLabel: { show: false },
       dayLabel: {
         show: true,
+        silent: true,
         firstDay: 0,
         color: TEXT_COLOR,
         fontSize: 11,
         nameMap: dimensionCol ? getWeekDaysLabels(dimensionCol) : undefined,
       },
       monthLabel: {
+        silent: true,
         color: TEXT_COLOR,
         fontSize: 11,
         formatter: dimensionCol
@@ -117,6 +119,7 @@ export const getOption = (
         type: "heatmap",
         coordinateSystem: "calendar",
         data: emptyData,
+        silent: true,
         itemStyle: {
           color: EMPTY_CELL_COLOR,
           borderRadius,
