@@ -1,21 +1,28 @@
 import type { Column } from "@metabase/custom-viz";
 import { formatValue } from "@metabase/custom-viz";
 import { DateString, Value, CellShape, MonthLabelFormatterParams } from "./types";
-import { getColorScale, TEXT_COLOR } from "./utils/colors";
-import { CALENDAR_DAY_LABEL_WIDTH, getBorderRadius } from "./utils/looks";
+import {
+  getColorScale,
+  TEXT_COLOR,
+  TEXT_COLOR_DARK,
+  EMPTY_CELL_COLOR,
+  EMPTY_CELL_COLOR_DARK,
+} from "./utils/colors";
 import { toISODateString, getAllDatesForYear, getWeekDaysLabels, formatColumnAsMonth } from "./utils/data";
 import {
   CALENDAR_TOP,
   CALENDAR_ROWS,
   VISUALMAP_GAP,
   PADDING,
+  CALENDAR_DAY_LABEL_WIDTH,
+  getBorderRadius,
 } from "./utils/looks";
-import { EMPTY_CELL_COLOR } from "./utils/colors";
 
 export const getOption = (
   data: Array<[DateString, Value]>,
   displayedYear: number,
   color: string,
+  colorScheme: "light" | "dark" | undefined,
   dimensionLabel: string,
   metricLabel: string,
   cellSize: number,
@@ -24,6 +31,8 @@ export const getOption = (
   metricCol?: Column,
 ) => {
   const colorScale = getColorScale(color);
+  const isDarkScheme = colorScheme === "dark";
+  const labelColor = isDarkScheme ? TEXT_COLOR_DARK : TEXT_COLOR;
   const displayedYearData = data.filter(([date]) => {
     const d = new Date(date);
     return !isNaN(d.getTime()) && d.getFullYear() === displayedYear;
@@ -48,6 +57,7 @@ export const getOption = (
   const borderRadius = getBorderRadius(cellShape, cellSize);
 
   return {
+    backgroundColor: "transparent",
     tooltip: { show: false },
     visualMap: {
       min,
@@ -91,8 +101,9 @@ export const getOption = (
       cellSize: [cellSize, cellSize],
       range: displayedYear,
       itemStyle: {
+        color: "transparent",
         borderWidth: 4,
-        borderColor: "#ffffff",
+        borderColor: "transparent",
         borderRadius,
       },
       splitLine: { show: false },
@@ -101,16 +112,17 @@ export const getOption = (
         show: true,
         silent: true,
         firstDay: 0,
-        color: TEXT_COLOR,
+        color: labelColor,
         fontSize: 11,
         nameMap: dimensionCol ? getWeekDaysLabels(dimensionCol) : undefined,
       },
       monthLabel: {
         silent: true,
-        color: TEXT_COLOR,
+        color: labelColor,
         fontSize: 11,
         formatter: dimensionCol
-          ? (params: MonthLabelFormatterParams) => formatColumnAsMonth(params, dimensionCol)
+          ? (params: MonthLabelFormatterParams) =>
+              formatColumnAsMonth(params, dimensionCol)
           : undefined,
       },
     },
@@ -121,7 +133,7 @@ export const getOption = (
         data: emptyData,
         silent: true,
         itemStyle: {
-          color: EMPTY_CELL_COLOR,
+          color: isDarkScheme ? EMPTY_CELL_COLOR_DARK : EMPTY_CELL_COLOR,
           borderRadius,
         },
       },
@@ -135,5 +147,5 @@ export const getOption = (
       },
     ],
   };
-}
+};
 
