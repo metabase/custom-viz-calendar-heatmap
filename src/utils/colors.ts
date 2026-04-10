@@ -1,8 +1,10 @@
 import Color from "color";
 
 export const TEXT_COLOR = "#57606a";
+export const TEXT_COLOR_DARK = "#c9d1d9"; 
 export const DEFAULT_CALENDAR_COLOR = "#85b8e8";
 export const EMPTY_CELL_COLOR = "#ebedf0";
+export const EMPTY_CELL_COLOR_DARK = "#21262d";
 
 type ColorMap = Map<
   "empty" | "low" | "medium-low" | "medium-high" | "high",

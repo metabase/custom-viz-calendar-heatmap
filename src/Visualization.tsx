@@ -11,7 +11,8 @@ import { getOption } from "./settings";
 export function VisualizationComponent(
   props: CustomVisualizationProps<Settings>,
 ) {
-  const { height, width, settings, series, onClick, onHover } = props;
+  const { height, width, settings, series, onClick, onHover, colorScheme } =
+    props;
   const containerRef = useRef<HTMLDivElement>(null);
   const chartRef = useRef<echarts.ECharts | null>(null);
   const onClickRef = useRef(onClick);
@@ -96,7 +97,7 @@ export function VisualizationComponent(
       chart.dispose();
       chartRef.current = null;
     };
-  }, []);
+  }, [colorScheme]);
 
   const setupTooltip = (chart: echarts.ECharts) => {
     chart.on("mouseover", (params: echarts.ECElementEvent) => {
@@ -149,6 +150,7 @@ export function VisualizationComponent(
         data,
         currentYear,
         color,
+        colorScheme,
         dimensionLabel,
         metricLabel,
         cellSize,
@@ -162,6 +164,7 @@ export function VisualizationComponent(
     data,
     currentYear,
     color,
+    colorScheme,
     dimensionLabel,
     metricLabel,
     cellSize,
@@ -206,6 +209,7 @@ export function VisualizationComponent(
           <Button
             onClick={() => setDisplayedYear(years[yearIndex - 1])}
             disabled={!canGoPrev}
+            colorScheme={colorScheme}
           >
             Previous
           </Button>
@@ -213,6 +217,7 @@ export function VisualizationComponent(
           <Button
             onClick={() => setDisplayedYear(years[yearIndex + 1])}
             disabled={!canGoNext}
+            colorScheme={colorScheme}
           >
             Next
           </Button>
