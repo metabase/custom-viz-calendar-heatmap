@@ -187,8 +187,7 @@ export const StaticVisualizationComponent = (
   return (
     <div style={{ display: "flex", justifyContent: "center" }}>
       <svg
-        width={svgWidth}
-        height={svgHeight}
+        viewBox={`0 0 ${svgWidth} ${svgHeight}`}
         xmlns="http://www.w3.org/2000/svg"
       >
         {yearLabel}
