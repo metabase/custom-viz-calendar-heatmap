@@ -1,5 +1,5 @@
 import { Column, formatValue, Series } from "@metabase/custom-viz";
-import { MonthLabelFormatterParams, Settings } from "../types";
+import { Settings } from "../types";
 
 export const getChartData = (
   series: Series,
@@ -10,8 +10,8 @@ export const getChartData = (
   latestYear: number;
   dimensionLabel: string;
   metricLabel: string;
-  dimensionCol?: Column;
-  metricCol?: Column;
+  dimensionCol: Column;
+  metricCol: Column;
 } => {
   const [{ data }] = series;
   const dimIndex = data.cols.findIndex(
@@ -22,14 +22,7 @@ export const getChartData = (
   );
 
   if (dimIndex === -1 || metricIndex === -1) {
-    const currentYear = new Date().getFullYear();
-    return {
-      data: [],
-      years: [currentYear],
-      latestYear: currentYear,
-      dimensionLabel: settings.dimension ?? "Date",
-      metricLabel: settings.metric ?? "Value",
-    };
+    throw new Error("There is no valid columns to render a chart");
   }
 
   const chartData: [string, number][] = data.rows.map((row) => [
@@ -96,10 +89,11 @@ export function getAllDatesForYear(year: number): string[] {
   return dates;
 }
 
-export const formatColumnAsMonth = (params: MonthLabelFormatterParams, dimensionCol: Column) => {
-  const date = `${params.yyyy}-${params.MM}-01`;
-  return formatValue(date, { column: { ...dimensionCol, unit: "month-of-year" }, date_abbreviate: true });
-};
+export const formatColumnAsMonth = (date: Date, dimensionCol: Column) =>
+  formatValue(
+    date,
+    { column: { ...dimensionCol, unit: "month-of-year" }, date_abbreviate: true },
+  );
 
 const formatColumnAsDay = (date: Date, dimensionCol: Column) => formatValue(
   date,
