@@ -86,6 +86,8 @@ export function VisualizationComponent(
         origin: matchedRow
           ? { row: matchedRow as (string | number | null)[], cols }
           : undefined,
+        /** settings need to be included in the click object to support custom click behavior */
+        settings: settingsRef.current,
       };
 
       onClickRef.current(clickObject);
