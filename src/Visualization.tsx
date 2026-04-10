@@ -9,10 +9,8 @@ import { DEFAULT_CALENDAR_COLOR } from "./utils/colors";
 import { getOption } from "./settings";
 
 export function VisualizationComponent(
-  props: CustomVisualizationProps<Settings>,
+  { height, width, settings, series, onClick, onHover, colorScheme }: CustomVisualizationProps<Settings>,
 ) {
-  const { height, width, settings, series, onClick, onHover, colorScheme } =
-    props;
   const containerRef = useRef<HTMLDivElement>(null);
   const chartRef = useRef<echarts.ECharts | null>(null);
   const onClickRef = useRef(onClick);

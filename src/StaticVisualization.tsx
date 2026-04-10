@@ -1,25 +1,36 @@
 import { CustomStaticVisualizationProps } from "@metabase/custom-viz";
-import { DEFAULT_CALENDAR_COLOR } from "./utils/colors";
+import {
+  ColorMap,
+  DEFAULT_CALENDAR_COLOR,
+  EMPTY_CELL_COLOR,
+  getCellColor,
+  getColorScale,
+  TEXT_COLOR,
+} from "./utils/colors";
 import type { Settings } from "./types";
-import { getChartData } from "./utils/data";
-import { getColorScale } from "./utils/colors";
-import { toISODateString, getAllDatesForYear } from "./utils/data";
+import {
+  formatColumnAsMonth,
+  getAllDatesForYear,
+  getChartData,
+  getWeekDaysLabels,
+  toISODateString,
+} from "./utils/data";
 import { getBorderRadius } from "./utils/looks";
-import { EMPTY_CELL_COLOR } from "./utils/colors";
-import { TEXT_COLOR } from "./utils/colors";
 
 export const StaticVisualizationComponent = (
-  props: CustomStaticVisualizationProps<Settings>,
+  { series, settings, renderingContext }: CustomStaticVisualizationProps<Settings>,
 ) => {
-  const { series, settings } = props;
-  const { data, latestYear } = getChartData(series, settings);
+  const { data, latestYear, dimensionCol } = getChartData(series, settings);
   const color = settings.color ?? DEFAULT_CALENDAR_COLOR;
   const cellShape = settings.cellShape;
+
+  const { fontFamily } = renderingContext;
 
   const cellSize = 14;
   const step = cellSize + 2;
   const paddingLeft = 28;
-  const paddingTop = 20;
+  const yearLabelHeight = 24;
+  const paddingTop = 20 + yearLabelHeight;
   const paddingBottom = 36;
 
   const colorScale = getColorScale(color);
@@ -33,16 +44,6 @@ export const StaticVisualizationComponent = (
   );
   const values = yearData.map(([, v]) => v);
   const maxVal = values.length ? Math.max(...values) : 100;
-
-  function getCellFill(dateStr: string): string {
-    if (!dataMap.has(dateStr)) return EMPTY_CELL_COLOR;
-    const val = dataMap.get(dateStr)!;
-    if (val <= 0) return colorScale.get("empty")!;
-    if (val <= maxVal * 0.25) return colorScale.get("low")!;
-    if (val <= maxVal * 0.5) return colorScale.get("medium-low")!;
-    if (val <= maxVal * 0.75) return colorScale.get("medium-high")!;
-    return colorScale.get("high")!;
-  }
 
   const jan1 = new Date(latestYear, 0, 1);
   const jan1DayOfWeek = jan1.getDay();
@@ -59,6 +60,7 @@ export const StaticVisualizationComponent = (
     const dayOfYear = Math.round((date.getTime() - jan1.getTime()) / 86400000);
     const week = Math.floor((dayOfYear + jan1DayOfWeek) / 7);
     const dayOfWeek = date.getDay();
+    const fill = getCellColor(dataMap.get(dateStr), maxVal, colorScale);
     return (
       <rect
         key={dateStr}
@@ -68,37 +70,25 @@ export const StaticVisualizationComponent = (
         height={cellSize}
         rx={borderRadius}
         ry={borderRadius}
-        fill={getCellFill(dateStr)}
+        fill={fill}
       />
     );
   });
 
-  const MONTH_NAMES = [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec",
-  ];
-  const monthLabels = MONTH_NAMES.map((name, m) => {
+  const monthLabels = Array.from({ length: 12 }, (_, m) => {
     const firstOfMonth = new Date(latestYear, m, 1);
     const dayOfYear = Math.round(
       (firstOfMonth.getTime() - jan1.getTime()) / 86400000,
     );
     const week = Math.floor((dayOfYear + jan1DayOfWeek) / 7);
+    const name = formatColumnAsMonth(new Date(latestYear, m), dimensionCol);
     return (
       <text
         key={m}
         x={paddingLeft + week * step}
         y={paddingTop - 6}
         fontSize={11}
+        fontFamily={fontFamily}
         fill={TEXT_COLOR}
       >
         {name}
@@ -106,26 +96,37 @@ export const StaticVisualizationComponent = (
     );
   });
 
-  const dayLabels = (
-    [
-      { day: 1, label: "Mon" },
-      { day: 3, label: "Wed" },
-      { day: 5, label: "Fri" },
-    ] as const
-  ).map(({ day, label }) => (
+  const weekDayNames = getWeekDaysLabels(dimensionCol);
+
+  const dayLabels = [1, 3, 5].map((day) => (
     <text
       key={day}
       x={paddingLeft - 4}
       y={paddingTop + day * step + cellSize - 3}
       fontSize={10}
+      fontFamily={fontFamily}
       fill={TEXT_COLOR}
       textAnchor="end"
     >
-      {label}
+      {weekDayNames[day]}
     </text>
   ));
 
-  const legendKeys = ["low", "medium-low", "medium-high", "high"] as const;
+  const yearLabel = (
+    <text
+      x={svgWidth / 2}
+      y={18}
+      fontSize={16}
+      fontWeight={500}
+      fontFamily={fontFamily}
+      fill={TEXT_COLOR}
+      textAnchor="middle"
+    >
+      {latestYear}
+    </text>
+  );
+
+  const legendKeys: (keyof ColorMap)[] = ["empty", "low", "medium-low", "medium-high", "high"];
   const legendItemSize = 10;
   const legendGap = 5;
   const legendTextGap = 4;
@@ -144,6 +145,7 @@ export const StaticVisualizationComponent = (
         x={legendStartX}
         y={legendY + legendItemSize - 1}
         fontSize={11}
+        fontFamily={fontFamily}
         fill={TEXT_COLOR}
       >
         Less
@@ -162,7 +164,7 @@ export const StaticVisualizationComponent = (
           height={legendItemSize}
           rx={2}
           ry={2}
-          fill={colorScale.get(key)!}
+          fill={colorScale[key] ?? EMPTY_CELL_COLOR}
         />
       ))}
       <text
@@ -174,6 +176,7 @@ export const StaticVisualizationComponent = (
         }
         y={legendY + legendItemSize - 1}
         fontSize={11}
+        fontFamily={fontFamily}
         fill={TEXT_COLOR}
       >
         More
@@ -188,6 +191,7 @@ export const StaticVisualizationComponent = (
         height={svgHeight}
         xmlns="http://www.w3.org/2000/svg"
       >
+        {yearLabel}
         {monthLabels}
         {dayLabels}
         {cells}

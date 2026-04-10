@@ -6,7 +6,7 @@ export const DEFAULT_CALENDAR_COLOR = "#85b8e8";
 export const EMPTY_CELL_COLOR = "#ebedf0";
 export const EMPTY_CELL_COLOR_DARK = "#21262d";
 
-type ColorMap = Map<
+export type ColorMap = Record<
   "empty" | "low" | "medium-low" | "medium-high" | "high",
   string
 >;
@@ -33,11 +33,24 @@ export function getColorScale(color: string): ColorMap {
   const scale = (t: number) => lerpColor(light, dark, t);
   const colors = [0, 0.25, 0.5, 0.75, 1].map((value) => scale(value));
 
-  return new Map([
-    ["empty", colors[0]],
-    ["low", colors[1]],
-    ["medium-low", colors[2]],
-    ["medium-high", colors[3]],
-    ["high", colors[4]],
-  ]);
+  return {
+    "empty": colors[0],
+    "low": colors[1],
+    "medium-low": colors[2],
+    "medium-high": colors[3],
+    "high": colors[4],
+  };
 }
+
+export const getCellColor = (
+  value: number | undefined,
+  max: number,
+  colorScale: ColorMap,
+): string => {
+  if (value === undefined) return EMPTY_CELL_COLOR;
+  if (value <= 0) return colorScale["empty"];
+  if (value <= max * 0.25) return colorScale["low"];
+  if (value <= max * 0.5) return colorScale["medium-low"];
+  if (value <= max * 0.75) return colorScale["medium-high"];
+  return colorScale["high"];
+};

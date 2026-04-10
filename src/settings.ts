@@ -1,22 +1,16 @@
 import type { Column } from "@metabase/custom-viz";
 import { formatValue } from "@metabase/custom-viz";
-import { DateString, Value, CellShape, MonthLabelFormatterParams } from "./types";
+import { CellShape, DateString, MonthLabelFormatterParams, Value } from "./types";
+import { EMPTY_CELL_COLOR, EMPTY_CELL_COLOR_DARK, getColorScale, TEXT_COLOR, TEXT_COLOR_DARK } from "./utils/colors";
 import {
-  getColorScale,
-  TEXT_COLOR,
-  TEXT_COLOR_DARK,
-  EMPTY_CELL_COLOR,
-  EMPTY_CELL_COLOR_DARK,
-} from "./utils/colors";
-import { toISODateString, getAllDatesForYear, getWeekDaysLabels, formatColumnAsMonth } from "./utils/data";
-import {
-  CALENDAR_TOP,
-  CALENDAR_ROWS,
-  VISUALMAP_GAP,
-  PADDING,
   CALENDAR_DAY_LABEL_WIDTH,
+  CALENDAR_ROWS,
+  CALENDAR_TOP,
   getBorderRadius,
+  PADDING,
+  VISUALMAP_GAP,
 } from "./utils/looks";
+import { formatColumnAsMonth, getAllDatesForYear, getWeekDaysLabels, toISODateString } from "./utils/data";
 
 export const getOption = (
   data: Array<[DateString, Value]>,
@@ -27,8 +21,8 @@ export const getOption = (
   metricLabel: string,
   cellSize: number,
   cellShape: CellShape | undefined,
-  dimensionCol?: Column,
-  metricCol?: Column,
+  dimensionCol: Column,
+  metricCol: Column,
 ) => {
   const colorScale = getColorScale(color);
   const isDarkScheme = colorScheme === "dark";
@@ -73,19 +67,19 @@ export const getOption = (
         color: colorScale,
       },
       pieces: [
-        { min: 0, max: 0, color: colorScale.get("empty") },
-        { gt: 0, lte: max * 0.25, color: colorScale.get("low") },
+        { min: 0, max: 0, color: colorScale["empty"] },
+        { gt: 0, lte: max * 0.25, color: colorScale["low"] },
         {
           gt: max * 0.25,
           lte: max * 0.5,
-          color: colorScale.get("medium-low"),
+          color: colorScale["medium-low"],
         },
         {
           gt: max * 0.5,
           lte: max * 0.75,
-          color: colorScale.get("medium-high"),
+          color: colorScale["medium-high"],
         },
-        { gt: max * 0.75, color: colorScale.get("high") },
+        { gt: max * 0.75, color: colorScale["high"] },
       ],
       showLabel: false,
       formatter: (value: number) => formatValue(value, { column: metricCol }),
@@ -114,16 +108,17 @@ export const getOption = (
         firstDay: 0,
         color: labelColor,
         fontSize: 11,
-        nameMap: dimensionCol ? getWeekDaysLabels(dimensionCol) : undefined,
+        nameMap: getWeekDaysLabels(dimensionCol),
       },
       monthLabel: {
         silent: true,
         color: labelColor,
         fontSize: 11,
-        formatter: dimensionCol
-          ? (params: MonthLabelFormatterParams) =>
-              formatColumnAsMonth(params, dimensionCol)
-          : undefined,
+        formatter: (params: MonthLabelFormatterParams) =>
+          formatColumnAsMonth(
+            new Date(parseInt(params.yyyy), params.M - 1),
+            dimensionCol,
+          ),
       },
     },
     series: [
