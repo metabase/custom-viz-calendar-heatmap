@@ -1,102 +1,106 @@
-import type { CSSProperties, ReactNode } from "react";
-import { useState } from "react";
+import type { CSSProperties, ReactNode } from 'react';
+import { useMemo, useState } from 'react';
 
-const base: CSSProperties = {
-  pointerEvents: "all",
-  borderRadius: 8,
-  fontWeight: 600,
-  fontSize: 12,
-  padding: "4px 10px",
-  transition:
-    "background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease",
+type ButtonState = 'default' | 'hover' | 'active' | 'disabled';
+
+const lightStyles: Record<ButtonState, CSSProperties> = {
+  default: {
+    background: '#ffffff',
+    border: '1px solid #e5e7eb',
+    color: '#374151',
+    cursor: 'pointer',
+  },
+  hover: {
+    background: '#f9fafb',
+    border: '1px solid #d1d5db',
+    color: '#111827',
+    cursor: 'pointer',
+  },
+  active: {
+    background: '#f3f4f6',
+    border: '1px solid #9ca3af',
+    cursor: 'pointer',
+  },
+  disabled: {
+    background: '#ffffff',
+    border: '1px solid #e5e7eb',
+    color: '#9ca3af',
+    cursor: 'default',
+  },
 };
 
-const lightStyles = {
+const darkStyles: Record<ButtonState, CSSProperties> = {
   default: {
-    background: "#ffffff",
-    border: "1px solid #e5e7eb",
-    color: "#374151",
-    cursor: "pointer",
-  } satisfies CSSProperties,
+    background: '#21262d',
+    border: '1px solid #30363d',
+    color: '#c9d1d9',
+    cursor: 'pointer',
+  },
   hover: {
-    background: "#f9fafb",
-    border: "1px solid #d1d5db",
-    color: "#111827",
-    cursor: "pointer",
-  } satisfies CSSProperties,
+    background: '#30363d',
+    border: '1px solid #8b949e',
+    color: '#e6edf3',
+    cursor: 'pointer',
+  },
   active: {
-    background: "#f3f4f6",
-    border: "1px solid #9ca3af",
-    cursor: "pointer",
-  } satisfies CSSProperties,
+    background: '#3d444d',
+    border: '1px solid #8b949e',
+    cursor: 'pointer',
+  },
   disabled: {
-    background: "#ffffff",
-    border: "1px solid #e5e7eb",
-    color: "#9ca3af",
-    cursor: "default",
-  } satisfies CSSProperties,
-};
-
-const darkStyles = {
-  default: {
-    background: "#21262d",
-    border: "1px solid #30363d",
-    color: "#c9d1d9",
-    cursor: "pointer",
-  } satisfies CSSProperties,
-  hover: {
-    background: "#30363d",
-    border: "1px solid #8b949e",
-    color: "#e6edf3",
-    cursor: "pointer",
-  } satisfies CSSProperties,
-  active: {
-    background: "#3d444d",
-    border: "1px solid #8b949e",
-    cursor: "pointer",
-  } satisfies CSSProperties,
-  disabled: {
-    background: "#21262d",
-    border: "1px solid #30363d",
-    color: "#484f58",
-    cursor: "default",
-  } satisfies CSSProperties,
+    background: '#21262d',
+    border: '1px solid #30363d',
+    color: '#484f58',
+    cursor: 'default',
+  },
 };
 
 export function Button({
   children,
-  onClick,
-  disabled,
   colorScheme,
+  disabled,
+  onClick,
 }: {
   children: ReactNode;
-  onClick: () => void;
-  disabled?: boolean;
   colorScheme?: string;
+  disabled?: boolean;
+  onClick: () => void;
 }) {
   const [hovered, setHovered] = useState(false);
   const [pressed, setPressed] = useState(false);
 
-  const styles =
-    colorScheme?.toLowerCase() === "dark" ? darkStyles : lightStyles;
+  const stateStyle = useMemo(() => {
+    const styles = colorScheme?.toLowerCase() === 'dark' ? darkStyles : lightStyles;
 
-  let stateStyle: CSSProperties;
-  if (disabled) {
-    stateStyle = styles.disabled;
-  } else if (pressed) {
-    stateStyle = styles.active;
-  } else if (hovered) {
-    stateStyle = styles.hover;
-  } else {
-    stateStyle = styles.default;
-  }
+    if (disabled) {
+      return styles.disabled;
+    }
+
+    if (pressed) {
+      return styles.active;
+    }
+
+    if (hovered) {
+      return styles.hover;
+    }
+
+    return styles.default;
+  }, [colorScheme, disabled, hovered, pressed]);
 
   return (
     <button
-      type="button"
-      onClick={onClick}
       disabled={disabled}
-      style={{ ...base, ...stateStyle }}
+      type="button"
+      style={{
+        pointerEvents: 'all',
+        borderRadius: 8,
+        fontWeight: 600,
+        fontSize: 12,
+        padding: '4px 10px',
+        transition: 'background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease',
+        ...stateStyle,
+      }}
+      onClick={onClick}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => {
         setHovered(false);
