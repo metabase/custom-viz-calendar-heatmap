@@ -28,15 +28,10 @@ export function VisualizationComponent({
   const settingsRef = useRef(settings);
   const [displayedYear, setDisplayedYear] = useState<number | null>(null);
 
-  const {
-    data,
-    years,
-    latestYear,
-    dimensionLabel,
-    metricLabel,
-    dimensionCol,
-    metricCol,
-  } = getChartData(series, settings);
+  const { data, years, latestYear, dimensionCol, metricCol } = getChartData(
+    series,
+    settings,
+  );
 
   useEffect(() => {
     setDisplayedYear(latestYear);
@@ -175,8 +170,6 @@ export function VisualizationComponent({
         currentYear,
         color,
         colorScheme,
-        dimensionLabel,
-        metricLabel,
         cellSize,
         cellShape,
         dimensionCol,
@@ -189,8 +182,6 @@ export function VisualizationComponent({
     currentYear,
     color,
     colorScheme,
-    dimensionLabel,
-    metricLabel,
     cellSize,
     cellShape,
     dimensionCol,

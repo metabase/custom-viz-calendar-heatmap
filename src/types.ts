@@ -8,5 +8,7 @@ export type Settings = {
 };
 
 export type DateString = string;
+
 export type Value = number;
+
 export type MonthLabelFormatterParams = { yyyy: string; M: number };

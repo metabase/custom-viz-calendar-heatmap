@@ -33,8 +33,6 @@ export const getOption = (
   displayedYear: number,
   color: string,
   colorScheme: "light" | "dark" | undefined,
-  dimensionLabel: string,
-  metricLabel: string,
   cellSize: number,
   cellShape: CellShape | undefined,
   dimensionCol: Column,

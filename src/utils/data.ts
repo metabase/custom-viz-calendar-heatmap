@@ -8,8 +8,6 @@ export function getChartData(
   data: [string, number][];
   years: number[];
   latestYear: number;
-  dimensionLabel: string;
-  metricLabel: string;
   dimensionCol: Column;
   metricCol: Column;
 } {
@@ -35,19 +33,10 @@ export function getChartData(
     ? years[years.length - 1]
     : new Date().getFullYear();
 
-  const dimensionLabel =
-    data.cols[dimIndex]?.display_name ?? data.cols[dimIndex]?.name ?? "Date";
-  const metricLabel =
-    data.cols[metricIndex]?.display_name ??
-    data.cols[metricIndex]?.name ??
-    "Value";
-
   return {
     data: chartData,
     years,
     latestYear,
-    dimensionLabel,
-    metricLabel,
     dimensionCol: data.cols[dimIndex],
     metricCol: data.cols[metricIndex],
   };
