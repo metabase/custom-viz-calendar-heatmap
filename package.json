@@ -2,6 +2,7 @@
   "name": "@metabase/custom-viz-calendar-heatmap",
   "version": "0.0.1",
   "private": true,
+  "license": "MIT",
   "type": "module",
   "engines": {
     "node": ">=22"
