@@ -1,15 +1,16 @@
-import * as echarts from "echarts";
-import { useEffect, useRef, useState } from "react";
-import { Button } from "./components/Button";
 import type {
   ClickObject,
   CustomVisualizationProps,
 } from "@metabase/custom-viz";
+import * as echarts from "echarts";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { Button } from "./components/Button";
+import { useLatest } from "./hooks/useLatest";
+import { getOption } from "./settings";
 import type { Settings } from "./types";
+import { DEFAULT_CALENDAR_COLOR } from "./utils/colors";
 import { getChartData, toISODateString } from "./utils/data";
 import { getCellSize, getChartHeight, getChartWidth } from "./utils/looks";
-import { DEFAULT_CALENDAR_COLOR } from "./utils/colors";
-import { getOption } from "./settings";
 
 export function VisualizationComponent({
   height,
@@ -22,10 +23,10 @@ export function VisualizationComponent({
 }: CustomVisualizationProps<Settings>) {
   const containerRef = useRef<HTMLDivElement>(null);
   const chartRef = useRef<echarts.ECharts | null>(null);
-  const onClickRef = useRef(onClick);
-  const onHoverRef = useRef(onHover);
-  const seriesRef = useRef(series);
-  const settingsRef = useRef(settings);
+  const onClickRef = useLatest(onClick);
+  const onHoverRef = useLatest(onHover);
+  const seriesRef = useLatest(series);
+  const settingsRef = useLatest(settings);
   const [displayedYear, setDisplayedYear] = useState<number | null>(null);
 
   const { data, years, latestYear, dimensionCol, metricCol } = getChartData(
@@ -38,22 +39,6 @@ export function VisualizationComponent({
   }, [latestYear]);
 
   useEffect(() => {
-    onClickRef.current = onClick;
-  }, [onClick]);
-
-  useEffect(() => {
-    onHoverRef.current = onHover;
-  }, [onHover]);
-
-  useEffect(() => {
-    seriesRef.current = series;
-  }, [series]);
-
-  useEffect(() => {
-    settingsRef.current = settings;
-  }, [settings]);
-
-  useEffect(() => {
     if (!containerRef.current) return;
     const chart = echarts.init(containerRef.current);
     chartRef.current = chart;
@@ -61,7 +46,9 @@ export function VisualizationComponent({
     setupTooltip(chart);
 
     chart.on("click", (params: echarts.ECElementEvent) => {
-      if (typeof onClickRef.current !== "function") return;
+      if (typeof onClickRef.current !== "function") {
+        return;
+      }
 
       // Empty cells (series index 0) have no data to drill into
       if (params.seriesIndex === 0) {
@@ -110,8 +97,15 @@ export function VisualizationComponent({
 
   const setupTooltip = (chart: echarts.ECharts) => {
     chart.on("mouseover", (params: echarts.ECElementEvent) => {
-      if (typeof onHoverRef.current !== "function") return;
-      if (params.seriesIndex === 0) return;
+      if (typeof onHoverRef.current !== "function") {
+        return;
+      }
+
+      // Empty cells (series index 0) have no data to drill into
+      if (params.seriesIndex === 0) {
+        return;
+      }
+
       const [dateString, metricValue] = params.data as [string, number];
       const columns = seriesRef.current[0].data.cols;
       const dimensionIndex = columns.findIndex(
@@ -163,19 +157,16 @@ export function VisualizationComponent({
 
   const cellSize = width ? getCellSize(width) : 0;
 
-  useEffect(() => {
-    chartRef.current?.setOption(
-      getOption(
-        data,
-        currentYear,
-        color,
-        colorScheme,
-        cellSize,
-        cellShape,
-        dimensionCol,
-        metricCol,
-      ),
-      true,
+  const option = useMemo(() => {
+    return getOption(
+      data,
+      currentYear,
+      color,
+      colorScheme,
+      cellSize,
+      cellShape,
+      dimensionCol,
+      metricCol,
     );
   }, [
     data,
@@ -187,6 +178,10 @@ export function VisualizationComponent({
     dimensionCol,
     metricCol,
   ]);
+
+  useEffect(() => {
+    chartRef.current?.setOption(option, true);
+  }, [option]);
 
   useEffect(() => {
     chartRef.current?.resize();
@@ -219,7 +214,7 @@ export function VisualizationComponent({
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            gap: 8,
+            gap: 16,
             marginBottom: 10,
             marginTop: 10,
             width: chartWidth,
@@ -232,7 +227,9 @@ export function VisualizationComponent({
           >
             Previous
           </Button>
+
           <span style={{ fontSize: 16, fontWeight: 500 }}>{currentYear}</span>
+
           <Button
             onClick={() => setDisplayedYear(years[yearIndex + 1])}
             disabled={!canGoNext}

@@ -1,8 +1,8 @@
 import type { CreateCustomVisualization } from "@metabase/custom-viz";
-import { DEFAULT_CALENDAR_COLOR } from "./utils/colors";
 import { CellShapeWidget } from "./components/CellShapeWidget";
-import type { Settings } from "./types";
 import { StaticVisualizationComponent } from "./StaticVisualization";
+import type { Settings } from "./types";
+import { DEFAULT_CALENDAR_COLOR } from "./utils/colors";
 import { VisualizationComponent } from "./Visualization";
 
 import { hasDuplicateDates } from "./utils/data";
@@ -26,9 +26,9 @@ const createVisualization: CreateCustomVisualization<Settings> = ({
         throw new Error("No series provided");
       }
       const cols = series[0]?.data?.cols ?? [];
-      const s = settings ?? {};
-      const dimensionName = s.dimension ?? findDefaultDimensionName(cols);
-      const metricName = s.metric ?? findDefaultMetricName(cols);
+      const dimensionName =
+        settings.dimension ?? findDefaultDimensionName(cols);
+      const metricName = settings.metric ?? findDefaultMetricName(cols);
       const dimensionCol = cols.find(
         (col) => col.name === dimensionName && isDimensionCol(col),
       );
@@ -44,7 +44,7 @@ const createVisualization: CreateCustomVisualization<Settings> = ({
       }
       if (
         hasDuplicateDates(series, {
-          ...s,
+          ...settings,
           dimension: dimensionName,
           metric: metricName,
         })
@@ -60,8 +60,9 @@ const createVisualization: CreateCustomVisualization<Settings> = ({
         section: "Data",
         title: "Date Column",
         widget: "field",
-        getDefault: (series) =>
-          findDefaultDimensionName(series?.[0]?.data?.cols ?? []),
+        getDefault: (series) => {
+          return findDefaultDimensionName(series?.[0]?.data?.cols ?? []);
+        },
         getProps: (series) => {
           const cols = series?.[0]?.data?.cols ?? [];
           const dimensionCols = cols.filter(isDimensionCol);
@@ -79,8 +80,9 @@ const createVisualization: CreateCustomVisualization<Settings> = ({
         section: "Data",
         title: "Metric Column",
         widget: "field",
-        getDefault: (series) =>
-          findDefaultMetricName(series?.[0]?.data?.cols ?? []),
+        getDefault: (series) => {
+          return findDefaultMetricName(series?.[0]?.data?.cols ?? []);
+        },
         getProps: (series) => {
           const cols = series?.[0]?.data?.cols ?? [];
           const metricCols = cols.filter(isMetricCol);

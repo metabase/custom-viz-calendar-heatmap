@@ -1,4 +1,5 @@
 import { CustomStaticVisualizationProps } from "@metabase/custom-viz";
+import type { Settings } from "./types";
 import {
   ColorMap,
   DEFAULT_CALENDAR_COLOR,
@@ -7,7 +8,6 @@ import {
   getColorScale,
   TEXT_COLOR,
 } from "./utils/colors";
-import type { Settings } from "./types";
 import {
   formatColumnAsMonth,
   getAllDatesForYear,
