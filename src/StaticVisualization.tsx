@@ -17,9 +17,11 @@ import {
 } from "./utils/data";
 import { getBorderRadius } from "./utils/looks";
 
-export const StaticVisualizationComponent = (
-  { series, settings, renderingContext }: CustomStaticVisualizationProps<Settings>,
-) => {
+export const StaticVisualizationComponent = ({
+  series,
+  settings,
+  renderingContext,
+}: CustomStaticVisualizationProps<Settings>) => {
   const { data, latestYear, dimensionCol } = getChartData(series, settings);
   const color = settings.color ?? DEFAULT_CALENDAR_COLOR;
   const cellShape = settings.cellShape;
@@ -126,7 +128,13 @@ export const StaticVisualizationComponent = (
     </text>
   );
 
-  const legendKeys: (keyof ColorMap)[] = ["empty", "low", "medium-low", "medium-high", "high"];
+  const legendKeys: (keyof ColorMap)[] = [
+    "empty",
+    "low",
+    "medium-low",
+    "medium-high",
+    "high",
+  ];
   const legendItemSize = 10;
   const legendGap = 5;
   const legendTextGap = 4;

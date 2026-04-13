@@ -6,9 +6,16 @@ import { StaticVisualizationComponent } from "./StaticVisualization";
 import { VisualizationComponent } from "./Visualization";
 
 import { hasDuplicateDates } from "./utils/data";
-import { findDefaultDimensionName, findDefaultMetricName, isDimensionCol, isMetricCol } from "./utils/isa";
+import {
+  findDefaultDimensionName,
+  findDefaultMetricName,
+  isDimensionCol,
+  isMetricCol,
+} from "./utils/isa";
 
-const createVisualization: CreateCustomVisualization<Settings> = ({ defineSetting }) => {
+const createVisualization: CreateCustomVisualization<Settings> = ({
+  defineSetting,
+}) => {
   return {
     id: "calendar-heatmap",
     getName: () => "Calendar Heatmap",
@@ -22,8 +29,12 @@ const createVisualization: CreateCustomVisualization<Settings> = ({ defineSettin
       const s = settings ?? {};
       const dimensionName = s.dimension ?? findDefaultDimensionName(cols);
       const metricName = s.metric ?? findDefaultMetricName(cols);
-      const dimensionCol = cols.find((col) => col.name === dimensionName && isDimensionCol(col));
-      const metricCol = cols.find((col) => col.name === metricName && isMetricCol(col));
+      const dimensionCol = cols.find(
+        (col) => col.name === dimensionName && isDimensionCol(col),
+      );
+      const metricCol = cols.find(
+        (col) => col.name === metricName && isMetricCol(col),
+      );
 
       if (!dimensionCol) {
         throw new Error("Please select a date column for the dimension.");
@@ -31,7 +42,13 @@ const createVisualization: CreateCustomVisualization<Settings> = ({ defineSettin
       if (!metricCol) {
         throw new Error("Please select a numeric column for the metric.");
       }
-      if (hasDuplicateDates(series, { ...s, dimension: dimensionName, metric: metricName })) {
+      if (
+        hasDuplicateDates(series, {
+          ...s,
+          dimension: dimensionName,
+          metric: metricName,
+        })
+      ) {
         throw new Error(
           "Data is unbinned: multiple entries with the same date. Please aggregate date column by day.",
         );
@@ -43,13 +60,17 @@ const createVisualization: CreateCustomVisualization<Settings> = ({ defineSettin
         section: "Data",
         title: "Date Column",
         widget: "field",
-        getDefault: (series) => findDefaultDimensionName(series?.[0]?.data?.cols ?? []),
+        getDefault: (series) =>
+          findDefaultDimensionName(series?.[0]?.data?.cols ?? []),
         getProps: (series) => {
           const cols = series?.[0]?.data?.cols ?? [];
           const dimensionCols = cols.filter(isDimensionCol);
           return {
             columns: dimensionCols,
-            options: dimensionCols.map(({ display_name, name }) => ({ name: display_name, value: name })),
+            options: dimensionCols.map(({ display_name, name }) => ({
+              name: display_name,
+              value: name,
+            })),
           };
         },
       }),
@@ -58,13 +79,17 @@ const createVisualization: CreateCustomVisualization<Settings> = ({ defineSettin
         section: "Data",
         title: "Metric Column",
         widget: "field",
-        getDefault: (series) => findDefaultMetricName(series?.[0]?.data?.cols ?? []),
+        getDefault: (series) =>
+          findDefaultMetricName(series?.[0]?.data?.cols ?? []),
         getProps: (series) => {
           const cols = series?.[0]?.data?.cols ?? [];
           const metricCols = cols.filter(isMetricCol);
           return {
             columns: metricCols,
-            options: metricCols.map(({ display_name, name }) => ({ name: display_name, value: name })),
+            options: metricCols.map(({ display_name, name }) => ({
+              name: display_name,
+              value: name,
+            })),
           };
         },
       }),

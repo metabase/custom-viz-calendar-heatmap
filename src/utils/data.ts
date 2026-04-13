@@ -90,15 +90,16 @@ export function getAllDatesForYear(year: number): string[] {
 }
 
 export const formatColumnAsMonth = (date: Date, dimensionCol: Column) =>
-  formatValue(
-    date,
-    { column: { ...dimensionCol, unit: "month-of-year" }, date_abbreviate: true },
-  );
+  formatValue(date, {
+    column: { ...dimensionCol, unit: "month-of-year" },
+    date_abbreviate: true,
+  });
 
-const formatColumnAsDay = (date: Date, dimensionCol: Column) => formatValue(
-  date,
-  { column: { ...dimensionCol, unit: "day-of-week" }, date_abbreviate: true },
-);
+const formatColumnAsDay = (date: Date, dimensionCol: Column) =>
+  formatValue(date, {
+    column: { ...dimensionCol, unit: "day-of-week" },
+    date_abbreviate: true,
+  });
 
 export const getWeekDaysLabels = (dimensionCol: Column) => {
   /**

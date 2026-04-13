@@ -1,16 +1,25 @@
 import * as echarts from "echarts";
 import { useEffect, useRef, useState } from "react";
 import { Button } from "./components/Button";
-import type { ClickObject, CustomVisualizationProps } from "@metabase/custom-viz";
+import type {
+  ClickObject,
+  CustomVisualizationProps,
+} from "@metabase/custom-viz";
 import type { Settings } from "./types";
 import { getChartData, toISODateString } from "./utils/data";
 import { getCellSize, getChartHeight, getChartWidth } from "./utils/looks";
 import { DEFAULT_CALENDAR_COLOR } from "./utils/colors";
 import { getOption } from "./settings";
 
-export function VisualizationComponent(
-  { height, width, settings, series, onClick, onHover, colorScheme }: CustomVisualizationProps<Settings>,
-) {
+export function VisualizationComponent({
+  height,
+  width,
+  settings,
+  series,
+  onClick,
+  onHover,
+  colorScheme,
+}: CustomVisualizationProps<Settings>) {
   const containerRef = useRef<HTMLDivElement>(null);
   const chartRef = useRef<echarts.ECharts | null>(null);
   const onClickRef = useRef(onClick);
@@ -19,10 +28,15 @@ export function VisualizationComponent(
   const settingsRef = useRef(settings);
   const [displayedYear, setDisplayedYear] = useState<number | null>(null);
 
-  const { data, years, latestYear, dimensionLabel, metricLabel, dimensionCol, metricCol } = getChartData(
-    series,
-    settings,
-  );
+  const {
+    data,
+    years,
+    latestYear,
+    dimensionLabel,
+    metricLabel,
+    dimensionCol,
+    metricCol,
+  } = getChartData(series, settings);
 
   useEffect(() => {
     setDisplayedYear(latestYear);
@@ -120,10 +134,20 @@ export function VisualizationComponent(
       onHoverRef.current({
         value: metricValue,
         column: metricColumn,
-        dimensions: dimensionColumn ? [{ value: dateString, column: dimensionColumn }] : [],
+        dimensions: dimensionColumn
+          ? [{ value: dateString, column: dimensionColumn }]
+          : [],
         data: [
-          { key: dimensionColumn.display_name, col: dimensionColumn, value: dateString },
-          { key: metricColumn.display_name, col: metricColumn, value: metricValue },
+          {
+            key: dimensionColumn.display_name,
+            col: dimensionColumn,
+            value: dateString,
+          },
+          {
+            key: metricColumn.display_name,
+            col: metricColumn,
+            value: metricValue,
+          },
         ],
         event: new MouseEvent("mouseover", {
           clientX: chartRect.left + cellPixel[0],
@@ -190,11 +214,15 @@ export function VisualizationComponent(
         justifyContent: "center",
       }}
     >
-      <div style={{
-        overflowX: "auto", width: "100%", display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-      }}>
+      <div
+        style={{
+          overflowX: "auto",
+          width: "100%",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
         <div
           style={{
             display: "flex",
