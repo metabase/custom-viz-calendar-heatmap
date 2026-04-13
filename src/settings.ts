@@ -1,5 +1,6 @@
 import type { Column } from "@metabase/custom-viz";
 import { formatValue } from "@metabase/custom-viz";
+import * as echarts from "echarts";
 import {
   CellShape,
   DateString,
@@ -14,6 +15,12 @@ import {
   TEXT_COLOR_DARK,
 } from "./utils/colors";
 import {
+  formatColumnAsMonth,
+  getAllDatesForYear,
+  getWeekDaysLabels,
+  toISODateString,
+} from "./utils/data";
+import {
   CALENDAR_DAY_LABEL_WIDTH,
   CALENDAR_ROWS,
   CALENDAR_TOP,
@@ -21,12 +28,6 @@ import {
   PADDING,
   VISUALMAP_GAP,
 } from "./utils/looks";
-import {
-  formatColumnAsMonth,
-  getAllDatesForYear,
-  getWeekDaysLabels,
-  toISODateString,
-} from "./utils/data";
 
 export const getOption = (
   data: Array<[DateString, Value]>,
@@ -37,7 +38,7 @@ export const getOption = (
   cellShape: CellShape | undefined,
   dimensionCol: Column,
   metricCol: Column,
-) => {
+): echarts.EChartsCoreOption => {
   const colorScale = getColorScale(color);
   const isDarkScheme = colorScheme === "dark";
   const labelColor = isDarkScheme ? TEXT_COLOR_DARK : TEXT_COLOR;
