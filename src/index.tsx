@@ -58,7 +58,7 @@ const createVisualization: CreateCustomVisualization<Settings> = ({
       dimension: defineSetting({
         id: "dimension",
         section: "Data",
-        title: "Date Column",
+        title: "Date column",
         widget: "field",
         getDefault: (series) => {
           return findDefaultDimensionName(series?.[0]?.data?.cols ?? []);
@@ -78,7 +78,7 @@ const createVisualization: CreateCustomVisualization<Settings> = ({
       metric: defineSetting({
         id: "metric",
         section: "Data",
-        title: "Metric Column",
+        title: "Metric column",
         widget: "field",
         getDefault: (series) => {
           return findDefaultMetricName(series?.[0]?.data?.cols ?? []);
