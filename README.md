@@ -1,5 +1,11 @@
 # @metabase/custom-viz-calendar-heatmap
 
+<div align="center">
+  [![Build](https://github.com/metabase/custom-viz-calendar-heatmap/actions/workflows/build.yml/badge.svg)](https://github.com/metabase/custom-viz-calendar-heatmap/actions/workflows/build.yml)
+  [![Type Check](https://github.com/metabase/custom-viz-calendar-heatmap/actions/workflows/type-check.yml/badge.svg)](https://github.com/metabase/custom-viz-calendar-heatmap/actions/workflows/type-check.yml)
+  [![Prettier](https://github.com/metabase/custom-viz-calendar-heatmap/actions/workflows/prettier.yml/badge.svg)](https://github.com/metabase/custom-viz-calendar-heatmap/actions/workflows/prettier.yml)
+</div>
+
 A Calendar Heatmap custom visualization for Metabase. Renders a GitHub-style year calendar where each cell represents a day, colored by an aggregated metric value.
 
 Requires Metabase `>= 59`.
