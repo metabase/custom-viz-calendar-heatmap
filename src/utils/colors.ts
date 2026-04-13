@@ -42,15 +42,15 @@ export function getColorScale(color: string): ColorMap {
   };
 }
 
-export const getCellColor = (
+export function getCellColor(
   value: number | undefined,
   max: number,
   colorScale: ColorMap,
-): string => {
+): string {
   if (value === undefined) return EMPTY_CELL_COLOR;
   if (value <= 0) return colorScale["empty"];
   if (value <= max * 0.25) return colorScale["low"];
   if (value <= max * 0.5) return colorScale["medium-low"];
   if (value <= max * 0.75) return colorScale["medium-high"];
   return colorScale["high"];
-};
+}

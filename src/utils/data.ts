@@ -1,7 +1,7 @@
 import { Column, formatValue, Series } from "@metabase/custom-viz";
 import { Settings } from "../types";
 
-export const getChartData = (
+export function getChartData(
   series: Series,
   settings: Settings,
 ): {
@@ -12,7 +12,7 @@ export const getChartData = (
   metricLabel: string;
   dimensionCol: Column;
   metricCol: Column;
-} => {
+} {
   const [{ data }] = series;
   const dimIndex = data.cols.findIndex(
     (col) => col.name === settings.dimension,
@@ -51,7 +51,7 @@ export const getChartData = (
     dimensionCol: data.cols[dimIndex],
     metricCol: data.cols[metricIndex],
   };
-};
+}
 
 function getYears(dates: string[]): number[] {
   const distinct = new Set<number>();
@@ -89,19 +89,21 @@ export function getAllDatesForYear(year: number): string[] {
   return dates;
 }
 
-export const formatColumnAsMonth = (date: Date, dimensionCol: Column) =>
-  formatValue(date, {
+export function formatColumnAsMonth(date: Date, dimensionCol: Column): string {
+  return formatValue(date, {
     column: { ...dimensionCol, unit: "month-of-year" },
     date_abbreviate: true,
   });
+}
 
-const formatColumnAsDay = (date: Date, dimensionCol: Column) =>
-  formatValue(date, {
+function formatColumnAsDay(date: Date, dimensionCol: Column): string {
+  return formatValue(date, {
     column: { ...dimensionCol, unit: "day-of-week" },
     date_abbreviate: true,
   });
+}
 
-export const getWeekDaysLabels = (dimensionCol: Column) => {
+export function getWeekDaysLabels(dimensionCol: Column): string[] {
   /**
    * Fixed Sunday; actual date doesn't matter, only the day-of-week.
    * echarts nameMap requires index 0 = Sunday
@@ -112,4 +114,4 @@ export const getWeekDaysLabels = (dimensionCol: Column) => {
     day.setDate(sunday.getDate() + i);
     return formatColumnAsDay(day, dimensionCol);
   });
-};
+}
