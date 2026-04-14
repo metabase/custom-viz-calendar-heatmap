@@ -2,7 +2,7 @@
 
 <div>
   <img src="https://github.com/metabase/custom-viz-calendar-heatmap/actions/workflows/build.yml/badge.svg" alt="Build" />
-  <img src="https://github.com/metabase/custom-viz-calendar-heatmap/actions/workflows/type-check.yml/badge.svg" alt="TypeScript" />
+  <img src="https://github.com/metabase/custom-viz-calendar-heatmap/actions/workflows/type-check.yml/badge.svg" alt="Type Check" />
   <img src="https://github.com/metabase/custom-viz-calendar-heatmap/actions/workflows/prettier.yml/badge.svg" alt="Prettier" />
 </div>
 
