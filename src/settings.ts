@@ -1,7 +1,25 @@
 import type { Column } from "@metabase/custom-viz";
 import { formatValue } from "@metabase/custom-viz";
-import { CellShape, DateString, MonthLabelFormatterParams, Value } from "./types";
-import { EMPTY_CELL_COLOR, EMPTY_CELL_COLOR_DARK, getColorScale, TEXT_COLOR, TEXT_COLOR_DARK } from "./utils/colors";
+import * as echarts from "echarts";
+import {
+  CellShape,
+  DateString,
+  MonthLabelFormatterParams,
+  Value,
+} from "./types";
+import {
+  EMPTY_CELL_COLOR,
+  EMPTY_CELL_COLOR_DARK,
+  getColorScale,
+  TEXT_COLOR,
+  TEXT_COLOR_DARK,
+} from "./utils/colors";
+import {
+  formatColumnAsMonth,
+  getAllDatesForYear,
+  getWeekDaysLabels,
+  toISODateString,
+} from "./utils/data";
 import {
   CALENDAR_DAY_LABEL_WIDTH,
   CALENDAR_ROWS,
@@ -10,20 +28,17 @@ import {
   PADDING,
   VISUALMAP_GAP,
 } from "./utils/looks";
-import { formatColumnAsMonth, getAllDatesForYear, getWeekDaysLabels, toISODateString } from "./utils/data";
 
 export const getOption = (
   data: Array<[DateString, Value]>,
   displayedYear: number,
   color: string,
   colorScheme: "light" | "dark" | undefined,
-  dimensionLabel: string,
-  metricLabel: string,
   cellSize: number,
   cellShape: CellShape | undefined,
   dimensionCol: Column,
   metricCol: Column,
-) => {
+): echarts.EChartsCoreOption => {
   const colorScale = getColorScale(color);
   const isDarkScheme = colorScheme === "dark";
   const labelColor = isDarkScheme ? TEXT_COLOR_DARK : TEXT_COLOR;
@@ -143,4 +158,3 @@ export const getOption = (
     ],
   };
 };
-

@@ -1,19 +1,25 @@
 {
-  "name": "@metabase/custom-viz-grid-heatmap",
+  "name": "@metabase/custom-viz-calendar-heatmap",
   "version": "0.0.1",
   "private": true,
+  "license": "MIT",
   "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
     "build": "vite build",
     "dev": "vite build --watch & vite preview",
+    "prettier": "prettier --write .",
     "type-check": "tsc --noEmit"
   },
   "devDependencies": {
     "@metabase/custom-viz": "^0.0.1-alpha.13",
     "@types/react": "^19.2.14",
-    "react": "^19.1.0",
-    "typescript": "^5.9.3",
-    "vite": "^8.0.0"
+    "prettier": "^3.8.2",
+    "react": "^19.2.5",
+    "typescript": "^6.0.2",
+    "vite": "^8.0.8"
   },
   "dependencies": {
     "color": "^5.0.3",
