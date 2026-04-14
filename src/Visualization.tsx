@@ -123,9 +123,7 @@ export function VisualizationComponent({
       onHoverRef.current({
         value: metricValue,
         column: metricColumn,
-        dimensions: dimensionColumn
-          ? [{ value: dateString, column: dimensionColumn }]
-          : [],
+        dimensions: [{ value: dateString, column: dimensionColumn }],
         data: [
           {
             key: dimensionColumn.display_name,
