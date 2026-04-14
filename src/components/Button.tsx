@@ -1,5 +1,5 @@
 import type { CSSProperties, ReactNode } from "react";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 
 type ButtonState = "default" | "hover" | "active" | "disabled";
 
@@ -69,7 +69,7 @@ export function Button({
   const [hovered, setHovered] = useState(false);
   const [pressed, setPressed] = useState(false);
 
-  const stateStyle = useMemo(() => {
+  const stateStyle = (() => {
     const styles =
       colorScheme?.toLowerCase() === "dark" ? darkStyles : lightStyles;
 
@@ -86,7 +86,7 @@ export function Button({
     }
 
     return styles.default;
-  }, [colorScheme, disabled, hovered, pressed]);
+  })();
 
   return (
     <button
