@@ -193,17 +193,15 @@ export const StaticVisualizationComponent = ({
   );
 
   return (
-    <div style={{ display: "flex", justifyContent: "center" }}>
-      <svg
-        viewBox={`0 0 ${svgWidth} ${svgHeight}`}
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        {yearLabel}
-        {monthLabels}
-        {dayLabels}
-        {cells}
-        {legend}
-      </svg>
-    </div>
+    <svg
+      viewBox={`0 0 ${svgWidth} ${svgHeight}`}
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      {yearLabel}
+      {monthLabels}
+      {dayLabels}
+      {cells}
+      {legend}
+    </svg>
   );
 };
