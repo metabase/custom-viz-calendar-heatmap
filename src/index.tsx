@@ -19,7 +19,7 @@ const createVisualization: CreateCustomVisualization<Settings> = ({
   return {
     id: "calendar-heatmap",
     getName: () => "Calendar Heatmap",
-    minSize: { width: 15, height: 6 },
+    minSize: { width: 8, height: 3 },
     defaultSize: { width: 20, height: 6 },
     checkRenderable(series, settings) {
       if (series.length === 0) {
