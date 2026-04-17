@@ -1,7 +1,7 @@
 import type { CellShape } from "../types";
 
 export const PADDING = 30;
-export const CALENDAR_TOP = 20;
+export const CALENDAR_TOP = 24;
 export const CALENDAR_DAY_LABEL_WIDTH = 20;
 export const CALENDAR_MONTH_LABEL_HEIGHT = 18;
 export const CALENDAR_ROWS = 7;
