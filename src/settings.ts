@@ -131,7 +131,7 @@ export const getOption = (
         fontSize: 11,
         formatter: (params: MonthLabelFormatterParams) =>
           formatColumnAsMonth(
-            new Date(parseInt(params.yyyy), params.M - 1),
+            new Date(parseInt(params.yyyy), params.M),
             dimensionCol,
           ),
       },
