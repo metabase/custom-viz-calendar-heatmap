@@ -10,6 +10,8 @@ A Calendar Heatmap custom visualization for Metabase. Renders a GitHub-style yea
 
 Requires Metabase `>= 59`.
 
+![calendar heatmap](./assets/calendar-heatmap.webp)
+
 ## Data requirements
 
 The query must return two columns:
