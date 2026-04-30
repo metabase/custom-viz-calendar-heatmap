@@ -35,10 +35,12 @@ Rows must be aggregated by day; multiple rows with the same date will fail to re
 ```bash
 npm install
 npm run dev         # watch build + preview
-npm run build       # production build to dist/
+npm run build       # compiles src/ → dist/, then packages it into a .tgz
 ```
 
-The build output in `dist/` along with `metabase-plugin.json` and `public/assets/` is what Metabase loads as the plugin.
+`npm run build` writes `<name>-<version>.tgz` to the project root. Upload that file in **Admin → Custom visualizations → Add** to register the plugin.
+
+> The packaged archive contains `metabase-plugin.json` plus the build output (`dist/index.js` and any whitelisted `dist/assets/*`).
 
 ## Other scripts
 
