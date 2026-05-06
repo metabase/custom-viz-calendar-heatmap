@@ -8,7 +8,7 @@
 
 A Calendar Heatmap custom visualization for Metabase. Renders a GitHub-style year calendar where each cell represents a day, colored by an aggregated metric value.
 
-Requires Metabase `>= 59`.
+Requires Metabase `>= 62`.
 
 ![calendar heatmap](./assets/calendar-heatmap.webp)
 
