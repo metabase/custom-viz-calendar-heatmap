@@ -1,5 +1,5 @@
 import type { CreateCustomVisualization } from "@metabase/custom-viz";
-import { CellShapeWidget } from "./components/CellShapeWidget";
+import { defineConfig } from "@metabase/custom-viz";
 import type { Settings } from "./types";
 import { DEFAULT_CALENDAR_COLOR } from "./utils/colors";
 import { VisualizationComponent } from "./Visualization";
@@ -15,7 +15,7 @@ import {
 const createVisualization: CreateCustomVisualization<Settings> = ({
   defineSetting,
 }) => {
-  return {
+  return defineConfig<Settings>({
     id: "calendar-heatmap",
     getName: () => "Calendar Heatmap",
     minSize: { width: 8, height: 3 },
@@ -106,13 +106,19 @@ const createVisualization: CreateCustomVisualization<Settings> = ({
         id: "cellShape",
         section: "Display",
         title: "Cell Shape",
-        widget: CellShapeWidget,
+        widget: "radio",
         getDefault: () => "rounded",
-        getProps: () => ({}),
+        getProps: () => ({
+          options: [
+            { name: "Square", value: "square" },
+            { name: "Rounded square", value: "rounded" },
+            { name: "Circle", value: "circle" },
+          ],
+        }),
       }),
     },
     VisualizationComponent,
-  };
+  });
 };
 
 export default createVisualization;

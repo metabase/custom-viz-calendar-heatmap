@@ -14,17 +14,19 @@
     "type-check": "tsc --noEmit"
   },
   "devDependencies": {
-    "@metabase/custom-viz": "^0.0.1-alpha.13",
-    "@types/react": "^19.2.14",
-    "@types/tar-stream": "^3.1.4",
-    "prettier": "^3.8.2",
-    "react": "^19.2.5",
-    "tar-stream": "^3.1.8",
+    "@metabase/custom-viz": "0.0.1-canary.17",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "@types/tar-stream": "3.1.4",
+    "@vitejs/plugin-react": "5.2.0",
+    "tar-stream": "3.1.8",
     "typescript": "^6.0.2",
     "vite": "^8.0.8"
   },
   "dependencies": {
     "color": "^5.0.3",
-    "echarts": "^6.0.0"
+    "echarts": "^6.0.0",
+    "react": "18.2.0",
+    "react-dom": "18.2.0"
   }
 }
