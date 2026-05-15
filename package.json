@@ -24,7 +24,7 @@
     "vite": "^8.0.8"
   },
   "dependencies": {
-    "@metabase/custom-viz": "^1.0.0",
+    "@metabase/custom-viz": "^1.0.1",
     "color": "^5.0.3",
     "echarts": "^6.0.0",
     "react": "18.2.0",
