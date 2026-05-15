@@ -56,7 +56,7 @@ const createVisualization: CreateCustomVisualization<Settings> = ({
     settings: {
       dimension: defineSetting({
         id: "dimension",
-        section: "Data",
+        getSection: () => "Data",
         title: "Date column",
         widget: "field",
         getDefault: (series) => {
@@ -76,7 +76,7 @@ const createVisualization: CreateCustomVisualization<Settings> = ({
       }),
       metric: defineSetting({
         id: "metric",
-        section: "Data",
+        getSection: () => "Data",
         title: "Metric column",
         widget: "field",
         getDefault: (series) => {
@@ -96,7 +96,7 @@ const createVisualization: CreateCustomVisualization<Settings> = ({
       }),
       color: defineSetting({
         id: "color",
-        section: "Display",
+        getSection: () => "Display",
         title: "Color",
         widget: "color",
         getDefault: () => DEFAULT_CALENDAR_COLOR,
@@ -104,7 +104,7 @@ const createVisualization: CreateCustomVisualization<Settings> = ({
       }),
       cellShape: defineSetting({
         id: "cellShape",
-        section: "Display",
+        getSection: () => "Display",
         title: "Cell Shape",
         widget: "radio",
         getDefault: () => "rounded",
