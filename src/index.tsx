@@ -3,6 +3,7 @@ import { defineConfig } from "@metabase/custom-viz";
 import type { Settings } from "./types";
 import { DEFAULT_CALENDAR_COLOR } from "./utils/colors";
 import { VisualizationComponent } from "./Visualization";
+import { CellShapeWidget } from "./components/CellShapeWidget";
 
 import { hasDuplicateDates } from "./utils/data";
 import {
@@ -106,15 +107,7 @@ const createVisualization: CreateCustomVisualization<Settings> = ({
         id: "cellShape",
         getSection: () => "Display",
         title: "Cell Shape",
-        widget: "radio",
-        getDefault: () => "rounded",
-        getProps: () => ({
-          options: [
-            { name: "Square", value: "square" },
-            { name: "Rounded square", value: "rounded" },
-            { name: "Circle", value: "circle" },
-          ],
-        }),
+        widget: CellShapeWidget,
       }),
     },
     VisualizationComponent,
