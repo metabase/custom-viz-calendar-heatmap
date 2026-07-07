@@ -2,6 +2,7 @@ import type { CreateCustomVisualization } from "@metabase/custom-viz";
 import { defineConfig } from "@metabase/custom-viz";
 import type { Settings } from "./types";
 import { DEFAULT_CALENDAR_COLOR } from "./utils/colors";
+import { StaticVisualizationComponent } from "./StaticVisualization";
 import { VisualizationComponent } from "./Visualization";
 import { CellShapeWidget } from "./components/CellShapeWidget";
 
@@ -111,6 +112,7 @@ const createVisualization: CreateCustomVisualization<Settings> = ({
       }),
     },
     VisualizationComponent,
+    StaticVisualizationComponent,
   });
 };
 
