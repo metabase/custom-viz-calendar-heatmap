@@ -22,7 +22,7 @@ export function CellShapeWidget({
         <button
           key={shape}
           style={{
-            border: `1px solid ${value === shape ? "var(--mb-color-brand)" : "var(--mb-color-border)"}`,
+            border: `1px solid ${value === shape ? "var(--mb-color-core-brand)" : "var(--mb-color-border-neutral)"}`,
             borderRadius: 4,
             background: "none",
             cursor: "pointer",
@@ -38,7 +38,7 @@ export function CellShapeWidget({
               height={PREVIEW_SIZE}
               rx={rx}
               ry={rx}
-              fill="var(--mb-color-brand)"
+              fill="var(--mb-color-core-brand)"
             />
           </svg>
         </button>
