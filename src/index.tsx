@@ -17,8 +17,6 @@ const createVisualization: CreateCustomVisualization<Settings> = ({
   defineSetting,
 }) => {
   return defineConfig<Settings>({
-    id: "calendar-heatmap",
-    getName: () => "Calendar Heatmap",
     minSize: { width: 8, height: 3 },
     defaultSize: { width: 20, height: 6 },
     checkRenderable(series, settings) {

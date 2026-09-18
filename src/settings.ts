@@ -1,4 +1,4 @@
-import type { Column } from "@metabase/custom-viz";
+import type { Column, FormatValueOptions } from "@metabase/custom-viz";
 import { formatValue } from "@metabase/custom-viz";
 import * as echarts from "echarts";
 import {
@@ -33,11 +33,11 @@ export const getOption = (
   data: Array<[DateString, Value]>,
   displayedYear: number,
   color: string,
-  colorScheme: "light" | "dark" | undefined,
+  colorScheme: "light" | "dark",
   cellSize: number,
   cellShape: CellShape | undefined,
   dimensionCol: Column,
-  metricCol: Column,
+  metricFormatOptions: FormatValueOptions,
 ): echarts.EChartsCoreOption => {
   const colorScale = getColorScale(color);
   const isDarkScheme = colorScheme === "dark";
@@ -97,7 +97,7 @@ export const getOption = (
         { gt: max * 0.75, color: colorScale["high"] },
       ],
       showLabel: false,
-      formatter: (value: number) => formatValue(value, { column: metricCol }),
+      formatter: (value: number) => formatValue(value, metricFormatOptions),
       text: ["More", "Less"],
       itemWidth: 10,
       itemHeight: 10,

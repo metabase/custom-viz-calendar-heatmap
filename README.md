@@ -8,7 +8,7 @@
 
 A Calendar Heatmap custom visualization for Metabase. Renders a GitHub-style year calendar where each cell represents a day, colored by an aggregated metric value.
 
-Requires Metabase `>= 62`.
+Requires Metabase `>= 64` and is built with `@metabase/custom-viz` 2.x.
 
 ![calendar heatmap](./assets/calendar-heatmap.webp)
 
@@ -38,7 +38,7 @@ npm run dev         # watch build + preview
 npm run build       # compiles src/ → dist/, then packages it into a .tgz
 ```
 
-`npm run build` writes `<name>-<version>.tgz` to the project root. Upload that file in **Admin → Custom visualizations → Add** to register the plugin.
+`npm run build` writes `<name>-<version>.tgz` to the project root. Packaging is done by the SDK's `metabase-custom-viz pack` command, which also stamps the exact `@metabase/custom-viz` version into the packed manifest as `sdk.version`. Upload that file in **Admin → Custom visualizations → Add** to register the plugin.
 
 > The packaged archive contains `metabase-plugin.json` plus the build output (`dist/index.js` and any whitelisted `dist/assets/*`).
 
