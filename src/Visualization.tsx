@@ -1,6 +1,7 @@
 import type {
   ClickObject,
   CustomVisualizationProps,
+  FormatValueOptions,
 } from "@metabase/custom-viz";
 import * as echarts from "echarts";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -19,8 +20,9 @@ export function VisualizationComponent({
   series,
   onClick,
   onHover,
-  colorScheme,
+  renderingContext,
 }: CustomVisualizationProps<Settings>) {
+  const { colorScheme } = renderingContext;
   const containerRef = useRef<HTMLDivElement>(null);
   const chartRef = useRef<echarts.ECharts | null>(null);
   const onClickRef = useLatest(onClick);
@@ -74,7 +76,7 @@ export function VisualizationComponent({
         (row) => toISODateString(String(row[dimIndex])) === isoDate,
       );
 
-      const clickObject: ClickObject<Settings> = {
+      const clickObject: ClickObject = {
         value: metricValue,
         column: metricCol,
         dimensions: dimCol ? [{ value: dateStr, column: dimCol }] : [],
@@ -82,8 +84,6 @@ export function VisualizationComponent({
         origin: matchedRow
           ? { row: matchedRow as (string | number | null)[], cols }
           : undefined,
-        /** settings need to be included in the click object to support custom click behavior */
-        settings: settingsRef.current,
       };
 
       onClickRef.current(clickObject);
@@ -155,6 +155,13 @@ export function VisualizationComponent({
 
   const cellSize = width ? getCellSize(width) : 0;
 
+  // Per-column formatting picked in the column formatting popover
+  const columnSettings = settings.column;
+  const metricFormatOptions = useMemo<FormatValueOptions>(
+    () => ({ ...columnSettings?.(metricCol), column: metricCol }),
+    [columnSettings, metricCol],
+  );
+
   const option = useMemo(() => {
     return getOption(
       data,
@@ -164,7 +171,7 @@ export function VisualizationComponent({
       cellSize,
       cellShape,
       dimensionCol,
-      metricCol,
+      metricFormatOptions,
     );
   }, [
     data,
@@ -174,7 +181,7 @@ export function VisualizationComponent({
     cellSize,
     cellShape,
     dimensionCol,
-    metricCol,
+    metricFormatOptions,
   ]);
 
   useEffect(() => {
