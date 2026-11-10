@@ -14,8 +14,8 @@
     "type-check": "tsc --noEmit"
   },
   "devDependencies": {
-    "@types/react": "^18.2.0",
-    "@types/react-dom": "^18.2.0",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
     "@vitejs/plugin-react": "5.2.0",
     "prettier": "^3.8.3",
     "typescript": "^6.0.2",
@@ -25,7 +25,7 @@
     "@metabase/custom-viz": "2.0.2-canary.0",
     "color": "^5.0.3",
     "echarts": "^6.0.0",
-    "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react": "19.2.0",
+    "react-dom": "19.2.0"
   }
 }
